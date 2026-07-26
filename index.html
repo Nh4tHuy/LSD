@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ôn Tập Trắc Nghiệm Lịch Sử Đảng</title>
+    <title>Ôn Tập Trắc Nghiệm Lịch Sử Đảng - Wiky</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -54,7 +54,7 @@
 
         /* Glassmorphism styling */
         .glass-card {
-            background: rgba(255, 255, 255, 0.78);
+            background: rgba(255, 255, 255, 0.82);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.85);
@@ -62,7 +62,7 @@
         }
 
         .glass-header {
-            background: rgba(255, 255, 255, 0.88);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.75);
@@ -153,7 +153,7 @@
                 </div>
                 <div>
                     <h1 class="text-base sm:text-lg lg:text-xl font-bold bg-gradient-to-r from-emerald-800 via-teal-800 to-emerald-900 bg-clip-text text-transparent leading-tight">
-                        THẾ MÀ LẠI HAY !
+                    WIKY
                     </h1>
                     <p class="text-xs text-emerald-700 font-medium hidden sm:block">Đáp án chỉ mang tính chất tham khảo</p>
                 </div>
@@ -167,19 +167,20 @@
                     <span>Điểm: <strong id="headerScore" class="text-emerald-700 text-sm">0</strong>/<span id="headerTotal">0</span></span>
                 </div>
 
+                <!-- Timer Counter -->
+                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-pill text-xs font-semibold text-emerald-800 shadow-sm" title="Thời gian làm bài">
+                    <i data-lucide="timer" class="w-4 h-4 text-emerald-600 animate-pulse"></i>
+                    <span id="headerTimer" class="font-mono text-sm text-emerald-700 font-bold">00:00</span>
+                </div>
+
                 <!-- Grid Jump Button -->
                 <button id="btnOpenGrid" class="p-2 sm:px-3 sm:py-1.5 rounded-xl glass-pill text-emerald-800 hover:bg-emerald-100 transition-colors flex items-center gap-1 text-xs font-bold" title="Bảng chuyển nhanh câu hỏi">
                     <i data-lucide="layout-grid" class="w-4 h-4"></i>
                     <span class="hidden md:inline">Bảng câu hỏi</span>
                 </button>
 
-                <!-- Search Toggle Button -->
-                <button id="btnSearchToggle" class="p-2 rounded-xl glass-pill text-emerald-800 hover:bg-emerald-100 transition-colors" title="Tìm kiếm câu hỏi">
-                    <i data-lucide="search" class="w-4 h-4"></i>
-                </button>
-
                 <!-- Reset Button -->
-                <button id="btnResetAll" class="p-2 rounded-xl glass-pill text-red-700 hover:bg-red-50 transition-colors" title="Làm lại từ đầu">
+                <button id="btnResetAll" onclick="openResetModal()" class="p-2 rounded-xl glass-pill text-red-700 hover:bg-red-50 transition-colors" title="Làm lại từ đầu">
                     <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
                 </button>
             </div>
@@ -188,34 +189,15 @@
 
     <main class="flex-1 max-w-5xl w-full mx-auto px-3 sm:px-6 py-5 flex flex-col gap-5">
 
-        <!-- Search Drawer (Collapsible) -->
-        <div id="searchBox" class="hidden glass-card rounded-2xl p-4 transition-all duration-300">
-            <div class="relative">
-                <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-600"></i>
-                <input type="text" id="searchInput" placeholder="Nhập từ khóa cần tìm trong tất cả câu hỏi..." 
-                       class="w-full pl-10 pr-10 py-2.5 rounded-xl bg-white/90 border border-emerald-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 text-slate-700 shadow-inner">
-                <button id="btnCloseSearch" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-                    <i data-lucide="x" class="w-4 h-4"></i>
-                </button>
-            </div>
-            <div id="searchResults" class="mt-3 max-h-60 overflow-y-auto divide-y divide-emerald-100 text-xs text-slate-600"></div>
-        </div>
-
         <!-- Global Dashboard & Filter Bar -->
         <div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col gap-4">
             <!-- Progress Info -->
             <div class="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-100/80 pb-3">
                 <div>
                     <h2 class="text-base font-bold text-slate-800">Ôn tập Lịch Sử Đảng</h2>
-                    <p class="text-xs text-slate-500 font-medium">Tất cả câu hỏi hiển thị liên tục bên dưới, chọn đáp án để xem ngay kết quả</p>
+                    <p class="text-xs text-slate-500 font-medium">Tất cả câu hỏi hiển thị liên tục bên dưới, chọn đáp án để tính điểm và tính thời gian</p>
                 </div>
-                <div class="flex items-center gap-3">
-                    <div class="text-right">
-                        <span class="text-xs text-slate-500 block font-medium">Đã trả lời</span>
-                        <span class="text-sm font-bold text-emerald-700" id="progressText">0/0 câu</span>
-                    </div>
-                    
-                </div>
+                
             </div>
 
             <!-- Filter Buttons Bar -->
@@ -231,21 +213,13 @@
                         Đã làm (<span id="cnt-answered">0</span>)
                     </button>
                     <button onclick="setFilter('incorrect')" id="filter-incorrect" class="px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 text-slate-700 hover:bg-red-50 text-red-700 transition-all">
-                        Câu làm sai (<span id="cnt-incorrect">0</span>)
+                        Câu sai (<span id="cnt-incorrect">0</span>)
                     </button>
                     <button onclick="setFilter('bookmarked')" id="filter-bookmarked" class="px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 text-slate-700 hover:bg-amber-50 text-amber-700 transition-all">
                         <i data-lucide="bookmark" class="w-3.5 h-3.5 inline mr-1"></i>Đã lưu (<span id="cnt-bookmarked">0</span>)
                     </button>
                 </div>
 
-                <!-- Jump to input field -->
-                <div class="flex items-center gap-1.5 ml-auto">
-                    <span class="text-slate-500 text-xs hidden sm:inline">Đến câu:</span>
-                    <input type="number" id="jumpInput" min="1" placeholder="Số câu" class="w-16 px-2 py-1 rounded-lg bg-white/90 border border-emerald-300 text-center text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500">
-                    <button onclick="handleJumpInput()" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors text-xs">
-                        Tới
-                    </button>
-                </div>
             </div>
         </div>
 
@@ -256,7 +230,7 @@
 
     </main>
 
-    <!-- Floating Navigation Action Buttons (Scroll top/bottom, Grid Modal trigger) -->
+    <!-- Floating Navigation Action Buttons (Scroll top/bottom) -->
     <div class="fixed bottom-5 right-5 z-40 flex flex-col gap-2">
         <button id="btnScrollTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" class="p-3 rounded-2xl bg-emerald-600 text-white shadow-lg hover:bg-emerald-700 transition-all opacity-80 hover:opacity-100" title="Về đầu trang">
             <i data-lucide="arrow-up" class="w-5 h-5"></i>
@@ -294,9 +268,60 @@
         </div>
     </div>
 
+    <!-- Modal: Completion Celebration Popup -->
+    <div id="completionModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-md w-full rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center shadow-2xl border border-white/80 relative overflow-hidden">
+            <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-emerald-200/50 mb-4 animate-bounce">
+                <i data-lucide="trophy" class="w-10 h-10"></i>
+            </div>
+            <h2 class="text-2xl font-extrabold text-slate-800 mb-1">Chúc Mừng Bạn!</h2>
+            <p class="text-xs text-slate-500 font-medium mb-6">Bạn đã hoàn thành toàn bộ câu hỏi trong bộ đề!</p>
+            
+            <div class="w-full bg-emerald-50/80 rounded-2xl p-4 border border-emerald-100 flex justify-around mb-6">
+                <div class="text-center">
+                    <span class="text-xs text-slate-500 font-medium block mb-1">Kết quả</span>
+                    <span id="modalScore" class="text-2xl font-black text-emerald-600">0/0</span>
+                </div>
+                <div class="w-px bg-emerald-200"></div>
+                <div class="text-center">
+                    <span class="text-xs text-slate-500 font-medium block mb-1">Thời gian</span>
+                    <span id="modalTime" class="text-2xl font-black text-teal-600">00:00</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 w-full">
+                <button onclick="closeCompletionModal()" class="flex-1 py-3 px-4 rounded-xl bg-white border border-slate-200 font-semibold text-xs text-slate-700 hover:bg-slate-50 transition-colors shadow-sm">
+                    Xem Lại Bài
+                </button>
+                <button onclick="resetAllProgress()" class="flex-1 py-3 px-4 rounded-xl bg-emerald-600 font-bold text-xs text-white hover:bg-emerald-700 transition-colors shadow-md shadow-emerald-200">
+                    Làm Lại Từ Đầu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Custom Reset Confirmation Popup -->
+    <div id="resetConfirmModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-sm w-full rounded-3xl p-6 flex flex-col items-center text-center shadow-2xl border border-white/80">
+            <div class="w-14 h-14 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center mb-4">
+                <i data-lucide="rotate-ccw" class="w-7 h-7"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-2">Làm Lại Từ Đầu?</h3>
+            <p class="text-xs text-slate-500 font-medium mb-6">Tất cả câu hỏi đã trả lời và thời gian làm bài sẽ được xóa để bạn ôn tập lại từ đầu.</p>
+            <div class="flex items-center gap-3 w-full">
+                <button onclick="closeResetModal()" class="flex-1 py-2.5 px-4 rounded-xl bg-white border border-slate-200 font-semibold text-xs text-slate-700 hover:bg-slate-50 transition-colors">
+                    Hủy Bỏ
+                </button>
+                <button onclick="resetAllProgress()" class="flex-1 py-2.5 px-4 rounded-xl bg-red-600 font-bold text-xs text-white hover:bg-red-700 transition-colors shadow-md shadow-red-200">
+                    Xác Nhận
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer copyright -->
     <footer class="py-5 text-center text-xs text-slate-500 glass-header mt-8">
-        Web App Ôn tập Trắc nghiệm Lịch Sử Đảng CSVN &copy; 2026 - Nhật Huy Code Lỏ
+        Huy Lỏ Code Web
     </footer>
 
     <script>
@@ -785,6 +810,12 @@
         let bookmarkedQuestions = new Set();
         let currentFilter = 'all'; // 'all', 'unanswered', 'answered', 'incorrect', 'bookmarked'
 
+        /* Timer variables */
+        let timerInterval = null;
+        let secondsElapsed = 0;
+        let isTimerRunning = false;
+        let hasShownCompletionModal = false;
+
         /* Helper shuffle array */
         function shuffleArray(array) {
             const arr = [...array];
@@ -823,7 +854,53 @@
             renderAllQuestions();
             updateStatsAndFilters();
             renderQuestionGrid();
-            initSearch();
+        }
+
+        function startTimer() {
+            if (isTimerRunning) return;
+            isTimerRunning = true;
+            timerInterval = setInterval(() => {
+                secondsElapsed++;
+                const timerEl = document.getElementById('headerTimer');
+                if (timerEl) timerEl.innerText = formatDisplayTime(secondsElapsed);
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            isTimerRunning = false;
+        }
+
+        function resetTimer() {
+            stopTimer();
+            secondsElapsed = 0;
+            hasShownCompletionModal = false;
+            const timerEl = document.getElementById('headerTimer');
+            if (timerEl) timerEl.innerText = '00:00';
+        }
+
+        function formatDisplayTime(totalSecs) {
+            const hrs = Math.floor(totalSecs / 3600);
+            const mins = Math.floor((totalSecs % 3600) / 60);
+            const secs = totalSecs % 60;
+            const pad = n => String(n).padStart(2, '0');
+
+            if (hrs > 0) {
+                return `${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
+            }
+            return `${pad(mins)}:${pad(secs)}`;
+        }
+
+        function formatTextTime(totalSecs) {
+            const mins = Math.floor(totalSecs / 60);
+            const secs = totalSecs % 60;
+            if (mins > 0) {
+                return `${mins} phút ${secs} giây`;
+            }
+            return `${secs} giây`;
         }
 
         function renderAllQuestions() {
@@ -927,9 +1004,13 @@
         function selectAnswer(questionIdx, selectedOptIdx) {
             if (userAnswers[questionIdx] !== undefined) return;
 
+            // Start timer when user selects their first answer
+            if (!isTimerRunning && Object.keys(userAnswers).length === 0) {
+                startTimer();
+            }
+
             userAnswers[questionIdx] = selectedOptIdx;
 
-            // Re-render single question element efficiently
             renderAllQuestions();
             updateStatsAndFilters();
             renderQuestionGrid();
@@ -954,7 +1035,6 @@
         function setFilter(filterType) {
             currentFilter = filterType;
 
-            // Highlight active filter tab
             ['all', 'unanswered', 'answered', 'incorrect', 'bookmarked'].forEach(f => {
                 const btn = document.getElementById(`filter-${f}`);
                 if (btn) {
@@ -997,18 +1077,61 @@
             document.getElementById('cnt-answered').innerText = answeredCount;
             document.getElementById('cnt-incorrect').innerText = incorrectCount;
             document.getElementById('cnt-bookmarked').innerText = bookmarkedQuestions.size;
+
+            // Check if all questions have been answered
+            if (total > 0 && answeredCount === total) {
+                stopTimer();
+                if (!hasShownCompletionModal) {
+                    hasShownCompletionModal = true;
+                    showCompletionModal(correctCount, total, secondsElapsed);
+                }
+            }
         }
 
-        /* Jump directly to a question by number */
+        function showCompletionModal(score, total, timeSecs) {
+            document.getElementById('modalScore').innerText = `${score}/${total}`;
+            document.getElementById('modalTime').innerText = formatTextTime(timeSecs);
+            document.getElementById('completionModal').classList.remove('hidden');
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function closeCompletionModal() {
+            document.getElementById('completionModal').classList.add('hidden');
+        }
+
+        function openResetModal() {
+            if (Object.keys(userAnswers).length === 0) {
+                resetAllProgress();
+            } else {
+                document.getElementById('resetConfirmModal').classList.remove('hidden');
+                if (window.lucide) lucide.createIcons();
+            }
+        }
+
+        function closeResetModal() {
+            document.getElementById('resetConfirmModal').classList.add('hidden');
+        }
+
+        function resetAllProgress() {
+            userAnswers = {};
+            currentFilter = 'all';
+            resetTimer();
+            closeCompletionModal();
+            closeResetModal();
+            setFilter('all');
+            renderAllQuestions();
+            updateStatsAndFilters();
+            renderQuestionGrid();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
         function jumpToQuestion(qIndex) {
             if (qIndex < 0 || qIndex >= processedQuestions.length) return;
 
-            // Reset filter to 'all' if the question would be hidden
             if (currentFilter !== 'all') {
                 setFilter('all');
             }
 
-            // Close Grid Modal if open
             document.getElementById('gridModal').classList.add('hidden');
 
             setTimeout(() => {
@@ -1057,51 +1180,6 @@
             });
         }
 
-        function initSearch() {
-            const btnToggle = document.getElementById('btnSearchToggle');
-            const searchBox = document.getElementById('searchBox');
-            const btnClose = document.getElementById('btnCloseSearch');
-            const input = document.getElementById('searchInput');
-            const results = document.getElementById('searchResults');
-
-            btnToggle.addEventListener('click', () => {
-                searchBox.classList.toggle('hidden');
-                if (!searchBox.classList.contains('hidden')) {
-                    input.focus();
-                }
-            });
-
-            btnClose.addEventListener('click', () => {
-                searchBox.classList.add('hidden');
-            });
-
-            input.addEventListener('input', (e) => {
-                const term = e.target.value.trim().toLowerCase();
-                if (term.length < 2) {
-                    results.innerHTML = '<div class="p-2 text-slate-400 text-center">Nhập ít nhất 2 ký tự để tìm kiếm...</div>';
-                    return;
-                }
-
-                const matches = processedQuestions.filter(q => q.question.toLowerCase().includes(term));
-
-                if (matches.length === 0) {
-                    results.innerHTML = '<div class="p-2 text-slate-400 text-center">Không tìm thấy câu hỏi phù hợp.</div>';
-                    return;
-                }
-
-                results.innerHTML = matches.map(q => `
-                    <div onclick="jumpToQuestion(${q.id})" class="p-2.5 hover:bg-emerald-50 rounded-lg cursor-pointer transition-colors flex items-center justify-between gap-2">
-                        <span class="font-medium text-slate-700 truncate">Câu ${q.id + 1}: ${q.question}</span>
-                        <i data-lucide="arrow-right-circle" class="w-4 h-4 text-emerald-600 shrink-0"></i>
-                    </div>
-                `).join('');
-
-                if (window.lucide) {
-                    lucide.createIcons();
-                }
-            });
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
             initApp();
 
@@ -1117,19 +1195,6 @@
             document.getElementById('gridModal').addEventListener('click', (e) => {
                 if (e.target.id === 'gridModal') {
                     document.getElementById('gridModal').classList.add('hidden');
-                }
-            });
-
-            // Reset All
-            document.getElementById('btnResetAll').addEventListener('click', () => {
-                if (confirm('Bạn có chắc chắn muốn xóa toàn bộ tiến trình làm bài và bắt đầu lại không?')) {
-                    userAnswers = {};
-                    currentFilter = 'all';
-                    setFilter('all');
-                    renderAllQuestions();
-                    updateStatsAndFilters();
-                    renderQuestionGrid();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             });
 
