@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ôn Tập Trắc Nghiệm Lịch Sử Đảng</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        pastel: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+                        'glass-lg': '0 12px 40px 0 rgba(31, 38, 135, 0.12)',
+                        'pastel-glow': '0 0 20px rgba(134, 239, 172, 0.4)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #e6f4ea 0%, #d3ede0 35%, #e1f5fe 70%, #e8f5e9 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        /* Glassmorphism styling */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 10px 30px -5px rgba(20, 83, 45, 0.05), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+        }
+
+        .glass-header {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.75);
+        }
+
+        .glass-pill {
+            background: rgba(240, 253, 244, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(187, 247, 208, 0.7);
+        }
+
+        .option-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(34, 197, 94, 0.14);
+        }
+
+        /* Answer States */
+        .option-correct {
+            background: rgba(220, 252, 231, 0.95) !important;
+            border-color: #22c55e !important;
+            color: #14532d !important;
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.25) !important;
+        }
+
+        .option-incorrect {
+            background: rgba(254, 226, 226, 0.95) !important;
+            border-color: #ef4444 !important;
+            color: #7f1d1d !important;
+        }
+
+        .option-disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(240, 253, 244, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a7f3d0;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6ee7b7;
+        }
+
+        /* Floating background ambient elements */
+        .ambient-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(70px);
+            z-index: -1;
+            opacity: 0.55;
+            pointer-events: none;
+            animation: float 18s ease-in-out infinite alternate;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0px, 0px) scale(1); }
+            50% { transform: translate(30px, -40px) scale(1.1); }
+            100% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+    </style>
+</head>
+<body class="font-sans text-slate-800 antialiased selection:bg-emerald-200 selection:text-emerald-900 flex flex-col min-h-screen">
+
+    <!-- Ambient background blobs -->
+    <div class="ambient-blob w-96 h-96 bg-emerald-200 top-10 left-10"></div>
+    <div class="ambient-blob w-80 h-80 bg-teal-200 bottom-10 right-10" style="animation-delay: -5s;"></div>
+    <div class="ambient-blob w-72 h-72 bg-emerald-100 top-1/2 left-1/3" style="animation-delay: -10s;"></div>
+
+    <!-- Sticky Navigation Header -->
+    <header class="sticky top-0 z-40 glass-header px-4 lg:px-8 py-3 shadow-sm">
+        <div class="max-w-6xl mx-auto flex items-center justify-between gap-3">
+            <!-- Brand / Title -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-200 shrink-0">
+                    <i data-lucide="book-open-check" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h1 class="text-base sm:text-lg lg:text-xl font-bold bg-gradient-to-r from-emerald-800 via-teal-800 to-emerald-900 bg-clip-text text-transparent leading-tight">
+                        THẾ MÀ LẠI HAY !
+                    </h1>
+                    <p class="text-xs text-emerald-700 font-medium hidden sm:block">Đáp án chỉ mang tính chất tham khảo</p>
+                </div>
+            </div>
+
+            <!-- Header Quick Stats & Controls -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Score Counter -->
+                <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl glass-pill text-xs font-semibold text-emerald-800 shadow-sm">
+                    <i data-lucide="award" class="w-4 h-4 text-emerald-600"></i>
+                    <span>Điểm: <strong id="headerScore" class="text-emerald-700 text-sm">0</strong>/<span id="headerTotal">0</span></span>
+                </div>
+
+                <!-- Grid Jump Button -->
+                <button id="btnOpenGrid" class="p-2 sm:px-3 sm:py-1.5 rounded-xl glass-pill text-emerald-800 hover:bg-emerald-100 transition-colors flex items-center gap-1 text-xs font-bold" title="Bảng chuyển nhanh câu hỏi">
+                    <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                    <span class="hidden md:inline">Bảng câu hỏi</span>
+                </button>
+
+                <!-- Search Toggle Button -->
+                <button id="btnSearchToggle" class="p-2 rounded-xl glass-pill text-emerald-800 hover:bg-emerald-100 transition-colors" title="Tìm kiếm câu hỏi">
+                    <i data-lucide="search" class="w-4 h-4"></i>
+                </button>
+
+                <!-- Reset Button -->
+                <button id="btnResetAll" class="p-2 rounded-xl glass-pill text-red-700 hover:bg-red-50 transition-colors" title="Làm lại từ đầu">
+                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-5xl w-full mx-auto px-3 sm:px-6 py-5 flex flex-col gap-5">
+
+        <!-- Search Drawer (Collapsible) -->
+        <div id="searchBox" class="hidden glass-card rounded-2xl p-4 transition-all duration-300">
+            <div class="relative">
+                <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-600"></i>
+                <input type="text" id="searchInput" placeholder="Nhập từ khóa cần tìm trong tất cả câu hỏi..." 
+                       class="w-full pl-10 pr-10 py-2.5 rounded-xl bg-white/90 border border-emerald-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 text-slate-700 shadow-inner">
+                <button id="btnCloseSearch" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div id="searchResults" class="mt-3 max-h-60 overflow-y-auto divide-y divide-emerald-100 text-xs text-slate-600"></div>
+        </div>
+
+        <!-- Global Dashboard & Filter Bar -->
+        <div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col gap-4">
+            <!-- Progress Info -->
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-100/80 pb-3">
+                <div>
+                    <h2 class="text-base font-bold text-slate-800">Ôn tập Lịch Sử Đảng</h2>
+                    <p class="text-xs text-slate-500 font-medium">Tất cả câu hỏi hiển thị liên tục bên dưới, chọn đáp án để xem ngay kết quả</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="text-right">
+                        <span class="text-xs text-slate-500 block font-medium">Đã trả lời</span>
+                        <span class="text-sm font-bold text-emerald-700" id="progressText">0/0 câu</span>
+                    </div>
+                    <div class="w-28 sm:w-36 h-3 bg-emerald-100/80 rounded-full overflow-hidden border border-emerald-200">
+                        <div id="globalProgressBar" class="h-full bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full transition-all duration-300 w-0"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Buttons Bar -->
+            <div class="flex items-center justify-between flex-wrap gap-2 text-xs font-semibold">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                    <button onclick="setFilter('all')" id="filter-all" class="px-3 py-1.5 rounded-xl bg-emerald-600 text-white shadow-sm transition-all">
+                        Tất cả (<span id="cnt-all">0</span>)
+                    </button>
+                    <button onclick="setFilter('unanswered')" id="filter-unanswered" class="px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 text-slate-700 hover:bg-emerald-50 transition-all">
+                        Chưa làm (<span id="cnt-unanswered">0</span>)
+                    </button>
+                    <button onclick="setFilter('answered')" id="filter-answered" class="px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 text-slate-700 hover:bg-emerald-50 transition-all">
+                        Đã làm (<span id="cnt-answered">0</span>)
+                    </button>
+                    <button onclick="setFilter('incorrect')" id="filter-incorrect" class="px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 text-slate-700 hover:bg-red-50 text-red-700 transition-all">
+                        Câu làm sai (<span id="cnt-incorrect">0</span>)
+                    </button>
+                    <button onclick="setFilter('bookmarked')" id="filter-bookmarked" class="px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 text-slate-700 hover:bg-amber-50 text-amber-700 transition-all">
+                        <i data-lucide="bookmark" class="w-3.5 h-3.5 inline mr-1"></i>Đã lưu (<span id="cnt-bookmarked">0</span>)
+                    </button>
+                </div>
+
+                <!-- Jump to input field -->
+                <div class="flex items-center gap-1.5 ml-auto">
+                    <span class="text-slate-500 text-xs hidden sm:inline">Đến câu:</span>
+                    <input type="number" id="jumpInput" min="1" placeholder="Số câu" class="w-16 px-2 py-1 rounded-lg bg-white/90 border border-emerald-300 text-center text-xs focus:outline-none focus:ring-1 focus:ring-emerald-500">
+                    <button onclick="handleJumpInput()" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors text-xs">
+                        Tới
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Continuous List Container -->
+        <div id="questionsContainer" class="flex flex-col gap-5">
+            <!-- Questions rendered here as one continuous list -->
+        </div>
+
+    </main>
+
+    <!-- Floating Navigation Action Buttons (Scroll top/bottom, Grid Modal trigger) -->
+    <div class="fixed bottom-5 right-5 z-40 flex flex-col gap-2">
+        <button id="btnScrollTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" class="p-3 rounded-2xl bg-emerald-600 text-white shadow-lg hover:bg-emerald-700 transition-all opacity-80 hover:opacity-100" title="Về đầu trang">
+            <i data-lucide="arrow-up" class="w-5 h-5"></i>
+        </button>
+        <button id="btnScrollBottom" onclick="window.scrollTo({top: document.body.scrollHeight, behavior:'smooth'})" class="p-3 rounded-2xl bg-teal-600 text-white shadow-lg hover:bg-teal-700 transition-all opacity-80 hover:opacity-100" title="Xuống cuối trang">
+            <i data-lucide="arrow-down" class="w-5 h-5"></i>
+        </button>
+    </div>
+
+    <!-- Modal: Question Grid Selector -->
+    <div id="gridModal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-card max-w-2xl w-full max-h-[85vh] rounded-2xl p-5 flex flex-col shadow-2xl">
+            <div class="flex items-center justify-between pb-3 border-b border-emerald-100">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="layout-grid" class="w-5 h-5 text-emerald-700"></i>
+                    <h3 class="font-bold text-slate-800 text-base">Bảng Chuyển Nhanh Câu Hỏi</h3>
+                </div>
+                <button id="btnCloseGrid" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Grid Legend -->
+            <div class="flex items-center justify-center gap-4 py-3 text-xs border-b border-emerald-100 flex-wrap">
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-white border border-slate-300"></span> Chưa làm</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-emerald-500"></span> Đúng</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-red-500"></span> Sai</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-amber-400"></span> Đã đánh dấu</span>
+            </div>
+
+            <!-- Grid Buttons Container -->
+            <div id="questionGridContainer" class="flex-1 overflow-y-auto py-4 grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-2">
+                <!-- Dynamically generated grid buttons -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer copyright -->
+    <footer class="py-5 text-center text-xs text-slate-500 glass-header mt-8">
+        Web App Ôn tập Trắc nghiệm Lịch Sử Đảng CSVN &copy; 2026 - Nhật Huy Code Lỏ
+    </footer>
+
+    <script>
+        /* RAW EXHAUSTIVE DATASET: All questions combined from docx, exams, and images */
+        const RAW_DATASET = [
+            {
+                q: "Sự ra đời của ba tổ chức Cộng sản vào năm 1929 có khuyết điểm cơ bản là gì?",
+                a: "Thiếu sự đoàn kết thống nhất về tổ chức",
+                d: ["Không ủng hộ Quốc tế Cộng sản", "Không có đường lối cách mạng đúng đắn", "Chưa thu hút được đông đảo công nhân"]
+            },
+            {
+                q: "Sự phát triển của phong trào yêu nước Việt Nam vào những năm 20 của thế kỷ XX có ý nghĩa như thế nào?",
+                a: "Cả ba phương án đều đúng (Bồi đắp thêm chủ nghĩa yêu nước; Cổ vũ mạnh mẽ tinh thần yêu nước; Thúc đẩy những nhà yêu nước tìm con đường mới)",
+                d: ["Chỉ có ý nghĩa cổ vũ tinh thần đơn thuần", "Dẫn đến sự thành lập ngay lập tức của Đảng Cộng sản", "Làm suy yếu hoàn toàn bộ máy cai trị của Pháp"]
+            },
+            {
+                q: "Nội dung nào sau đây không được xác định tại Hội nghị thành lập Đảng 2/1930?",
+                a: "Lấy tên Đảng là Đảng Cộng sản Đông Dương",
+                d: ["Lấy tên Đảng là Đảng Cộng sản Việt Nam", "Thông qua Chánh cương vắn tắt, Sách lược vắn tắt", "Cử Ban chấp hành Trung ương Đảng lâm thời"]
+            },
+            {
+                q: "Mưu đồ của Pháp đối với công cuộc xâm lược Việt Nam nói riêng và Đông Dương nói chung là gì?",
+                a: "Cả ba phương án đều đúng (Bóc lột sức lao động rẻ mạt; Vơ vét tài nguyên khoáng sản; Biến nơi đây thành thị trường tiêu thụ hàng hóa)",
+                d: ["Chỉ nhằm mục đích vơ vét tài nguyên khoáng sản", "Xây dựng nền kinh tế hiện đại cho Việt Nam", "Chỉ biến Việt Nam thành căn cứ quân sự"]
+            },
+            {
+                q: "Mâu thuẫn chủ yếu trong lòng xã hội Việt Nam dưới thời Pháp thuộc là gì?",
+                a: "Giữa toàn thể dân tộc VN với thực dân Pháp xâm lược",
+                d: ["Giữa tư sản và công nhân", "Giữa địa chủ và nông dân", "Giữa tầng lớp trí thức và thực dân Pháp"]
+            },
+            {
+                q: "Sự khác nhau cơ bản giữa Cương lĩnh chính trị đầu tiên và Luận cương tháng 10/1930 là ở nội dung nào?",
+                a: "Nhiệm vụ và lực lượng cách mạng",
+                d: ["Phương hướng chiến lược", "Vai trò lãnh đạo của Đảng", "Mục tiêu cuối cùng là xây dựng CNXH"]
+            },
+            {
+                q: "Đảng cộng sản Việt nam ra đời dựa trên sự kết hợp của các yếu tố nào sau đây?",
+                a: "CN Mác - Lênin, Phong trào Công Nhân, Phong trào yêu nước",
+                d: ["Chủ nghĩa Mác - Lênin và Phong trào công nhân", "Chủ nghĩa Mác - Lênin và Phong trào yêu nước", "Phong trào công nhân và Phong trào yêu nước"]
+            },
+            {
+                q: "Ai được bầu làm Tổng Bí thư tại Đại hội lần thứ I của Đảng (3/1935)?",
+                a: "Lê Hồng Phong",
+                d: ["Trần Phú", "Nguyễn Văn Cừ", "Hà Huy Tập"]
+            },
+            {
+                q: "Đâu là điều kiện tạo ra khả năng đấu tranh công khai hợp pháp cho phong trào cách mạng Đông Dương giai đoạn 1936-1939?",
+                a: "Tất cả các điều kiện trên (Sự xuất hiện chủ nghĩa phát xít; Chủ trương chuyển hướng của Quốc tế CS; Mặt trận Nhân dân Pháp lên cầm quyền)",
+                d: ["Chỉ do Mặt trận Nhân dân Pháp lên cầm quyền", "Thực dân Pháp tự nguyện nới rộng quyền tự do", "Do Nhật Bản vào xâm lược Đông Dương"]
+            },
+            {
+                q: "Hãy cho biết tên gọi chung của các tổ chức quần chúng trong mặt trận Việt Minh?",
+                a: "Cứu quốc",
+                d: ["Dân chủ", "Phản đế", "Giải phóng"]
+            },
+            {
+                q: "Kẻ thù chính của nhân dân Đông Dương kể từ khi Nhật đảo chính Pháp 9/3/1945 là ai?",
+                a: "Phát xít Nhật",
+                d: ["Thực dân Pháp", "Cả Pháp và Nhật", "Quân Tưởng và Anh"]
+            },
+            {
+                q: "Ngày 12/3/1945, Ban chấp hành Trung ương Đảng ra chỉ thị nào sau đây?",
+                a: "Nhật - Pháp bắn nhau và hành động của chúng ta",
+                d: ["Kháng chiến kiến quốc", "Toàn quốc kháng chiến", "Hòa để tiến"]
+            },
+            {
+                q: "Thời cơ giành chính quyền trong Cách mạng tháng Tám năm 1945 tồn tại trong khoảng thời gian nào?",
+                a: "Từ khi Nhật đầu hàng đến trước khi quân Đồng minh vào Đông Dương",
+                d: ["Từ khi Nhật đảo chính Pháp đến khi Bảo Đại thoái vị", "Từ khi Pháp đầu hàng đến khi Nhật đầu hàng", "Từ khi quân Đồng minh vào Đông Dương đến cuối năm 1945"]
+            },
+            {
+                q: "Việt Nam đã được các nước xã hội chủ nghĩa công nhận và đặt quan hệ ngoại giao từ khi nào?",
+                a: "Năm 1950",
+                d: ["Năm 1945", "Năm 1948", "Năm 1954"]
+            },
+            {
+                q: "Đại hội lần thứ II (1951) đã quyết định tách 3 Đảng bộ ở mỗi nước để thành lập đảng riêng. Đảng bộ Việt Nam được đặt tên là gì?",
+                a: "Đảng Lao động Việt Nam",
+                d: ["Đảng Cộng sản Việt Nam", "Đảng Cộng sản Đông Dương", "Hội nghiên cứu chủ nghĩa Mác"]
+            },
+            {
+                q: "Quyết định mở mặt trận ngoại giao nhằm tranh thủ sự ủng hộ của quốc tế, mở ra cục diện vừa đánh, vừa đàm của Đảng được đề ra trong kỳ họp nào?",
+                a: "Hội nghị lần thứ 13 Ban Chấp hành Trung ương Đảng (khóa III) 1/1967",
+                d: ["Đại hội III (9/1960)", "Hội nghị Trung ương 11 (3/1965)", "Hội nghị Trung ương 12 (12/1965)"]
+            },
+            {
+                q: "Giai đoạn 1965-1968, đế quốc Mỹ thực hiện chiến lược chiến tranh nào đối với Việt Nam?",
+                a: "Chiến tranh phá hoại ở miền Bắc và Chiến tranh cục bộ ở miền Nam",
+                d: ["Chiến tranh đơn phương", "Việt Nam hóa chiến tranh", "Chiến tranh đặc biệt"]
+            },
+            {
+                q: "Đâu là khó khăn lớn nhất khi cả nước bắt tay vào xây dựng Chủ nghĩa xã hội?",
+                a: "Điểm xuất phát thấp từ nền kinh tế nghèo nàn, lạc hậu, trình độ sản xuất nhỏ",
+                d: ["Các nước xã hội chủ nghĩa giảm viện trợ", "Hậu quả chiến tranh để lại", "Các thế lực thù địch bao vây cấm vận"]
+            },
+            {
+                q: "Đại hội IV (12/1976) của Đảng đã xác định nhiệm vụ trọng tâm của cả thời kỳ quá độ lên chủ nghĩa xã hội ở nước ta là gì?",
+                a: "Đẩy mạnh công nghiệp hóa XHCN",
+                d: ["Xây dựng con người mới XHCN", "Xây dựng nền sản xuất lớn XHCN", "Xây dựng nền văn hóa mới"]
+            },
+            {
+                q: "Cuộc chiến tranh chống xâm lược bảo vệ Tổ quốc ở biên giới phía Bắc nước ta trên thực tế diễn ra trong thời gian nào?",
+                a: "10 năm (Từ năm 1979 đến năm 1989)",
+                d: ["Trong năm 1979", "Từ năm 1978 đến năm 1980", "Từ năm 1979 đến năm 1985"]
+            },
+            {
+                q: "Đâu là bài học kinh nghiệm mà Đại hội VI (12/1986) rút ra?",
+                a: "Phải kết hợp sức mạnh dân tộc và sức mạnh thời đại trong điều kiện mới",
+                d: ["Phải ưu tiên phát triển công nghiệp nặng", "Phải hoàn thành cải tạo XHCN trước tiên", "Phải duy trì cơ chế tập trung bao cấp thêm một thời gian"]
+            },
+            {
+                q: "Tính từ năm 1986 đến nay, Đảng đã thông qua bao nhiêu Cương lĩnh?",
+                a: "Hai cương lĩnh (Cương lĩnh 1991 và Cương lĩnh bổ sung, phát triển 2011)",
+                d: ["Một", "Ba", "Bốn"]
+            },
+            {
+                q: "Nước ta ra khỏi tình trạng nước nghèo và kém phát triển, nằm trong nhóm nước có thu nhập trung bình từ khi nào?",
+                a: "Năm 2010",
+                d: ["Năm 2000", "Năm 2002", "Năm 2008"]
+            },
+            {
+                q: "Hội nghị Trung ương 5 khóa XII (2017) của Đảng đã xác định thành phần kinh tế nào đóng vai trò nòng cốt để phát triển nền kinh tế độc lập tự chủ?",
+                a: "Kinh tế nhà nước, kinh tế tập thể và kinh tế tư nhân",
+                d: ["Chỉ có Kinh tế Nhà nước", "Kinh tế nhà nước và Kinh tế có vốn đầu tư nước ngoài", "Kinh tế tư nhân và Kinh tế tập thể"]
+            },
+            {
+                q: "Tháng 11/2006, Việt Nam trở thành thành viên thứ mấy của Tổ chức Thương mại Thế giới (WTO)?",
+                a: "Thứ 150",
+                d: ["Thứ 145", "Thứ 160", "Thứ 164"]
+            },
+            {
+                q: "Mô hình kinh tế nước ta trong thời kỳ trước đổi mới là gì?",
+                a: "Kế hoạch hóa tập trung hành chính bao cấp",
+                d: ["Kinh tế thị trường tự do", "Kinh tế nhiều thành phần", "Kinh tế thị trường định hướng XHCN"]
+            },
+            {
+                q: "Đâu là đặc tính cơ bản của con người Việt Nam mà Đảng Cộng sản Việt Nam hiện đang chú trọng xây dựng?",
+                a: "Yêu nước, nhân ái, nghĩa tình, trung thực, đoàn kết, cần cù, sáng tạo",
+                d: ["Dân tộc, nhân văn, dân chủ và khoa học", "Cần kiệm, liêm chính, chí công vô tư", "Chân, thiện, mỹ"]
+            },
+            {
+                q: "Để hình thành đường lối đổi mới, Đảng đã trải qua quá trình tìm tòi, khảo nghiệm với bao nhiêu khâu đột phá cơ bản?",
+                a: "Ba khâu đột phá",
+                d: ["Hai khâu đột phá", "Bốn khâu đột phá", "Năm khâu đột phá"]
+            },
+            {
+                q: "Công tác chuẩn bị mọi mặt cho Đại hội VI - Đại hội đổi mới của Đảng gắn liền với vai trò của Tổng bí thư nào?",
+                a: "Trường Chinh",
+                d: ["Lê Duẩn", "Nguyễn Văn Linh", "Đỗ Mười"]
+            },
+            {
+                q: "Đâu là đặc trưng tổng quát về mục tiêu xây dựng chủ nghĩa xã hội ở Việt Nam được xác định tại Đại hội VIII (1996) của Đảng?",
+                a: "Dân giàu, nước mạnh, xã hội công bằng, văn minh",
+                d: ["Dân giàu, nước mạnh, công bằng, dân chủ, văn minh", "Dân giàu, nước mạnh, xã hội dân chủ, công bằng", "Dân giàu, nước mạnh, xã hội văn minh, hiện đại"]
+            },
+            {
+                q: "Để rút ngắn thời gian khoảng cách đuổi kịp các nước đi trước, Đảng ta đã có chủ trương gì?",
+                a: "Đẩy mạnh công nghiệp hóa, hiện đại hóa gắn với phát triển kinh tế tri thức",
+                d: ["Tập trung phát triển nông nghiệp sinh thái", "Vay vốn tối đa từ các quỹ quốc tế", "Ưu tiên phát triển công nghiệp nặng"]
+            },
+            {
+                q: "Khái niệm 'Công nghiệp hóa - Hiện đại hóa' được Đảng đưa ra lần đầu tiên khi nào?",
+                a: "Hội nghị Trung ương 7 khóa VII (năm 1994)",
+                d: ["Đại hội VI (năm 1986)", "Đại hội VII (năm 1991)", "Hội nghị Trung ương 6 khóa VII (năm 1993)"]
+            },
+            {
+                q: "Chủ trương xóa bỏ cơ chế kế hoạch hóa, tập trung quan liêu bao cấp của Đảng được đề cập lần đầu tiên ở kỳ họp nào?",
+                a: "Hội nghị Trung ương 8 khóa V (6/1985)",
+                d: ["Hội nghị Trung ương 6 khóa IV (8/1979)", "Hội nghị Trung ương 9 khóa IV (1/1981)", "Đại hội VI (12/1986)"]
+            },
+            {
+                q: "Đâu là mục tiêu tổng quát được Đảng xác định trong Chiến lược phát triển kinh tế - xã hội năm 2001-2010?",
+                a: "Phấn đấu đến năm 2010, đưa nước ta ra khỏi tình trạng nước nghèo và kém phát triển",
+                d: ["Phấn đấu đưa nước ta trở thành nước công nghiệp phát triển", "Đưa thu nhập bình quân đầu người vượt mức 5.000 USD", "Hoàn thành về cơ bản sự nghiệp CNH, HĐH"]
+            },
+            {
+                q: "Nội dung nào sau đây được xác định tại Đại hội III (9/1960) của Đảng?",
+                a: "Miền Bắc có vai trò quyết định nhất đối với sự nghiệp cách mạng Việt Nam",
+                d: ["Miền Nam có vai trò quyết định nhất", "Hai miền có vai trò ngang nhau", "Miền Bắc chỉ đóng vai trò hậu thuẫn tinh thần"]
+            },
+            {
+                q: "Đại hội VIII của Đảng đã xác định nguồn lực nào là yếu tố cơ bản cho sự phát triển nhanh và bền vững trong quá trình CNH, HĐH?",
+                a: "Con người",
+                d: ["Khoa học công nghệ", "Tài nguyên đất đai", "Vốn đầu tư nước ngoài"]
+            },
+            {
+                q: "Hiện nay, khoa học công nghệ được Đảng xác định có vai trò gì đối với sự nghiệp đẩy mạnh CNH, HĐH?",
+                a: "Nền tảng và động lực",
+                d: ["Động lực quan trọng nhất", "Điều kiện hỗ trợ", "Nguồn lực quyết định duy nhất"]
+            },
+            {
+                q: "Để góp phần thành công trong sự nghiệp xây dựng chủ nghĩa xã hội ở Việt Nam, mỗi sinh viên cần thực hiện những điều nào?",
+                a: "Thực hiện đồng thời (Kiên định mục tiêu độc lập dân tộc và CNXH; Tập trung phát triển bản thân, học tập nâng cao trình độ)",
+                d: ["Kiên định mục tiêu độc lập dân tộc và CNXH", "Tập trung phát triển bản thân, học tập nâng cao trình độ", "Chỉ làm giàu kinh tế cho cá nhân"]
+            },
+            {
+                q: "Diễn đạt nào sau đây là đúng khi nói về vai trò lãnh đạo của Đảng đối với cách mạng Việt Nam?",
+                a: "Sự lãnh đạo đúng đắn của Đảng là nhân tố hàng đầu quyết định thắng lợi của cách mạng Việt Nam",
+                d: ["Sự lãnh đạo của Đảng là yếu tố duy nhất tạo nên thắng lợi", "Đảng chỉ đóng vai trò cố vấn cho chính phủ", "Sự thắng lợi hoàn toàn dựa vào viện trợ bên ngoài"]
+            },
+            {
+                q: "Tại Đại hội XIII của Đảng đã xác định mục tiêu phấn đấu đến năm 2030 đưa nước ta đạt trình độ phát triển như thế nào?",
+                a: "Đến năm 2030, kỷ niệm 100 năm thành lập Đảng, là nước đang phát triển, có công nghiệp hiện đại, thu nhập trung bình cao",
+                d: ["Là nước phát triển, thu nhập cao", "Là nước đang phát triển, thu nhập trung bình thấp", "Là nước công nghiệp phát triển hiện đại hàng đầu Châu Á"]
+            },
+            {
+                q: "Tình hình thế giới cuối thế kỷ XIX đầu thế kỷ XX có mấy đặc điểm lớn tác động mạnh mẽ đến phong trào yêu nước Việt Nam?",
+                a: "3 đặc điểm lớn",
+                d: ["2 đặc điểm", "4 đặc điểm", "5 đặc điểm"]
+            },
+            {
+                q: "Hiệp ước nào sau đây đánh dấu việc Triều đình Nhà Nguyễn đã đầu hàng hoàn toàn thực dân Pháp?",
+                a: "Hiệp ước 1884 (Hiệp ước Patenôtre)",
+                d: ["Hiệp ước 1862 (Nhâm Tuất)", "Hiệp ước 1874 (Giáp Tuất)", "Hiệp ước 1883 (Harmand)"]
+            },
+            {
+                q: "Trong quá trình thống trị Việt Nam, Thực dân Pháp đã tiến hành mấy cuộc khai thác thuộc địa?",
+                a: "2 cuộc khai thác thuộc địa",
+                d: ["1 cuộc", "3 cuộc", "4 cuộc"]
+            },
+            {
+                q: "Dưới chế độ thống trị của Thực dân Pháp, giai cấp địa chủ Việt Nam bị phân hóa làm mấy bộ phận?",
+                a: "3 bộ phận (Địa chủ đại, trung và tiểu địa chủ)",
+                d: ["2 bộ phận", "4 bộ phận", "5 bộ phận"]
+            },
+            {
+                q: "Dưới chế độ thống trị của Thực dân Pháp, giai cấp tư sản Việt Nam bị phân hóa làm mấy bộ phận?",
+                a: "2 bộ phận (Tư sản mại bản và Tư sản dân tộc)",
+                d: ["3 bộ phận", "4 bộ phận", "Không bị phân hóa"]
+            },
+            {
+                q: "Dưới chế độ thống trị của Thực dân Pháp, giai cấp nào ở Việt Nam bị bóc lột nặng nề nhất?",
+                a: "Nông dân",
+                d: ["Công nhân", "Địa chủ", "Tư sản"]
+            },
+            {
+                q: "Dưới chế độ thống trị của Thực dân Pháp, giai tầng nào có lực lượng nhỏ bé nhưng sớm tiếp nhận tư tưởng tiên tiến, nhanh chóng phát triển từ 'tự phát' đến 'tự giác'?",
+                a: "Công nhân",
+                d: ["Nông dân", "Tiểu tư sản, trí thức", "Tư sản dân tộc"]
+            },
+            {
+                q: "Dưới chế độ thống trị của Thực dân Pháp, giai tầng nào có tinh thần dân tộc, yêu nước, nhạy cảm về chính trị nhưng địa vị kinh tế bấp bênh, dễ dao động?",
+                a: "Tiểu tư sản, trí thức",
+                d: ["Công nhân", "Nông dân", "Tư sản mại bản"]
+            },
+            {
+                q: "Nguyên nhân chính yếu dẫn đến sự thất bại của phong trào yêu nước Việt Nam cuối thế kỷ XIX đầu thế kỷ XX là gì?",
+                a: "Thiếu giai cấp tiên tiến và đường lối cách mạng đúng đắn lãnh đạo",
+                d: ["Thực dân Pháp quá mạnh", "Nhân dân không ủng hộ", "Thiếu vũ khí hiện đại"]
+            },
+            {
+                q: "Vào những năm cuối thế kỷ XIX đầu thế kỷ XX ở vùng miền núi và trung du phía Bắc có phong trào đã kiên cường chống Pháp suốt gần 30 năm. Đó là phong trào nào?",
+                a: "Phong trào nông dân Yên Thế",
+                d: ["Phong trào nông dân Hưng Yên", "Phong trào Yên Bái", "Phong trào Thái Nguyên"]
+            },
+            {
+                q: "Ở Việt Nam đầu thế kỷ XX, phong trào yêu nước Việt Nam chịu ảnh hưởng, tác động của xu hướng nào?",
+                a: "Cải cách, canh tân",
+                d: ["Cần Vương phong kiến", "Chủ nghĩa vô sản ngay từ đầu", "Xu hướng hòa hoãn"]
+            },
+            {
+                q: "Những năm đầu thế kỷ XX, phong trào yêu nước theo xu hướng bạo động do ai khởi xướng và lãnh đạo?",
+                a: "Phan Bội Châu",
+                d: ["Phan Châu Trinh", "Hoàng Hoa Thám", "Nguyễn Thái Học"]
+            },
+            {
+                q: "Những năm đầu thế kỷ XX, phong trào yêu nước theo xu hướng cải cách do ai khởi xướng và lãnh đạo?",
+                a: "Phan Châu Trinh",
+                d: ["Phan Bội Châu", "Kỳ Ngoại Hầu Cường Để", "Huỳnh Thúc Kháng"]
+            },
+            {
+                q: "Khi thực dân Pháp đẩy mạnh khai thác thuộc địa lần thứ hai, đã ra đời một tổ chức yêu nước thu hút đông đảo học sinh, sinh viên yêu nước ở Bắc Kỳ. Đó là tổ chức nào?",
+                a: "Việt Nam Quốc dân Đảng",
+                d: ["Tân Việt Cách mạng Đảng", "Đảng Lập trường", "Việt Nam Nghĩa đoàn"]
+            },
+            {
+                q: "Tổ chức Việt Nam Quốc dân Đảng do ai sáng lập và lãnh đạo?",
+                a: "Nguyễn Thái Học",
+                d: ["Phan Bội Châu", "Nguyễn An Ninh", "Lê Hồng Phong"]
+            },
+            {
+                q: "Thắng lợi về quốc tế của nước ta sau Cách mạng Tháng Tám năm 1945 là gì?",
+                a: "Liên Xô trở thành thành trì CNXH ; Các nước Đông, Trung Âu chọn đường CNXH ; Phong trào giải phóng dân tộc thuộc địa dâng cao",
+                d: ["Chỉ có Liên Xô trở thành thành trì CNXH", "Các nước Tư bản nới lỏng chính sách thuộc địa", "Liên Hợp Quốc công nhận ngay lập tức"]
+            },
+            {
+                q: "Sau thắng lợi của Cách mạng Tháng 8/1945 ai đã trở thành biểu tượng của khối đại đoàn kết toàn dân tộc Việt Nam?",
+                a: "Hồ Chí Minh",
+                d: ["Trường Chinh", "Võ Nguyên Giáp", "Tôn Đức Thắng"]
+            },
+            {
+                q: "Sau Cách mạng Tháng 8/1945 nước ta có bao nhiêu % dân số bị mù chữ?",
+                a: "95% dân số",
+                d: ["80%", "90%", "98%"]
+            },
+            {
+                q: "Ngày 3/9/1945, Phiên họp đầu tiên của Chính phủ Lâm thời dưới sự chủ trì của Bác Hồ đã xác định nhiệm vụ cấp bách là gì?",
+                a: "Diệt giặc đói, giặc dốt và giặc ngoại xâm",
+                d: ["Củng cố chính quyền và cải cách ruộng đất", "Chống giặc ngoại xâm là duy nhất", "Phát hành đồng tiền Việt Nam"]
+            },
+            {
+                q: "Chỉ thị nào của Đảng có tác dụng định hướng tư tưởng, trực tiếp chỉ đạo cuộc kháng chiến ở Nam Bộ và bảo vệ chính quyền sau Cách mạng Tháng Tám?",
+                a: "Chỉ thị Kháng chiến kiến quốc (25/11/1945)",
+                d: ["Chỉ thị Hòa để tiến", "Lời kêu gọi toàn quốc kháng chiến", "Chỉ thị Nhật Pháp bắn nhau"]
+            },
+            {
+                q: "Nạn đói lớn năm 1945 ở nước ta cơ bản được đẩy lùi vào thời gian nào?",
+                a: "Đầu năm 1946",
+                d: ["Cuối năm 1945", "Cuối năm 1946", "Năm 1947"]
+            },
+            {
+                q: "Chủ tịch Hồ Chí Minh đã gửi thư khen ngợi, động viên đồng bào miền Nam và tặng danh hiệu gì cho nhân dân Nam Bộ?",
+                a: "\"Thành đồng Tổ quốc\"",
+                d: ["\"Anh hùng kiên cường\"", "\"Bất khuất trung hậu\"", "\"Dũng cảm tiên phong\""]
+            },
+            {
+                q: "Ngay sau khi ký Hiệp định sơ bộ, ngày 9/3/1946, Thường vụ Trung ương Đảng đã ra Chỉ thị gì để phân tích, đánh giá chủ trương hòa hoãn?",
+                a: "Chỉ thị \"Hòa để tiến\"",
+                d: ["Chỉ thị Kháng chiến kiến quốc", "Lời kêu gọi toàn quốc kháng chiến", "Chỉ thị Nhật - Pháp bắn nhau"]
+            },
+            {
+                q: "Ngọn cờ dẫn đường, động viên toàn Đảng, toàn quân, toàn dân ta tiến lên chống thực dân Pháp xâm lược là văn kiện nào?",
+                a: "Lời kêu gọi toàn quốc kháng chiến",
+                d: ["Chỉ thị Kháng chiến kiến quốc", "Chỉ thị Hòa để tiến", "Tác phẩm Kháng chiến nhất định thắng lợi"]
+            },
+            {
+                q: "Sắp xếp thứ tự các nước lần lượt công nhận và đặt quan hệ ngoại giao với ta năm 1950?",
+                a: "Trung Quốc, Liên Xô, Triều Tiên",
+                d: ["Liên Xô, Trung Quốc, Triều Tiên", "Triều Tiên, Trung Quốc, Liên Xô", "Trung Quốc, Triều Tiên, Liên Xô"]
+            },
+            {
+                q: "Âm mưu của đế quốc Mỹ tại miền Nam Việt Nam sau năm 1954 là gì?",
+                a: "Biến nơi đây thành thuộc địa kiểu mới; Chia cắt lâu dài hai miền Nam - Bắc",
+                d: ["Xây dựng nền kinh tế tư bản hiện đại", "Biến Việt Nam thành quốc gia trung lập", "Giúp đỡ chính quyền Ngô Đình Diệm phát triển dân chủ"]
+            },
+            {
+                q: "Ai là người soạn thảo Đề cương đường lối cách mạng Việt Nam ở miền Nam (1956)?",
+                a: "Lê Duẩn",
+                d: ["Trường Chinh", "Võ Nguyên Giáp", "Phạm Văn Đồng"]
+            },
+            {
+                q: "Thắng lợi nào là bước nhảy vọt lịch sử của cách mạng miền Nam, chuyển từ thế giữ gìn lực lượng sang thế tiến công?",
+                a: "Phong trào Đồng khởi (1959 - 1960)",
+                d: ["Trận thắng Ấp Bắc", "Chiến thắng Bình Giã", "Trận Núi Thành"]
+            },
+            {
+                q: " \"Đại hội lần này là Đại hội xây dựng CNXH ở miền Bắc và đấu tranh hòa bình thống nhất nước nhà\" là nói về Đại hội nào?",
+                a: "Đại hội III (9/1960)",
+                d: ["Đại hội II (1951)", "Đại hội IV (1976)", "Đại hội V (1982)"]
+            },
+            {
+                q: "Trước nguy cơ thất bại của \"Chiến tranh đặc biệt\", đế quốc Mỹ quyết định chuyển sang chiến lược chiến tranh nào?",
+                a: "Chiến lược chiến tranh cục bộ",
+                d: ["Chiến tranh đơn phương", "Việt Nam hóa chiến tranh", "Chiến tranh phá hoại"]
+            },
+            {
+                q: "Khó khăn lớn nhất của đất nước ta sau năm 1975 là gì?",
+                a: "Kinh tế - xã hội còn ở trình độ rất thấp",
+                d: ["Chỉ do hậu quả của thiên tai", "Chỉ do dịch bệnh kéo dài", "Do thiếu nhân lực lao động"]
+            },
+            {
+                q: "Đại hội IV của Đảng (12/1976) đã bộc lộ những hạn chế nào?",
+                a: "Chưa tổng kết kinh nghiệm 21 năm xây dựng CNXH ở miền Bắc ; Chưa phát hiện khuyết tật mô hình cũ ; Dự kiến thời gian kết thúc thời kỳ quá độ quá nóng vội",
+                d: ["Chỉ bộc lộ hạn chế trong đường lối đối ngoại", "Không xác định được mục tiêu CNH", "Bỏ qua phát triển nông nghiệp"]
+            },
+            {
+                q: "Bước đột phá đầu tiên về đổi mới kinh tế của Đảng tại Hội nghị Trung ương 6 khóa IV (8/1979) có chủ trương gì?",
+                a: "Hủy bỏ những rào cản để cho \"sản xuất bung ra\"",
+                d: ["Xóa bỏ hoàn toàn thành phần kinh tế tư nhân", "Thực hiện khoán 10 ngay lập tức", "Mở cửa thu hút đầu tư nước ngoài"]
+            },
+            {
+                q: "Chỉ thị số 100-CT/TW (1/1981) của Ban Bí thư Trung ương Đảng mang lại đổi mới quan trọng trong lĩnh vực nào?",
+                a: "Nông nghiệp (tháo gỡ rào cản, khoán sản phẩm đến nhóm và người lao động)",
+                d: ["Công nghiệp nặng", "Thương nghiệp và xuất nhập khẩu", "Giao thông vận tải"]
+            },
+            {
+                q: "Quyết định 25/CP và 26/CP (năm 1981) của Chính phủ tập trung tháo gỡ rào cản trong lĩnh vực nào?",
+                a: "Công nghiệp và xí nghiệp quốc doanh (mở rộng quyền tự chủ sản xuất)",
+                d: ["Nông nghiệp hợp tác xã", "Giáo dục và y tế", "Tài chính ngân hàng"]
+            },
+            {
+                q: "Trước hiện tượng \"khoán chui\" trong hợp tác xã nông nghiệp ở một số địa phương, Ban Bí thư đã ban hành văn bản nào?",
+                a: "Chỉ thị 100-CT/TW",
+                d: ["Nghị quyết Khoán 10", "Quyết định 25/CP", "Nghị quyết Trung ương 6"]
+            },
+            {
+                q: "Sau đại thắng mùa Xuân năm 1975, nhiệm vụ đầu tiên và bức thiết nhất của nước ta là gì?",
+                a: "Hoàn thành thống nhất nước nhà về mặt Nhà nước",
+                d: ["Khôi phục công nghiệp nặng", "Xin gia nhập Liên Hợp Quốc", "Cải cách tiền tệ"]
+            },
+            {
+                q: "Trong ba cuộc cách mạng được Đảng xác định ở Đại hội IV (1976), cuộc cách mạng nào là then chốt nhất?",
+                a: "Cách mạng Khoa học - Kỹ thuật",
+                d: ["Cách mạng quan hệ sản xuất", "Cách mạng tư tưởng và văn hóa", "Cách mạng công nghiệp nhẹ"]
+            },
+            {
+                q: "Nước nào là nước đầu tiên trong hệ thống xã hội chủ nghĩa chính thức đặt quan hệ ngoại giao với Việt Nam năm 1950?",
+                a: "Cộng hòa Nhân dân Trung Hoa (18/1/1950)",
+                d: ["Liên Xô", "Cộng hòa Dân chủ Đức", "Triều Tiên"]
+            },
+            {
+                q: "Tính từ năm 1930 đến nay, Đảng Cộng sản Việt Nam đã thông qua tổng cộng bao nhiêu Cương lĩnh chính trị?",
+                a: "Năm Cương lĩnh (1930, Luận cương 10/1930, 1951, 1991, 2011)",
+                d: ["Ba Cương lĩnh", "Bốn Cương lĩnh", "Sáu Cương lĩnh"]
+            },
+            {
+                q: "Tính chất của xã hội Việt Nam dưới thời Pháp thuộc là gì?",
+                a: "Thuộc địa nửa phong kiến",
+                d: ["Phong kiến thuần túy", "Tư bản chủ nghĩa", "Thuộc địa hoàn toàn không còn phong kiến"]
+            },
+            {
+                q: "Kỳ họp Quốc hội nước Việt Nam thống nhất lần thứ nhất (7/1976) đã bầu ai làm Chủ tịch Quốc hội, Chủ tịch nước, Thủ tướng?",
+                a: "Chủ tịch Quốc hội: Trường Chinh; Chủ tịch nước: Tôn Đức Thắng; Thủ tướng: Phạm Văn Đồng",
+                d: ["Chủ tịch Quốc hội: Lê Duẩn; Chủ tịch nước: Tôn Đức Thắng; Thủ tướng: Đỗ Mười", "Chủ tịch Quốc hội: Nguyễn Hữu Thọ; Chủ tịch nước: Trường Chinh; Thủ tướng: Phạm Văn Đồng", "Chủ tịch Quốc hội: Trường Chinh; Chủ tịch nước: Nguyễn Hữu Thọ; Thủ tướng: Võ Văn Kiệt"]
+            },
+            {
+                q: "Nhiệm vụ bao trùm mục tiêu tổng quát trong suốt thời kỳ quá độ lên CNXH được xác định ở Đại hội IV (12/1976) là gì?",
+                a: "Đẩy mạnh công nghiệp hóa xã hội chủ nghĩa",
+                d: ["Hoàn thành cải tạo XHCN ở miền Nam", "Phát triển kinh tế thị trường", "Mở rộng hợp tác quốc tế"]
+            },
+            {
+                q: "Đảng quyết định đổi tên Đảng từ Đảng Lao động Việt Nam sang Đảng Cộng sản Việt Nam tại kỳ họp nào?",
+                a: "Đại hội Đại biểu toàn quốc lần thứ IV (12/1976)",
+                d: ["Đại hội III (1960)", "Đại hội V (1982)", "Đại hội VI (1986)"]
+            },
+            {
+                q: "Trước thời kỳ đổi mới (1986), nền kinh tế nước ta có mấy thành phần kinh tế?",
+                a: "3 thành phần (quốc doanh, tập thể và cá thể)",
+                d: ["5 thành phần", "2 thành phần", "1 thành phần"]
+            },
+            {
+                q: "Kỳ họp hội nghị nào có ý nghĩa là khâu đột phá đầu tiên về đổi mới kinh tế?",
+                a: "Hội nghị Trung ương 6 khóa IV (8/1979)",
+                d: ["Hội nghị Trung ương 8 khóa V (6/1985)", "Đại hội VI (12/1986)", "Hội nghị Trung ương 9 khóa IV"]
+            },
+            {
+                q: "Đặc trưng cơ bản của công nghiệp hóa thời kỳ trước đổi mới là gì?",
+                a: "Ưu tiên phát triển công nghiệp nặng",
+                d: ["Ưu tiên phát triển công nghiệp nhẹ", "Ưu tiên phát triển nông nghiệp sinh thái", "Ưu tiên phát triển kinh tế tri thức"]
+            },
+            {
+                q: "Chặng đường đầu tiên của thời kỳ quá độ lên CNXH được xác định từ Đại hội mấy của Đảng?",
+                a: "Đại hội V (1982)",
+                d: ["Đại hội III (1960)", "Đại hội IV (1976)", "Đại hội VI (1986)"]
+            },
+            {
+                q: "Mô hình chủ nghĩa xã hội trước thời kỳ đổi mới có mấy đặc trưng cơ bản?",
+                a: "4 đặc trưng",
+                d: ["6 đặc trưng", "8 đặc trưng", "10 đặc trưng"]
+            },
+            {
+                q: "Nội dung CNH tại Đại hội VI (12/1986) tập trung vào những chương trình nào?",
+                a: "Thực hiện 3 chương trình kinh tế lớn (lương thực - thực phẩm, hàng tiêu dùng và hàng xuất khẩu)",
+                d: ["Tập trung phát triển công nghiệp nặng và điện lực", "Mở rộng khu công nghiệp chế xuất", "Đẩy mạnh công nghệ thông tin"]
+            },
+            {
+                q: "Lĩnh vực nào được Đảng chủ trương đổi mới đầu tiên tại Đại hội VI (12/1986)?",
+                a: "Đổi mới kinh tế",
+                d: ["Đổi mới hệ thống chính trị", "Đổi mới văn hóa - tư tưởng", "Đổi mới giáo dục"]
+            },
+            {
+                q: "Sai lầm trong chủ trương về xây dựng CNXH trước thời kỳ đổi mới là gì?",
+                a: "Cả ba đáp án (Duy trì quá lâu cơ chế kế hoạch hóa; Mục tiêu phát triển quá cao; Chủ quan nóng vội)",
+                d: ["Duy trì quá lâu cơ chế kế hoạch hóa", "Mục tiêu phát triển quá cao", "Chủ quan nóng vội"]
+            },
+            {
+                q: "Mô hình chủ nghĩa xã hội được xác định trong Cương lĩnh năm 1991 gồm mấy đặc trưng?",
+                a: "6 đặc trưng",
+                d: ["4 đặc trưng", "8 đặc trưng", "10 đặc trưng"]
+            },
+            {
+                q: "Đặc trưng nào sau đây của CNXH KHÔNG được xác định trong Cương lĩnh năm 1991?",
+                a: "Có nhà nước pháp quyền XHCN",
+                d: ["Do nhân dân lao động làm chủ", "Có nền kinh tế phát triển cao dựa trên lực lượng sản xuất hiện đại", "Con người được giải phóng khỏi áp bức, bóc lột"]
+            },
+            {
+                q: "Văn kiện nào của Đảng đã đặt nhiệm vụ giải phóng dân tộc, chống đế quốc lên hàng đầu?",
+                a: "Chánh cương vắn tắt, Sách lược vắn tắt (Cương lĩnh chính trị đầu tiên 2/1930)",
+                d: ["Luận cương chính trị tháng 10/1930", "Nghị quyết Đại hội I (1935)", "Chỉ thị thành lập Đội Tuyên truyền giải phóng quân"]
+            }
+        ];
+
+        /* State management variables */
+        let processedQuestions = [];
+        let userAnswers = {}; // Format: { questionIdx: selectedOptionIdx }
+        let bookmarkedQuestions = new Set();
+        let currentFilter = 'all'; // 'all', 'unanswered', 'answered', 'incorrect', 'bookmarked'
+
+        /* Helper shuffle array */
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function initApp() {
+            // Process raw data into question objects with 4 options each
+            processedQuestions = RAW_DATASET.map((item, idx) => {
+                const correctAnswer = item.a;
+                const optionsList = [correctAnswer, ...item.d];
+                const shuffled = shuffleArray(optionsList);
+                const correctIdx = shuffled.indexOf(correctAnswer);
+
+                return {
+                    id: idx,
+                    question: item.q,
+                    options: shuffled,
+                    correctIndex: correctIdx,
+                    correctText: correctAnswer
+                };
+            });
+
+            // Load bookmarks from localStorage if available
+            try {
+                const savedBookmarks = localStorage.getItem('lsd_bookmarks');
+                if (savedBookmarks) {
+                    bookmarkedQuestions = new Set(JSON.parse(savedBookmarks));
+                }
+            } catch(e) {}
+
+            renderAllQuestions();
+            updateStatsAndFilters();
+            renderQuestionGrid();
+            initSearch();
+        }
+
+        function renderAllQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            const prefixes = ['A', 'B', 'C', 'D'];
+
+            processedQuestions.forEach((qObj, idx) => {
+                const userSelected = userAnswers[idx];
+                const isAnswered = userSelected !== undefined;
+                const isBookmarked = bookmarkedQuestions.has(idx);
+                const isIncorrect = isAnswered && userSelected !== qObj.correctIndex;
+
+                // Determine if question matches current active filter
+                let isVisible = true;
+                if (currentFilter === 'unanswered' && isAnswered) isVisible = false;
+                if (currentFilter === 'answered' && !isAnswered) isVisible = false;
+                if (currentFilter === 'incorrect' && !isIncorrect) isVisible = false;
+                if (currentFilter === 'bookmarked' && !isBookmarked) isVisible = false;
+
+                const card = document.createElement('div');
+                card.className = `glass-card rounded-2xl p-5 sm:p-6 transition-all duration-300 relative overflow-hidden ${isVisible ? 'block' : 'hidden'}`;
+                card.id = `q-card-${idx}`;
+
+                // Options HTML
+                let optionsHTML = '';
+                qObj.options.forEach((optText, optIdx) => {
+                    let btnClass = 'option-btn w-full text-left p-3.5 sm:p-4 rounded-xl border text-sm sm:text-base font-medium flex items-start gap-3 bg-white/80 border-slate-200 text-slate-700 hover:bg-emerald-50/80 hover:border-emerald-300';
+                    let badgeClass = 'w-6 h-6 rounded-lg bg-emerald-100 text-emerald-800 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5';
+                    let iconHTML = '';
+
+                    if (isAnswered) {
+                        if (optIdx === qObj.correctIndex) {
+                            btnClass = 'option-btn option-correct w-full text-left p-3.5 sm:p-4 rounded-xl border text-sm sm:text-base font-semibold flex items-start gap-3';
+                            badgeClass = 'w-6 h-6 rounded-lg bg-emerald-600 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5';
+                            iconHTML = `<i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600 shrink-0 ml-auto"></i>`;
+                        } else if (optIdx === userSelected) {
+                            btnClass = 'option-btn option-incorrect w-full text-left p-3.5 sm:p-4 rounded-xl border text-sm sm:text-base font-semibold flex items-start gap-3';
+                            badgeClass = 'w-6 h-6 rounded-lg bg-red-600 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5';
+                            iconHTML = `<i data-lucide="x-circle" class="w-5 h-5 text-red-500 shrink-0 ml-auto"></i>`;
+                        } else {
+                            btnClass += ' option-disabled';
+                        }
+                    }
+
+                    optionsHTML += `
+                        <button 
+                            onclick="selectAnswer(${idx}, ${optIdx})" 
+                            ${isAnswered ? 'disabled' : ''} 
+                            class="${btnClass}">
+                            <span class="${badgeClass}">${prefixes[optIdx]}</span>
+                            <span class="flex-1 leading-snug">${optText}</span>
+                            ${iconHTML}
+                        </button>
+                    `;
+                });
+
+                // Status tag
+                let statusBadge = '';
+                if (isAnswered) {
+                    if (userSelected === qObj.correctIndex) {
+                        statusBadge = `<span class="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800 text-xs font-bold flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5"></i> Chính xác</span>`;
+                    } else {
+                        statusBadge = `<span class="px-2.5 py-1 rounded-lg bg-red-100 text-red-800 text-xs font-bold flex items-center gap-1"><i data-lucide="x" class="w-3.5 h-3.5"></i> Chưa đúng</span>`;
+                    }
+                }
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between gap-3 mb-3.5">
+                        <div class="flex items-center gap-2">
+                            <span class="px-3 py-1 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold text-xs shadow-sm">
+                                CÂU ${idx + 1}
+                            </span>
+                            <span id="status-${idx}">${statusBadge}</span>
+                        </div>
+
+                        <!-- Bookmark Action -->
+                        <button onclick="toggleBookmark(${idx})" class="p-1.5 rounded-lg text-slate-400 hover:text-amber-500 hover:bg-amber-50 transition-colors" title="${isBookmarked ? 'Bỏ lưu' : 'Lưu câu này'}">
+                            <i data-lucide="bookmark" class="w-5 h-5 ${isBookmarked ? 'fill-amber-400 text-amber-500' : ''}"></i>
+                        </button>
+                    </div>
+
+                    <h3 class="text-base sm:text-lg font-bold text-slate-800 mb-4 leading-snug">
+                        ${qObj.question}
+                    </h3>
+
+                    <div class="grid grid-cols-1 gap-2.5">
+                        ${optionsHTML}
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        }
+
+        function selectAnswer(questionIdx, selectedOptIdx) {
+            if (userAnswers[questionIdx] !== undefined) return;
+
+            userAnswers[questionIdx] = selectedOptIdx;
+
+            // Re-render single question element efficiently
+            renderAllQuestions();
+            updateStatsAndFilters();
+            renderQuestionGrid();
+        }
+
+        function toggleBookmark(questionIdx) {
+            if (bookmarkedQuestions.has(questionIdx)) {
+                bookmarkedQuestions.delete(questionIdx);
+            } else {
+                bookmarkedQuestions.add(questionIdx);
+            }
+
+            try {
+                localStorage.setItem('lsd_bookmarks', JSON.stringify(Array.from(bookmarkedQuestions)));
+            } catch(e) {}
+
+            renderAllQuestions();
+            updateStatsAndFilters();
+            renderQuestionGrid();
+        }
+
+        function setFilter(filterType) {
+            currentFilter = filterType;
+
+            // Highlight active filter tab
+            ['all', 'unanswered', 'answered', 'incorrect', 'bookmarked'].forEach(f => {
+                const btn = document.getElementById(`filter-${f}`);
+                if (btn) {
+                    if (f === filterType) {
+                        btn.className = 'px-3 py-1.5 rounded-xl bg-emerald-600 text-white shadow-sm transition-all';
+                    } else {
+                        btn.className = 'px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 text-slate-700 hover:bg-emerald-50 transition-all';
+                    }
+                }
+            });
+
+            renderAllQuestions();
+        }
+
+        function updateStatsAndFilters() {
+            const total = processedQuestions.length;
+            const answeredCount = Object.keys(userAnswers).length;
+            
+            let correctCount = 0;
+            let incorrectCount = 0;
+
+            Object.keys(userAnswers).forEach(gIdx => {
+                if (userAnswers[gIdx] === processedQuestions[gIdx].correctIndex) {
+                    correctCount++;
+                } else {
+                    incorrectCount++;
+                }
+            });
+
+            // Update Counts in UI
+            document.getElementById('headerScore').innerText = correctCount;
+            document.getElementById('headerTotal').innerText = total;
+
+            document.getElementById('progressText').innerText = `${answeredCount}/${total} câu`;
+            const pct = (answeredCount / total) * 100;
+            document.getElementById('globalProgressBar').style.width = `${pct}%`;
+
+            document.getElementById('cnt-all').innerText = total;
+            document.getElementById('cnt-unanswered').innerText = total - answeredCount;
+            document.getElementById('cnt-answered').innerText = answeredCount;
+            document.getElementById('cnt-incorrect').innerText = incorrectCount;
+            document.getElementById('cnt-bookmarked').innerText = bookmarkedQuestions.size;
+        }
+
+        /* Jump directly to a question by number */
+        function jumpToQuestion(qIndex) {
+            if (qIndex < 0 || qIndex >= processedQuestions.length) return;
+
+            // Reset filter to 'all' if the question would be hidden
+            if (currentFilter !== 'all') {
+                setFilter('all');
+            }
+
+            // Close Grid Modal if open
+            document.getElementById('gridModal').classList.add('hidden');
+
+            setTimeout(() => {
+                const card = document.getElementById(`q-card-${qIndex}`);
+                if (card) {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    card.classList.add('ring-2', 'ring-emerald-500');
+                    setTimeout(() => card.classList.remove('ring-2', 'ring-emerald-500'), 2200);
+                }
+            }, 100);
+        }
+
+        function handleJumpInput() {
+            const input = document.getElementById('jumpInput');
+            const num = parseInt(input.value);
+            if (!isNaN(num) && num >= 1 && num <= processedQuestions.length) {
+                jumpToQuestion(num - 1);
+            }
+        }
+
+        function renderQuestionGrid() {
+            const gridContainer = document.getElementById('questionGridContainer');
+            gridContainer.innerHTML = '';
+
+            processedQuestions.forEach((qObj, idx) => {
+                const isAnswered = userAnswers[idx] !== undefined;
+                const isCorrect = isAnswered && userAnswers[idx] === qObj.correctIndex;
+                const isIncorrect = isAnswered && userAnswers[idx] !== qObj.correctIndex;
+                const isBookmarked = bookmarkedQuestions.has(idx);
+
+                let btnBg = 'bg-white border-slate-300 text-slate-700 hover:bg-emerald-50';
+                if (isBookmarked) {
+                    btnBg = 'bg-amber-100 border-amber-400 text-amber-900 font-bold';
+                } else if (isCorrect) {
+                    btnBg = 'bg-emerald-500 border-emerald-600 text-white font-bold';
+                } else if (isIncorrect) {
+                    btnBg = 'bg-red-500 border-red-600 text-white font-bold';
+                }
+
+                const btn = document.createElement('button');
+                btn.className = `p-2 rounded-xl text-xs border flex items-center justify-center transition-all shadow-sm ${btnBg}`;
+                btn.innerText = idx + 1;
+                btn.onclick = () => jumpToQuestion(idx);
+
+                gridContainer.appendChild(btn);
+            });
+        }
+
+        function initSearch() {
+            const btnToggle = document.getElementById('btnSearchToggle');
+            const searchBox = document.getElementById('searchBox');
+            const btnClose = document.getElementById('btnCloseSearch');
+            const input = document.getElementById('searchInput');
+            const results = document.getElementById('searchResults');
+
+            btnToggle.addEventListener('click', () => {
+                searchBox.classList.toggle('hidden');
+                if (!searchBox.classList.contains('hidden')) {
+                    input.focus();
+                }
+            });
+
+            btnClose.addEventListener('click', () => {
+                searchBox.classList.add('hidden');
+            });
+
+            input.addEventListener('input', (e) => {
+                const term = e.target.value.trim().toLowerCase();
+                if (term.length < 2) {
+                    results.innerHTML = '<div class="p-2 text-slate-400 text-center">Nhập ít nhất 2 ký tự để tìm kiếm...</div>';
+                    return;
+                }
+
+                const matches = processedQuestions.filter(q => q.question.toLowerCase().includes(term));
+
+                if (matches.length === 0) {
+                    results.innerHTML = '<div class="p-2 text-slate-400 text-center">Không tìm thấy câu hỏi phù hợp.</div>';
+                    return;
+                }
+
+                results.innerHTML = matches.map(q => `
+                    <div onclick="jumpToQuestion(${q.id})" class="p-2.5 hover:bg-emerald-50 rounded-lg cursor-pointer transition-colors flex items-center justify-between gap-2">
+                        <span class="font-medium text-slate-700 truncate">Câu ${q.id + 1}: ${q.question}</span>
+                        <i data-lucide="arrow-right-circle" class="w-4 h-4 text-emerald-600 shrink-0"></i>
+                    </div>
+                `).join('');
+
+                if (window.lucide) {
+                    lucide.createIcons();
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initApp();
+
+            // Modal Grid Listeners
+            document.getElementById('btnOpenGrid').addEventListener('click', () => {
+                document.getElementById('gridModal').classList.remove('hidden');
+            });
+
+            document.getElementById('btnCloseGrid').addEventListener('click', () => {
+                document.getElementById('gridModal').classList.add('hidden');
+            });
+
+            document.getElementById('gridModal').addEventListener('click', (e) => {
+                if (e.target.id === 'gridModal') {
+                    document.getElementById('gridModal').classList.add('hidden');
+                }
+            });
+
+            // Reset All
+            document.getElementById('btnResetAll').addEventListener('click', () => {
+                if (confirm('Bạn có chắc chắn muốn xóa toàn bộ tiến trình làm bài và bắt đầu lại không?')) {
+                    userAnswers = {};
+                    currentFilter = 'all';
+                    setFilter('all');
+                    renderAllQuestions();
+                    updateStatsAndFilters();
+                    renderQuestionGrid();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+
+            // Enter key on jump input
+            document.getElementById('jumpInput').addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') handleJumpInput();
+            });
+
+            // Initialize Lucide Icons
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>
