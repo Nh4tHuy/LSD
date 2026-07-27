@@ -173,12 +173,6 @@
                     <span id="headerTimer" class="font-mono text-sm text-emerald-700 font-bold">00:00</span>
                 </div>
 
-                <!-- Grid Jump Button -->
-                <button id="btnOpenGrid" class="p-2 sm:px-3 sm:py-1.5 rounded-xl glass-pill text-emerald-800 hover:bg-emerald-100 transition-colors flex items-center gap-1 text-xs font-bold" title="Bảng chuyển nhanh câu hỏi">
-                    <i data-lucide="layout-grid" class="w-4 h-4"></i>
-                    <span class="hidden md:inline">Bảng câu hỏi</span>
-                </button>
-
                 <!-- Reset Button -->
                 <button id="btnResetAll" onclick="openResetModal()" class="p-2 rounded-xl glass-pill text-red-700 hover:bg-red-50 transition-colors" title="Làm lại từ đầu">
                     <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
@@ -204,16 +198,16 @@
             <div class="flex items-center justify-between flex-wrap gap-2 text-xs font-semibold">
                 <div class="flex items-center gap-1.5 flex-wrap">
                     <button onclick="setFilter('all')" id="filter-all" class="px-3 py-1.5 rounded-xl bg-emerald-600 text-white shadow-sm transition-all">
-                        Tất cả (<span id="cnt-all">0</span>)
+                        Tất cả
                     </button>
                     <button onclick="setFilter('unanswered')" id="filter-unanswered" class="px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 text-slate-700 hover:bg-emerald-50 transition-all">
-                        Chưa làm (<span id="cnt-unanswered">0</span>)
+                        Chưa làm
                     </button>
                     <button onclick="setFilter('incorrect')" id="filter-incorrect" class="px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 text-slate-700 hover:bg-red-50 text-red-700 transition-all">
-                        Câu sai (<span id="cnt-incorrect">0</span>)
+                        Câu sai
                     </button>
                     <button onclick="setFilter('bookmarked')" id="filter-bookmarked" class="px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 text-slate-700 hover:bg-amber-50 text-amber-700 transition-all">
-                        <i data-lucide="bookmark" class="w-3.5 h-3.5 inline mr-1"></i>Đã lưu (<span id="cnt-bookmarked">0</span>)
+                       Đã lưu 
                     </button>
                 </div>
 
@@ -331,8 +325,8 @@
             },
             {
                 q: "Sự phát triển của phong trào yêu nước Việt Nam vào những năm 20 của thế kỷ XX có ý nghĩa như thế nào?",
-                a: "Cả ba phương án đều đúng (Bồi đắp thêm chủ nghĩa yêu nước; Cổ vũ mạnh mẽ tinh thần yêu nước; Thúc đẩy những nhà yêu nước tìm con đường mới)",
-                d: ["Chỉ có ý nghĩa cổ vũ tinh thần đơn thuần", "Dẫn đến sự thành lập ngay lập tức của Đảng Cộng sản", "Làm suy yếu hoàn toàn bộ máy cai trị của Pháp"]
+                a: "Bồi đắp thêm chủ nghĩa yêu nước ; Cổ vũ mạnh mẽ tinh thần yêu nước ; Thúc đẩy những nhà yêu nước tìm con đường mới",
+                d: ["Bồi đắp thêm chủ nghĩa yêu nước", "Cổ vũ mạnh mẽ tinh thần yêu nước", "Thúc đẩy những nhà yêu nước tìm con đường mới"]
             },
             {
                 q: "Nội dung nào sau đây không được xác định tại Hội nghị thành lập Đảng 2/1930?",
@@ -341,8 +335,8 @@
             },
             {
                 q: "Mưu đồ của Pháp đối với công cuộc xâm lược Việt Nam nói riêng và Đông Dương nói chung là gì?",
-                a: "Cả ba phương án đều đúng (Bóc lột sức lao động rẻ mạt; Vơ vét tài nguyên khoáng sản; Biến nơi đây thành thị trường tiêu thụ hàng hóa)",
-                d: ["Chỉ nhằm mục đích vơ vét tài nguyên khoáng sản", "Xây dựng nền kinh tế hiện đại cho Việt Nam", "Chỉ biến Việt Nam thành căn cứ quân sự"]
+                a: "Bóc lột sức lao động rẻ mạt ; Vơ vét tài nguyên khoáng sản ; Biến nơi đây thành thị trường tiêu thụ hàng hóa",
+                d: ["Bóc lột sức lao động rẻ mạt", "Vơ vét tài nguyên khoáng sản", "Biến nơi đây thành thị trường tiêu thụ hàng hóa"]
             },
             {
                 q: "Mâu thuẫn chủ yếu trong lòng xã hội Việt Nam dưới thời Pháp thuộc là gì?",
@@ -356,7 +350,7 @@
             },
             {
                 q: "Đảng cộng sản Việt nam ra đời dựa trên sự kết hợp của các yếu tố nào sau đây?",
-                a: "CN Mác - Lênin, Phong trào Công Nhân, Phong trào yêu nước",
+                a: "CN Mác - Lênin, Phong trào công nhân, Phong trào yêu nước",
                 d: ["Chủ nghĩa Mác - Lênin và Phong trào công nhân", "Chủ nghĩa Mác - Lênin và Phong trào yêu nước", "Phong trào công nhân và Phong trào yêu nước"]
             },
             {
@@ -366,8 +360,8 @@
             },
             {
                 q: "Đâu là điều kiện tạo ra khả năng đấu tranh công khai hợp pháp cho phong trào cách mạng Đông Dương giai đoạn 1936-1939?",
-                a: "Tất cả các điều kiện trên (Sự xuất hiện chủ nghĩa phát xít; Chủ trương chuyển hướng của Quốc tế CS; Mặt trận Nhân dân Pháp lên cầm quyền)",
-                d: ["Chỉ do Mặt trận Nhân dân Pháp lên cầm quyền", "Thực dân Pháp tự nguyện nới rộng quyền tự do", "Do Nhật Bản vào xâm lược Đông Dương"]
+                a: "Sự xuất hiện chủ nghĩa phát xít ; Chủ trương chuyển hướng của Quốc tế Cộng Sản ; Mặt trận Nhân dân Pháp lên cầm quyền",
+                d: ["Sự xuất hiện chủ nghĩa phát xít", "Chủ trương chuyển hướng của Quốc tế Cộng Sản", "Mặt trận Nhân dân Pháp lên cầm quyền"]
             },
             {
                 q: "Hãy cho biết tên gọi chung của các tổ chức quần chúng trong mặt trận Việt Minh?",
@@ -511,7 +505,7 @@
             },
             {
                 q: "Để góp phần thành công trong sự nghiệp xây dựng chủ nghĩa xã hội ở Việt Nam, mỗi sinh viên cần thực hiện những điều nào?",
-                a: "Thực hiện đồng thời (Kiên định mục tiêu độc lập dân tộc và CNXH; Tập trung phát triển bản thân, học tập nâng cao trình độ)",
+                a: "Kiên định mục tiêu độc lập dân tộc và CNXH ; Tập trung phát triển bản thân, học tập nâng cao trình độ",
                 d: ["Kiên định mục tiêu độc lập dân tộc và CNXH", "Tập trung phát triển bản thân, học tập nâng cao trình độ", "Chỉ làm giàu kinh tế cho cá nhân"]
             },
             {
@@ -602,7 +596,7 @@
             {
                 q: "Thắng lợi về quốc tế của nước ta sau Cách mạng Tháng Tám năm 1945 là gì?",
                 a: "Liên Xô trở thành thành trì CNXH ; Các nước Đông, Trung Âu chọn đường CNXH ; Phong trào giải phóng dân tộc thuộc địa dâng cao",
-                d: ["Chỉ có Liên Xô trở thành thành trì CNXH", "Các nước Tư bản nới lỏng chính sách thuộc địa", "Liên Hợp Quốc công nhận ngay lập tức"]
+                d: ["Liên Xô trở thành thành trì CNXH", "Các nước Đông, Trung Âu chọn đường CNXH", "Phong trào giải phóng dân tộc thuộc địa dâng cao"]
             },
             {
                 q: "Sau thắng lợi của Cách mạng Tháng 8/1945 ai đã trở thành biểu tượng của khối đại đoàn kết toàn dân tộc Việt Nam?",
@@ -651,8 +645,8 @@
             },
             {
                 q: "Âm mưu của đế quốc Mỹ tại miền Nam Việt Nam sau năm 1954 là gì?",
-                a: "Biến nơi đây thành thuộc địa kiểu mới; Chia cắt lâu dài hai miền Nam - Bắc",
-                d: ["Xây dựng nền kinh tế tư bản hiện đại", "Biến Việt Nam thành quốc gia trung lập", "Giúp đỡ chính quyền Ngô Đình Diệm phát triển dân chủ"]
+                a: "Biến nơi đây thành thuộc địa kiểu mới ; Chia cắt lâu dài hai miền Nam - Bắc",
+                d: ["Biến nơi đây thành thuộc địa kiểu mới", "Chia cắt lâu dài hai miền Nam - Bắc", "Giúp đỡ chính quyền Ngô Đình Diệm phát triển dân chủ"]
             },
             {
                 q: "Ai là người soạn thảo Đề cương đường lối cách mạng Việt Nam ở miền Nam (1956)?",
@@ -682,7 +676,7 @@
             {
                 q: "Đại hội IV của Đảng (12/1976) đã bộc lộ những hạn chế nào?",
                 a: "Chưa tổng kết kinh nghiệm 21 năm xây dựng CNXH ở miền Bắc ; Chưa phát hiện khuyết tật mô hình cũ ; Dự kiến thời gian kết thúc thời kỳ quá độ quá nóng vội",
-                d: ["Chỉ bộc lộ hạn chế trong đường lối đối ngoại", "Không xác định được mục tiêu CNH", "Bỏ qua phát triển nông nghiệp"]
+                d: ["Chưa tổng kết kinh nghiệm 21 năm xây dựng CNXH ở miền Bắc", "Chưa phát hiện khuyết tật mô hình cũ", "Dự kiến thời gian kết thúc thời kỳ quá độ quá nóng vội"]
             },
             {
                 q: "Bước đột phá đầu tiên về đổi mới kinh tế của Đảng tại Hội nghị Trung ương 6 khóa IV (8/1979) có chủ trương gì?",
@@ -731,8 +725,8 @@
             },
             {
                 q: "Kỳ họp Quốc hội nước Việt Nam thống nhất lần thứ nhất (7/1976) đã bầu ai làm Chủ tịch Quốc hội, Chủ tịch nước, Thủ tướng?",
-                a: "Chủ tịch Quốc hội: Trường Chinh; Chủ tịch nước: Tôn Đức Thắng; Thủ tướng: Phạm Văn Đồng",
-                d: ["Chủ tịch Quốc hội: Lê Duẩn; Chủ tịch nước: Tôn Đức Thắng; Thủ tướng: Đỗ Mười", "Chủ tịch Quốc hội: Nguyễn Hữu Thọ; Chủ tịch nước: Trường Chinh; Thủ tướng: Phạm Văn Đồng", "Chủ tịch Quốc hội: Trường Chinh; Chủ tịch nước: Nguyễn Hữu Thọ; Thủ tướng: Võ Văn Kiệt"]
+                a: "Chủ tịch Quốc hội: Trường Chinh ; Chủ tịch nước: Tôn Đức Thắng ; Thủ tướng: Phạm Văn Đồng",
+                d: ["Chủ tịch Quốc hội: Lê Duẩn ; Chủ tịch nước: Tôn Đức Thắng ; Thủ tướng: Đỗ Mười", "Chủ tịch Quốc hội: Nguyễn Hữu Thọ ; Chủ tịch nước: Trường Chinh ; Thủ tướng: Phạm Văn Đồng", "Chủ tịch Quốc hội: Trường Chinh ; Chủ tịch nước: Nguyễn Hữu Thọ ; Thủ tướng: Võ Văn Kiệt"]
             },
             {
                 q: "Nhiệm vụ bao trùm mục tiêu tổng quát trong suốt thời kỳ quá độ lên CNXH được xác định ở Đại hội IV (12/1976) là gì?",
@@ -781,7 +775,7 @@
             },
             {
                 q: "Sai lầm trong chủ trương về xây dựng CNXH trước thời kỳ đổi mới là gì?",
-                a: "Cả ba đáp án (Duy trì quá lâu cơ chế kế hoạch hóa; Mục tiêu phát triển quá cao; Chủ quan nóng vội)",
+                a: "Duy trì quá lâu cơ chế kế hoạch hóa ; Mục tiêu phát triển quá cao ; Chủ quan nóng vội",
                 d: ["Duy trì quá lâu cơ chế kế hoạch hóa", "Mục tiêu phát triển quá cao", "Chủ quan nóng vội"]
             },
             {
