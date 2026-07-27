@@ -22,23 +22,12 @@
                         sans: ['Plus Jakarta Sans', 'sans-serif'],
                     },
                     colors: {
-                        pastel: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            200: '#bbf7d0',
-                            300: '#86efac',
-                            400: '#4ade80',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            700: '#15803d',
-                            800: '#166534',
-                            900: '#14532d',
-                        }
+                        // Tông màu pastel blue tuỳ chỉnh nếu cần, nhưng ta sẽ dùng chủ yếu sky và blue của tailwind
                     },
                     boxShadow: {
                         'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
                         'glass-lg': '0 12px 40px 0 rgba(31, 38, 135, 0.12)',
-                        'pastel-glow': '0 0 20px rgba(134, 239, 172, 0.4)'
+                        'pastel-glow': '0 0 20px rgba(56, 189, 248, 0.4)'
                     }
                 }
             }
@@ -47,7 +36,8 @@
 
     <style>
         body {
-            background: linear-gradient(135deg, #e6f4ea 0%, #d3ede0 35%, #e1f5fe 70%, #e8f5e9 100%);
+            /* Đổi sang background xanh biển pastel */
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 35%, #f4f4f5 70%, #e6f7ff 100%);
             background-attachment: fixed;
             min-height: 100vh;
         }
@@ -58,7 +48,7 @@
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.85);
-            box-shadow: 0 10px 30px -5px rgba(20, 83, 45, 0.05), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 10px 30px -5px rgba(30, 58, 138, 0.05), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
         }
 
         .glass-header {
@@ -69,9 +59,9 @@
         }
 
         .glass-pill {
-            background: rgba(240, 253, 244, 0.85);
+            background: rgba(240, 249, 255, 0.85);
             backdrop-filter: blur(8px);
-            border: 1px solid rgba(187, 247, 208, 0.7);
+            border: 1px solid rgba(186, 230, 253, 0.7);
         }
 
         .option-btn {
@@ -80,15 +70,15 @@
 
         .option-btn:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(34, 197, 94, 0.14);
+            box-shadow: 0 6px 18px rgba(56, 189, 248, 0.14);
         }
 
-        /* Answer States */
+        /* Answer States - Updated to Blue */
         .option-correct {
-            background: rgba(220, 252, 231, 0.95) !important;
-            border-color: #22c55e !important;
-            color: #14532d !important;
-            box-shadow: 0 0 15px rgba(34, 197, 94, 0.25) !important;
+            background: rgba(224, 242, 254, 0.95) !important; /* sky-100 */
+            border-color: #3b82f6 !important; /* blue-500 */
+            color: #1e3a8a !important; /* blue-900 */
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.25) !important;
         }
 
         .option-incorrect {
@@ -102,23 +92,23 @@
             cursor: not-allowed;
         }
 
-        /* Custom Scrollbar */
+        /* Custom Scrollbar - Blue theme */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(240, 253, 244, 0.5);
+            background: rgba(240, 249, 255, 0.5);
         }
         ::-webkit-scrollbar-thumb {
-            background: #a7f3d0;
+            background: #bae6fd;
             border-radius: 9999px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #6ee7b7;
+            background: #7dd3fc;
         }
 
-        /* Floating background ambient elements */
+        /* Floating background ambient elements - Blue theme */
         .ambient-blob {
             position: fixed;
             border-radius: 50%;
@@ -136,44 +126,47 @@
         }
     </style>
 </head>
-<body class="font-sans text-slate-800 antialiased selection:bg-emerald-200 selection:text-emerald-900 flex flex-col min-h-screen">
+<body class="font-sans text-slate-800 antialiased selection:bg-sky-200 selection:text-blue-900 flex flex-col min-h-screen">
 
     <!-- Ambient background blobs -->
-    <div class="ambient-blob w-96 h-96 bg-emerald-200 top-10 left-10"></div>
-    <div class="ambient-blob w-80 h-80 bg-teal-200 bottom-10 right-10" style="animation-delay: -5s;"></div>
-    <div class="ambient-blob w-72 h-72 bg-emerald-100 top-1/2 left-1/3" style="animation-delay: -10s;"></div>
+    <div class="ambient-blob w-96 h-96 bg-sky-200 top-10 left-10"></div>
+    <div class="ambient-blob w-80 h-80 bg-blue-200 bottom-10 right-10" style="animation-delay: -5s;"></div>
+    <div class="ambient-blob w-72 h-72 bg-cyan-100 top-1/2 left-1/3" style="animation-delay: -10s;"></div>
 
     <!-- Sticky Navigation Header -->
     <header class="sticky top-0 z-40 glass-header px-4 lg:px-8 py-3 shadow-sm">
         <div class="max-w-6xl mx-auto flex items-center justify-between gap-3">
             <!-- Brand / Title -->
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-200 shrink-0">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-sky-500 flex items-center justify-center text-white shadow-md shadow-sky-200 shrink-0">
                     <i data-lucide="book-open-check" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <h1 class="text-base sm:text-lg lg:text-xl font-bold bg-gradient-to-r from-emerald-800 via-teal-800 to-emerald-900 bg-clip-text text-transparent leading-tight">
+                    <h1 class="text-base sm:text-lg lg:text-xl font-bold bg-gradient-to-r from-blue-800 via-sky-800 to-blue-900 bg-clip-text text-transparent leading-tight">
                     WIKY
                     </h1>
-                    <p class="text-xs text-emerald-700 font-medium hidden sm:block">Đáp án chỉ mang tính chất tham khảo</p>
+                    <p class="text-xs text-blue-700 font-medium hidden sm:block">Ôn tập Lịch Sử Đảng</p>
                 </div>
             </div>
 
-            <!-- Header Quick Stats & Controls -->
-            <div class="flex items-center gap-2 sm:gap-3">
+            <!-- Header Quick Stats & Controls (Ẩn đi lúc chưa bắt đầu) -->
+            <div id="headerControls" class="hidden items-center gap-2 sm:gap-3">
                 <!-- Score Counter -->
-                <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl glass-pill text-xs font-semibold text-emerald-800 shadow-sm">
-                    <i data-lucide="award" class="w-4 h-4 text-emerald-600"></i>
-                    <span><strong id="headerScore" class="text-emerald-700 text-sm">0</strong>/<span id="headerTotal">0</span></span>
+                <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl glass-pill text-xs font-semibold text-blue-800 shadow-sm">
+                    <i data-lucide="award" class="w-4 h-4 text-blue-600"></i>
+                    <span><strong id="headerScore" class="text-blue-700 text-sm">0</strong>/<span id="headerTotal">0</span></span>
                 </div>
 
                 <!-- Timer Counter -->
-                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-pill text-xs font-semibold text-emerald-800 shadow-sm" title="Thời gian làm bài">
-                    <i data-lucide="timer" class="w-4 h-4 text-emerald-600 animate-pulse"></i>
-                    <span id="headerTimer" class="font-mono text-sm text-emerald-700 font-bold">00:00</span>
+                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-pill text-xs font-semibold text-blue-800 shadow-sm" title="Thời gian làm bài">
+                    <i data-lucide="timer" class="w-4 h-4 text-blue-600 animate-pulse"></i>
+                    <span id="headerTimer" class="font-mono text-sm text-blue-700 font-bold">00:00</span>
                 </div>
 
-                <!-- Reset Button -->
+                <!-- Grid & Reset Buttons -->
+                <button id="btnOpenGrid" class="p-2 rounded-xl glass-pill text-blue-700 hover:bg-blue-50 transition-colors" title="Bảng câu hỏi">
+                    <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                </button>
                 <button id="btnResetAll" onclick="openResetModal()" class="p-2 rounded-xl glass-pill text-red-700 hover:bg-red-50 transition-colors" title="Làm lại từ đầu">
                     <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
                 </button>
@@ -182,74 +175,85 @@
     </header>
 
     <main class="flex-1 max-w-5xl w-full mx-auto px-3 sm:px-6 py-5 flex flex-col gap-5">
-
-        <!-- Global Dashboard & Filter Bar -->
-        <div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col gap-4">
-            <!-- Progress Info -->
-            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-emerald-100/80 pb-3">
-                <div>
-                    <h2 class="text-base font-bold text-slate-800">Ôn tập Lịch Sử Đảng</h2>
-                    <p class="text-xs text-slate-500 font-medium">Đáp án được chỉnh lại theo hướng dễ nhớ, có thể khác cách diễn đạt của Cô nên chỉ tham khảo thôi.</p>
-                </div>
-                
+        
+        <!-- Màn hình bắt đầu -->
+        <div id="startScreen" class="glass-card rounded-3xl p-8 max-w-xl mx-auto w-full text-center flex flex-col items-center justify-center gap-6 mt-10 sm:mt-20 shadow-xl border border-white/80 relative overflow-hidden">
+            <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-blue-500 to-sky-400 flex items-center justify-center text-white shadow-lg shadow-sky-200/50 mb-2">
+                <i data-lucide="graduation-cap" class="w-12 h-12"></i>
             </div>
-
-            <!-- Filter Buttons Bar -->
-            <div class="flex items-center justify-between flex-wrap gap-2 text-xs font-semibold">
-                <div class="flex items-center gap-1.5 flex-wrap">
-                    <button onclick="setFilter('all')" id="filter-all" class="px-3 py-1.5 rounded-xl bg-emerald-600 text-white shadow-sm transition-all">
-                        Tất cả
-                    </button>
-                    <button onclick="setFilter('unanswered')" id="filter-unanswered" class="px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 text-slate-700 hover:bg-emerald-50 transition-all">
-                        Chưa làm
-                    </button>
-                    <button onclick="setFilter('incorrect')" id="filter-incorrect" class="px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 text-slate-700 hover:bg-red-50 text-red-700 transition-all">
-                        Câu sai
-                    </button>
-                    <button onclick="setFilter('bookmarked')" id="filter-bookmarked" class="px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 text-slate-700 hover:bg-amber-50 text-amber-700 transition-all">
-                       Đã lưu 
-                    </button>
-                </div>
-
+            <div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800 mb-2">Sẵn sàng ôn tập?</h2>
+                <p class="text-sm text-slate-500 font-medium max-w-sm mx-auto">Hệ thống sẽ <strong class="text-blue-600">tính giờ ngay lập tức</strong> và <strong class="text-blue-600">xáo trộn ngẫu nhiên</strong> toàn bộ 95 câu hỏi để bạn ôn luyện.</p>
             </div>
+            
+            <button onclick="startQuiz()" class="w-full sm:w-auto px-10 py-4 mt-2 rounded-2xl bg-blue-600 font-bold text-lg text-white hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 hover:-translate-y-1 hover:shadow-blue-300 flex items-center justify-center gap-3">
+                Bắt Đầu
+                <i data-lucide="arrow-right" class="w-5 h-5"></i>
+            </button>
         </div>
 
-        <!-- Continuous List Container -->
-        <div id="questionsContainer" class="flex flex-col gap-5">
-            <!-- Questions rendered here as one continuous list -->
-        </div>
+        <!-- Main Quiz Content -->
+        <div id="mainContent" class="hidden flex-col gap-5">
+            <!-- Global Dashboard & Filter Bar -->
+            <div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col gap-4">
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-sky-100/80 pb-3">
+                    <div>
+                        <h2 class="text-base font-bold text-slate-800">Bộ đề xáo trộn ngẫu nhiên số 36</h2>
+                        <p class="text-xs text-slate-500 font-medium">Đáp án được chỉnh lại theo hướng dễ nhớ, có thể khác cách diễn đạt của Cô nên chỉ tham khảo thôi.</p>
+                    </div>
+                </div>
 
+                <!-- Filter Buttons Bar -->
+                <div class="flex items-center justify-between flex-wrap gap-2 text-xs font-semibold">
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <button onclick="setFilter('all')" id="filter-all" class="px-3 py-1.5 rounded-xl bg-blue-600 text-white shadow-sm transition-all">
+                            Tất cả
+                        </button>
+                        <button onclick="setFilter('unanswered')" id="filter-unanswered" class="px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 text-slate-700 hover:bg-sky-50 transition-all">
+                            Chưa làm
+                        </button>
+                        <button onclick="setFilter('incorrect')" id="filter-incorrect" class="px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 text-slate-700 hover:bg-red-50 text-red-700 transition-all">
+                            Câu sai
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Continuous List Container -->
+            <div id="questionsContainer" class="flex flex-col gap-5">
+                <!-- Questions rendered here as one continuous list -->
+            </div>
+        </div>
     </main>
 
     <!-- Floating Navigation Action Buttons (Scroll top/bottom) -->
     <div class="fixed bottom-5 right-5 z-40 flex flex-col gap-2">
-        <button id="btnScrollTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" class="p-3 rounded-2xl bg-emerald-600 text-white shadow-lg hover:bg-emerald-700 transition-all opacity-80 hover:opacity-100" title="Về đầu trang">
+        <button id="btnScrollTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" class="p-3 rounded-2xl bg-blue-600 text-white shadow-lg hover:bg-blue-700 transition-all opacity-80 hover:opacity-100 hidden" title="Về đầu trang">
             <i data-lucide="arrow-up" class="w-5 h-5"></i>
         </button>
-        <button id="btnScrollBottom" onclick="window.scrollTo({top: document.body.scrollHeight, behavior:'smooth'})" class="p-3 rounded-2xl bg-teal-600 text-white shadow-lg hover:bg-teal-700 transition-all opacity-80 hover:opacity-100" title="Xuống cuối trang">
+        <button id="btnScrollBottom" onclick="window.scrollTo({top: document.body.scrollHeight, behavior:'smooth'})" class="p-3 rounded-2xl bg-sky-600 text-white shadow-lg hover:bg-sky-700 transition-all opacity-80 hover:opacity-100 hidden" title="Xuống cuối trang">
             <i data-lucide="arrow-down" class="w-5 h-5"></i>
         </button>
     </div>
 
     <!-- Modal: Question Grid Selector -->
     <div id="gridModal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="glass-card max-w-2xl w-full max-h-[85vh] rounded-2xl p-5 flex flex-col shadow-2xl">
-            <div class="flex items-center justify-between pb-3 border-b border-emerald-100">
+        <div class="glass-card max-w-3xl w-full max-h-[85vh] rounded-2xl p-5 flex flex-col shadow-2xl">
+            <div class="flex items-center justify-between pb-3 border-b border-sky-100">
                 <div class="flex items-center gap-2">
-                    <i data-lucide="layout-grid" class="w-5 h-5 text-emerald-700"></i>
+                    <i data-lucide="layout-grid" class="w-5 h-5 text-blue-700"></i>
                     <h3 class="font-bold text-slate-800 text-base">Bảng Chuyển Nhanh Câu Hỏi</h3>
                 </div>
-                <button id="btnCloseGrid" class="text-slate-400 hover:text-slate-600 p-1">
+                <button id="btnCloseGrid" class="text-slate-400 hover:text-slate-600 p-1 bg-slate-100 rounded-full hover:bg-slate-200">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
 
             <!-- Grid Legend -->
-            <div class="flex items-center justify-center gap-4 py-3 text-xs border-b border-emerald-100 flex-wrap">
+            <div class="flex items-center justify-center gap-4 py-3 text-xs border-b border-sky-100 flex-wrap">
                 <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-white border border-slate-300"></span> Chưa làm</span>
-                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-emerald-500"></span> Đúng</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-blue-500"></span> Đúng</span>
                 <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-red-500"></span> Sai</span>
-                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-amber-400"></span> Đã đánh dấu</span>
             </div>
 
             <!-- Grid Buttons Container -->
@@ -262,30 +266,30 @@
     <!-- Modal: Completion Celebration Popup -->
     <div id="completionModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-md hidden flex items-center justify-center p-4">
         <div class="glass-card max-w-md w-full rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center shadow-2xl border border-white/80 relative overflow-hidden">
-            <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-emerald-200/50 mb-4 animate-bounce">
+            <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-blue-500 to-sky-400 flex items-center justify-center text-white shadow-lg shadow-sky-200/50 mb-4 animate-bounce">
                 <i data-lucide="trophy" class="w-10 h-10"></i>
             </div>
             <h2 class="text-2xl font-extrabold text-slate-800 mb-1">Chúc Mừng Bạn!</h2>
-            <p class="text-xs text-slate-500 font-medium mb-6">Bạn đã hoàn thành toàn bộ câu hỏi trong bộ đề!</p>
+            <p class="text-xs text-slate-500 font-medium mb-6">Bạn đã hoàn thành toàn toàn bộ bài ôn tập!</p>
             
-            <div class="w-full bg-emerald-50/80 rounded-2xl p-4 border border-emerald-100 flex justify-around mb-6">
+            <div class="w-full bg-sky-50/80 rounded-2xl p-4 border border-sky-100 flex justify-around mb-6 shadow-inner">
                 <div class="text-center">
                     <span class="text-xs text-slate-500 font-medium block mb-1">Kết quả</span>
-                    <span id="modalScore" class="text-2xl font-black text-emerald-600">0/0</span>
+                    <span id="modalScore" class="text-3xl font-black text-blue-600">0/0</span>
                 </div>
-                <div class="w-px bg-emerald-200"></div>
+                <div class="w-px bg-sky-200"></div>
                 <div class="text-center">
                     <span class="text-xs text-slate-500 font-medium block mb-1">Thời gian</span>
-                    <span id="modalTime" class="text-2xl font-black text-teal-600">00:00</span>
+                    <span id="modalTime" class="text-xl mt-1 block font-black text-sky-600">00:00</span>
                 </div>
             </div>
 
             <div class="flex items-center gap-3 w-full">
-                <button onclick="closeCompletionModal()" class="flex-1 py-3 px-4 rounded-xl bg-white border border-slate-200 font-semibold text-xs text-slate-700 hover:bg-slate-50 transition-colors shadow-sm">
-                    Xem Lại Bài
+                <button onclick="reviewQuiz()" class="flex-1 py-3 px-2 rounded-xl bg-white border border-slate-200 font-semibold text-sm text-slate-700 hover:bg-slate-50 transition-colors shadow-sm">
+                    Xem Lại
                 </button>
-                <button onclick="resetAllProgress()" class="flex-1 py-3 px-4 rounded-xl bg-emerald-600 font-bold text-xs text-white hover:bg-emerald-700 transition-colors shadow-md shadow-emerald-200">
-                    Làm Lại Từ Đầu
+                <button onclick="retryQuiz()" class="flex-1 py-3 px-2 rounded-xl bg-blue-600 font-bold text-sm text-white hover:bg-blue-700 transition-colors shadow-md shadow-blue-200">
+                    Làm Lại
                 </button>
             </div>
         </div>
@@ -298,12 +302,12 @@
                 <i data-lucide="rotate-ccw" class="w-7 h-7"></i>
             </div>
             <h3 class="text-lg font-bold text-slate-800 mb-2">Làm Lại Từ Đầu?</h3>
-            <p class="text-xs text-slate-500 font-medium mb-6">Tất cả câu hỏi đã trả lời và thời gian làm bài sẽ được xóa để bạn ôn tập lại từ đầu.</p>
+            <p class="text-xs text-slate-500 font-medium mb-6">Bạn sẽ bắt đầu một phiên làm bài mới, câu hỏi sẽ được xáo trộn lại.</p>
             <div class="flex items-center gap-3 w-full">
                 <button onclick="closeResetModal()" class="flex-1 py-2.5 px-4 rounded-xl bg-white border border-slate-200 font-semibold text-xs text-slate-700 hover:bg-slate-50 transition-colors">
                     Hủy Bỏ
                 </button>
-                <button onclick="resetAllProgress()" class="flex-1 py-2.5 px-4 rounded-xl bg-red-600 font-bold text-xs text-white hover:bg-red-700 transition-colors shadow-md shadow-red-200">
+                <button onclick="retryQuiz()" class="flex-1 py-2.5 px-4 rounded-xl bg-red-600 font-bold text-xs text-white hover:bg-red-700 transition-colors shadow-md shadow-red-200">
                     Xác Nhận
                 </button>
             </div>
@@ -311,12 +315,12 @@
     </div>
 
     <!-- Footer copyright -->
-    <footer class="py-5 text-center text-xs text-slate-500 glass-header mt-8">
+    <footer class="py-5 text-center text-xs text-slate-500 mt-auto glass-header">
         Huy Lỏ Code Web
     </footer>
 
     <script>
-        /* RAW EXHAUSTIVE DATASET: All questions combined from docx, exams, and images */
+        /* RAW EXHAUSTIVE DATASET: 95 Questions */
         const RAW_DATASET = [
             {
                 q: "Sự ra đời của ba tổ chức Cộng sản vào năm 1929 có khuyết điểm cơ bản là gì?",
@@ -325,7 +329,7 @@
             },
             {
                 q: "Sự phát triển của phong trào yêu nước Việt Nam vào những năm 20 của thế kỷ XX có ý nghĩa như thế nào?",
-                a: "Bồi đắp thêm chủ nghĩa yêu nước ; Cổ vũ mạnh mẽ tinh thần yêu nước ; Thúc đẩy những nhà yêu nước tìm con đường mới",
+                a: "Cả ba phương án trên đều đúng",
                 d: ["Bồi đắp thêm chủ nghĩa yêu nước", "Cổ vũ mạnh mẽ tinh thần yêu nước", "Thúc đẩy những nhà yêu nước tìm con đường mới"]
             },
             {
@@ -335,7 +339,7 @@
             },
             {
                 q: "Mưu đồ của Pháp đối với công cuộc xâm lược Việt Nam nói riêng và Đông Dương nói chung là gì?",
-                a: "Bóc lột sức lao động rẻ mạt ; Vơ vét tài nguyên khoáng sản ; Biến nơi đây thành thị trường tiêu thụ hàng hóa",
+                a: "Cả ba phương án trên đều đúng",
                 d: ["Bóc lột sức lao động rẻ mạt", "Vơ vét tài nguyên khoáng sản", "Biến nơi đây thành thị trường tiêu thụ hàng hóa"]
             },
             {
@@ -360,7 +364,7 @@
             },
             {
                 q: "Đâu là điều kiện tạo ra khả năng đấu tranh công khai hợp pháp cho phong trào cách mạng Đông Dương giai đoạn 1936-1939?",
-                a: "Sự xuất hiện chủ nghĩa phát xít ; Chủ trương chuyển hướng của Quốc tế Cộng Sản ; Mặt trận Nhân dân Pháp lên cầm quyền",
+                a: "Cả ba phương án trên đều đúng",
                 d: ["Sự xuất hiện chủ nghĩa phát xít", "Chủ trương chuyển hướng của Quốc tế Cộng Sản", "Mặt trận Nhân dân Pháp lên cầm quyền"]
             },
             {
@@ -396,7 +400,7 @@
             {
                 q: "Quyết định mở mặt trận ngoại giao nhằm tranh thủ sự ủng hộ của quốc tế, mở ra cục diện vừa đánh, vừa đàm của Đảng được đề ra trong kỳ họp nào?",
                 a: "Hội nghị lần thứ 13 Ban Chấp hành Trung ương Đảng (khóa III) 1/1967",
-                d: ["Đại hội III (9/1960)", "Hội nghị Trung ương 11 (3/1965)", "Hội nghị Trung ương 12 (12/1965)"]
+                d: ["Đại hội III (9/1960)", "Hội nghị lần thứ 11 Ban Chấp hành Trung ương Đảng (khóa III) 3/1965", "Hội nghị lần thứ 12 Ban Chấp hành Trung ương Đảng (khóa III) 12/1965"]
             },
             {
                 q: "Giai đoạn 1965-1968, đế quốc Mỹ thực hiện chiến lược chiến tranh nào đối với Việt Nam?",
@@ -415,7 +419,7 @@
             },
             {
                 q: "Cuộc chiến tranh chống xâm lược bảo vệ Tổ quốc ở biên giới phía Bắc nước ta trên thực tế diễn ra trong thời gian nào?",
-                a: "10 năm (Từ năm 1979 đến năm 1989)",
+                a: "Từ năm 1979 đến năm 1989",
                 d: ["Trong năm 1979", "Từ năm 1978 đến năm 1980", "Từ năm 1979 đến năm 1985"]
             },
             {
@@ -425,7 +429,7 @@
             },
             {
                 q: "Tính từ năm 1986 đến nay, Đảng đã thông qua bao nhiêu Cương lĩnh?",
-                a: "Hai cương lĩnh (Cương lĩnh 1991 và Cương lĩnh bổ sung, phát triển 2011)",
+                a: "Hai",
                 d: ["Một", "Ba", "Bốn"]
             },
             {
@@ -520,7 +524,7 @@
             },
             {
                 q: "Tình hình thế giới cuối thế kỷ XIX đầu thế kỷ XX có mấy đặc điểm lớn tác động mạnh mẽ đến phong trào yêu nước Việt Nam?",
-                a: "3 đặc điểm lớn",
+                a: "3 đặc điểm",
                 d: ["2 đặc điểm", "4 đặc điểm", "5 đặc điểm"]
             },
             {
@@ -530,17 +534,17 @@
             },
             {
                 q: "Trong quá trình thống trị Việt Nam, Thực dân Pháp đã tiến hành mấy cuộc khai thác thuộc địa?",
-                a: "2 cuộc khai thác thuộc địa",
+                a: "2 cuộc",
                 d: ["1 cuộc", "3 cuộc", "4 cuộc"]
             },
             {
                 q: "Dưới chế độ thống trị của Thực dân Pháp, giai cấp địa chủ Việt Nam bị phân hóa làm mấy bộ phận?",
-                a: "3 bộ phận (Địa chủ đại, trung và tiểu địa chủ)",
+                a: "3 bộ phận",
                 d: ["2 bộ phận", "4 bộ phận", "5 bộ phận"]
             },
             {
                 q: "Dưới chế độ thống trị của Thực dân Pháp, giai cấp tư sản Việt Nam bị phân hóa làm mấy bộ phận?",
-                a: "2 bộ phận (Tư sản mại bản và Tư sản dân tộc)",
+                a: "2 bộ phận",
                 d: ["3 bộ phận", "4 bộ phận", "Không bị phân hóa"]
             },
             {
@@ -595,7 +599,7 @@
             },
             {
                 q: "Thắng lợi về quốc tế của nước ta sau Cách mạng Tháng Tám năm 1945 là gì?",
-                a: "Liên Xô trở thành thành trì CNXH ; Các nước Đông, Trung Âu chọn đường CNXH ; Phong trào giải phóng dân tộc thuộc địa dâng cao",
+                a: "Cả ba phương án trên đều đúng",
                 d: ["Liên Xô trở thành thành trì CNXH", "Các nước Đông, Trung Âu chọn đường CNXH", "Phong trào giải phóng dân tộc thuộc địa dâng cao"]
             },
             {
@@ -605,7 +609,7 @@
             },
             {
                 q: "Sau Cách mạng Tháng 8/1945 nước ta có bao nhiêu % dân số bị mù chữ?",
-                a: "95% dân số",
+                a: "95%",
                 d: ["80%", "90%", "98%"]
             },
             {
@@ -614,8 +618,8 @@
                 d: ["Củng cố chính quyền và cải cách ruộng đất", "Chống giặc ngoại xâm là duy nhất", "Phát hành đồng tiền Việt Nam"]
             },
             {
-                q: "Chỉ thị nào của Đảng có tác dụng định hướng tư tưởng, trực tiếp chỉ đạo cuộc kháng chiến ở Nam Bộ và bảo vệ chính quyền sau Cách mạng Tháng Tám?",
-                a: "Chỉ thị Kháng chiến kiến quốc (25/11/1945)",
+                q: "Chỉ thị nào của Đảng có tác dụng định hướng tư tưởng, trực tiếp chỉ đạo cuộc kháng chiến ở Nam Bộ và bảo vệ chính quyền sau Cách mạng Tháng Tám? Note: 25/11/1945",
+                a: "Chỉ thị Kháng chiến kiến quốc",
                 d: ["Chỉ thị Hòa để tiến", "Lời kêu gọi toàn quốc kháng chiến", "Chỉ thị Nhật Pháp bắn nhau"]
             },
             {
@@ -654,8 +658,8 @@
                 d: ["Trường Chinh", "Võ Nguyên Giáp", "Phạm Văn Đồng"]
             },
             {
-                q: "Thắng lợi nào là bước nhảy vọt lịch sử của cách mạng miền Nam, chuyển từ thế giữ gìn lực lượng sang thế tiến công?",
-                a: "Phong trào Đồng khởi (1959 - 1960)",
+                q: "Thắng lợi nào là bước nhảy vọt lịch sử của cách mạng miền Nam, chuyển từ thế giữ gìn lực lượng sang thế tiến công? Note: 1959 - 1960",
+                a: "Phong trào Đồng khởi",
                 d: ["Trận thắng Ấp Bắc", "Chiến thắng Bình Giã", "Trận Núi Thành"]
             },
             {
@@ -685,12 +689,12 @@
             },
             {
                 q: "Chỉ thị số 100-CT/TW (1/1981) của Ban Bí thư Trung ương Đảng mang lại đổi mới quan trọng trong lĩnh vực nào?",
-                a: "Nông nghiệp (tháo gỡ rào cản, khoán sản phẩm đến nhóm và người lao động)",
+                a: "Nông nghiệp",
                 d: ["Công nghiệp nặng", "Thương nghiệp và xuất nhập khẩu", "Giao thông vận tải"]
             },
             {
                 q: "Quyết định 25/CP và 26/CP (năm 1981) của Chính phủ tập trung tháo gỡ rào cản trong lĩnh vực nào?",
-                a: "Công nghiệp và xí nghiệp quốc doanh (mở rộng quyền tự chủ sản xuất)",
+                a: "Công nghiệp",
                 d: ["Nông nghiệp hợp tác xã", "Giáo dục và y tế", "Tài chính ngân hàng"]
             },
             {
@@ -709,13 +713,13 @@
                 d: ["Cách mạng quan hệ sản xuất", "Cách mạng tư tưởng và văn hóa", "Cách mạng công nghiệp nhẹ"]
             },
             {
-                q: "Nước nào là nước đầu tiên trong hệ thống xã hội chủ nghĩa chính thức đặt quan hệ ngoại giao với Việt Nam năm 1950?",
-                a: "Cộng hòa Nhân dân Trung Hoa (18/1/1950)",
+                q: "Nước nào là nước đầu tiên trong hệ thống xã hội chủ nghĩa chính thức đặt quan hệ ngoại giao với Việt Nam năm 1950? Note: 18/1/1950",
+                a: "Cộng hòa Nhân dân Trung Hoa",
                 d: ["Liên Xô", "Cộng hòa Dân chủ Đức", "Triều Tiên"]
             },
             {
                 q: "Tính từ năm 1930 đến nay, Đảng Cộng sản Việt Nam đã thông qua tổng cộng bao nhiêu Cương lĩnh chính trị?",
-                a: "Năm Cương lĩnh (1930, Luận cương 10/1930, 1951, 1991, 2011)",
+                a: "Năm Cương lĩnh",
                 d: ["Ba Cương lĩnh", "Bốn Cương lĩnh", "Sáu Cương lĩnh"]
             },
             {
@@ -730,7 +734,7 @@
             },
             {
                 q: "Nhiệm vụ bao trùm mục tiêu tổng quát trong suốt thời kỳ quá độ lên CNXH được xác định ở Đại hội IV (12/1976) là gì?",
-                a: "Đẩy mạnh công nghiệp hóa xã hội chủ nghĩa",
+                a: "Đẩy mạnh công nghiệp hóa XHCN",
                 d: ["Hoàn thành cải tạo XHCN ở miền Nam", "Phát triển kinh tế thị trường", "Mở rộng hợp tác quốc tế"]
             },
             {
@@ -740,7 +744,7 @@
             },
             {
                 q: "Trước thời kỳ đổi mới (1986), nền kinh tế nước ta có mấy thành phần kinh tế?",
-                a: "3 thành phần (quốc doanh, tập thể và cá thể)",
+                a: "3 thành phần",
                 d: ["5 thành phần", "2 thành phần", "1 thành phần"]
             },
             {
@@ -765,8 +769,8 @@
             },
             {
                 q: "Nội dung CNH tại Đại hội VI (12/1986) tập trung vào những chương trình nào?",
-                a: "Thực hiện 3 chương trình kinh tế lớn (lương thực - thực phẩm, hàng tiêu dùng và hàng xuất khẩu)",
-                d: ["Tập trung phát triển công nghiệp nặng và điện lực", "Mở rộng khu công nghiệp chế xuất", "Đẩy mạnh công nghệ thông tin"]
+                a: "Thực hiện cả 3 chương trình kinh tế",
+                d: ["Về lương thực - thực phẩm", "Về hàng hóa tiêu dùng", "Về hàng hóa xuất khẩu"]
             },
             {
                 q: "Lĩnh vực nào được Đảng chủ trương đổi mới đầu tiên tại Đại hội VI (12/1986)?",
@@ -775,7 +779,7 @@
             },
             {
                 q: "Sai lầm trong chủ trương về xây dựng CNXH trước thời kỳ đổi mới là gì?",
-                a: "Duy trì quá lâu cơ chế kế hoạch hóa ; Mục tiêu phát triển quá cao ; Chủ quan nóng vội",
+                a: "Cả ba phương án trên đều đúng",
                 d: ["Duy trì quá lâu cơ chế kế hoạch hóa", "Mục tiêu phát triển quá cao", "Chủ quan nóng vội"]
             },
             {
@@ -795,16 +799,15 @@
             }
         ];
 
-        /* State management variables */
+        
         let processedQuestions = [];
         let userAnswers = {}; // Format: { questionIdx: selectedOptionIdx }
-        let bookmarkedQuestions = new Set();
-        let currentFilter = 'all'; // 'all', 'unanswered', 'answered', 'incorrect', 'bookmarked'
+        let currentFilter = 'all'; // 'all', 'unanswered', 'answered', 'incorrect'
+        let isQuizStarted = false;
 
         /* Timer variables */
         let timerInterval = null;
         let secondsElapsed = 0;
-        let isTimerRunning = false;
         let hasShownCompletionModal = false;
 
         /* Helper shuffle array */
@@ -818,38 +821,65 @@
         }
 
         function initApp() {
-            // Process raw data into question objects with 4 options each
-            processedQuestions = RAW_DATASET.map((item, idx) => {
+            // Chỉ chuẩn bị data nhưng KHÔNG hiển thị ra màn hình cho đến khi bấm bắt đầu
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        }
+
+        function startQuiz() {
+            isQuizStarted = true;
+
+            // Xử lý và xáo trộn ngẫu nhiên bộ câu hỏi mỗi lần bắt đầu
+            let shuffledRaw = shuffleArray(RAW_DATASET);
+            processedQuestions = shuffledRaw.map((item, idx) => {
                 const correctAnswer = item.a;
                 const optionsList = [correctAnswer, ...item.d];
-                const shuffled = shuffleArray(optionsList);
-                const correctIdx = shuffled.indexOf(correctAnswer);
+                const shuffledOptions = shuffleArray(optionsList);
+                const correctIdx = shuffledOptions.indexOf(correctAnswer);
 
                 return {
-                    id: idx,
+                    id: idx, // ID mới theo thứ tự đã xáo trộn
                     question: item.q,
-                    options: shuffled,
+                    options: shuffledOptions,
                     correctIndex: correctIdx,
                     correctText: correctAnswer
                 };
             });
 
-            // Load bookmarks from localStorage if available
-            try {
-                const savedBookmarks = localStorage.getItem('lsd_bookmarks');
-                if (savedBookmarks) {
-                    bookmarkedQuestions = new Set(JSON.parse(savedBookmarks));
-                }
-            } catch(e) {}
+            // Reset dữ liệu
+            userAnswers = {};
+            currentFilter = 'all';
+            hasShownCompletionModal = false;
 
+            // Chuyển đổi hiển thị màn hình
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('mainContent').classList.remove('hidden');
+            document.getElementById('mainContent').classList.add('flex');
+            
+            document.getElementById('headerControls').classList.remove('hidden');
+            document.getElementById('headerControls').classList.add('flex');
+
+            document.getElementById('btnScrollTop').classList.remove('hidden');
+            document.getElementById('btnScrollBottom').classList.remove('hidden');
+
+            // Cập nhật giao diện bộ lọc
+            setFilter('all');
+
+            // Bắt đầu tính giờ ngay lập tức
+            resetTimer();
+            startTimer();
+
+            // Render câu hỏi
             renderAllQuestions();
             updateStatsAndFilters();
             renderQuestionGrid();
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function startTimer() {
-            if (isTimerRunning) return;
-            isTimerRunning = true;
+            if (timerInterval) return;
             timerInterval = setInterval(() => {
                 secondsElapsed++;
                 const timerEl = document.getElementById('headerTimer');
@@ -862,13 +892,11 @@
                 clearInterval(timerInterval);
                 timerInterval = null;
             }
-            isTimerRunning = false;
         }
 
         function resetTimer() {
             stopTimer();
             secondsElapsed = 0;
-            hasShownCompletionModal = false;
             const timerEl = document.getElementById('headerTimer');
             if (timerEl) timerEl.innerText = '00:00';
         }
@@ -903,15 +931,13 @@
             processedQuestions.forEach((qObj, idx) => {
                 const userSelected = userAnswers[idx];
                 const isAnswered = userSelected !== undefined;
-                const isBookmarked = bookmarkedQuestions.has(idx);
                 const isIncorrect = isAnswered && userSelected !== qObj.correctIndex;
 
-                // Determine if question matches current active filter
+                // Lọc hiển thị
                 let isVisible = true;
                 if (currentFilter === 'unanswered' && isAnswered) isVisible = false;
                 if (currentFilter === 'answered' && !isAnswered) isVisible = false;
                 if (currentFilter === 'incorrect' && !isIncorrect) isVisible = false;
-                if (currentFilter === 'bookmarked' && !isBookmarked) isVisible = false;
 
                 const card = document.createElement('div');
                 card.className = `glass-card rounded-2xl p-5 sm:p-6 transition-all duration-300 relative overflow-hidden ${isVisible ? 'block' : 'hidden'}`;
@@ -920,15 +946,15 @@
                 // Options HTML
                 let optionsHTML = '';
                 qObj.options.forEach((optText, optIdx) => {
-                    let btnClass = 'option-btn w-full text-left p-3.5 sm:p-4 rounded-xl border text-sm sm:text-base font-medium flex items-start gap-3 bg-white/80 border-slate-200 text-slate-700 hover:bg-emerald-50/80 hover:border-emerald-300';
-                    let badgeClass = 'w-6 h-6 rounded-lg bg-emerald-100 text-emerald-800 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5';
+                    let btnClass = 'option-btn w-full text-left p-3.5 sm:p-4 rounded-xl border text-sm sm:text-base font-medium flex items-start gap-3 bg-white/80 border-slate-200 text-slate-700 hover:bg-sky-50/80 hover:border-sky-300';
+                    let badgeClass = 'w-6 h-6 rounded-lg bg-sky-100 text-blue-800 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5';
                     let iconHTML = '';
 
                     if (isAnswered) {
                         if (optIdx === qObj.correctIndex) {
                             btnClass = 'option-btn option-correct w-full text-left p-3.5 sm:p-4 rounded-xl border text-sm sm:text-base font-semibold flex items-start gap-3';
-                            badgeClass = 'w-6 h-6 rounded-lg bg-emerald-600 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5';
-                            iconHTML = `<i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-600 shrink-0 ml-auto"></i>`;
+                            badgeClass = 'w-6 h-6 rounded-lg bg-blue-600 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5';
+                            iconHTML = `<i data-lucide="check-circle-2" class="w-5 h-5 text-blue-600 shrink-0 ml-auto"></i>`;
                         } else if (optIdx === userSelected) {
                             btnClass = 'option-btn option-incorrect w-full text-left p-3.5 sm:p-4 rounded-xl border text-sm sm:text-base font-semibold flex items-start gap-3';
                             badgeClass = 'w-6 h-6 rounded-lg bg-red-600 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5';
@@ -954,7 +980,7 @@
                 let statusBadge = '';
                 if (isAnswered) {
                     if (userSelected === qObj.correctIndex) {
-                        statusBadge = `<span class="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800 text-xs font-bold flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5"></i> Chính xác</span>`;
+                        statusBadge = `<span class="px-2.5 py-1 rounded-lg bg-sky-100 text-blue-800 text-xs font-bold flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5"></i> Chính xác</span>`;
                     } else {
                         statusBadge = `<span class="px-2.5 py-1 rounded-lg bg-red-100 text-red-800 text-xs font-bold flex items-center gap-1"><i data-lucide="x" class="w-3.5 h-3.5"></i> Chưa đúng</span>`;
                     }
@@ -963,27 +989,19 @@
                 card.innerHTML = `
                     <div class="flex items-center justify-between gap-3 mb-3.5">
                         <div class="flex items-center gap-2">
-                            <span class="px-3 py-1 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold text-xs shadow-sm">
+                            <span class="px-3 py-1 rounded-xl bg-gradient-to-r from-blue-600 to-sky-500 text-white font-extrabold text-xs shadow-sm">
                                 CÂU ${idx + 1}
                             </span>
                             <span id="status-${idx}">${statusBadge}</span>
                         </div>
-
-                        <!-- Bookmark Action -->
-                        <button onclick="toggleBookmark(${idx})" class="p-1.5 rounded-lg text-slate-400 hover:text-amber-500 hover:bg-amber-50 transition-colors" title="${isBookmarked ? 'Bỏ lưu' : 'Lưu câu này'}">
-                            <i data-lucide="bookmark" class="w-5 h-5 ${isBookmarked ? 'fill-amber-400 text-amber-500' : ''}"></i>
-                        </button>
                     </div>
-
                     <h3 class="text-base sm:text-lg font-bold text-slate-800 mb-4 leading-snug">
                         ${qObj.question}
                     </h3>
-
                     <div class="grid grid-cols-1 gap-2.5">
                         ${optionsHTML}
                     </div>
                 `;
-
                 container.appendChild(card);
             });
 
@@ -994,29 +1012,7 @@
 
         function selectAnswer(questionIdx, selectedOptIdx) {
             if (userAnswers[questionIdx] !== undefined) return;
-
-            // Start timer when user selects their first answer
-            if (!isTimerRunning && Object.keys(userAnswers).length === 0) {
-                startTimer();
-            }
-
             userAnswers[questionIdx] = selectedOptIdx;
-
-            renderAllQuestions();
-            updateStatsAndFilters();
-            renderQuestionGrid();
-        }
-
-        function toggleBookmark(questionIdx) {
-            if (bookmarkedQuestions.has(questionIdx)) {
-                bookmarkedQuestions.delete(questionIdx);
-            } else {
-                bookmarkedQuestions.add(questionIdx);
-            }
-
-            try {
-                localStorage.setItem('lsd_bookmarks', JSON.stringify(Array.from(bookmarkedQuestions)));
-            } catch(e) {}
 
             renderAllQuestions();
             updateStatsAndFilters();
@@ -1026,13 +1022,13 @@
         function setFilter(filterType) {
             currentFilter = filterType;
 
-            ['all', 'unanswered', 'answered', 'incorrect', 'bookmarked'].forEach(f => {
+            ['all', 'unanswered', 'incorrect'].forEach(f => {
                 const btn = document.getElementById(`filter-${f}`);
                 if (btn) {
                     if (f === filterType) {
-                        btn.className = 'px-3 py-1.5 rounded-xl bg-emerald-600 text-white shadow-sm transition-all';
+                        btn.className = 'px-3 py-1.5 rounded-xl bg-blue-600 text-white shadow-sm transition-all';
                     } else {
-                        btn.className = 'px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 text-slate-700 hover:bg-emerald-50 transition-all';
+                        btn.className = 'px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 text-slate-700 hover:bg-sky-50 transition-all';
                     }
                 }
             });
@@ -1045,31 +1041,17 @@
             const answeredCount = Object.keys(userAnswers).length;
             
             let correctCount = 0;
-            let incorrectCount = 0;
 
             Object.keys(userAnswers).forEach(gIdx => {
                 if (userAnswers[gIdx] === processedQuestions[gIdx].correctIndex) {
                     correctCount++;
-                } else {
-                    incorrectCount++;
                 }
             });
 
-            // Update Counts in UI
             document.getElementById('headerScore').innerText = correctCount;
             document.getElementById('headerTotal').innerText = total;
 
-            document.getElementById('progressText').innerText = `${answeredCount}/${total} câu`;
-            const pct = (answeredCount / total) * 100;
-            document.getElementById('globalProgressBar').style.width = `${pct}%`;
-
-            document.getElementById('cnt-all').innerText = total;
-            document.getElementById('cnt-unanswered').innerText = total - answeredCount;
-            document.getElementById('cnt-answered').innerText = answeredCount;
-            document.getElementById('cnt-incorrect').innerText = incorrectCount;
-            document.getElementById('cnt-bookmarked').innerText = bookmarkedQuestions.size;
-
-            // Check if all questions have been answered
+            // Tự động kiểm tra đã làm hết 95 câu chưa
             if (total > 0 && answeredCount === total) {
                 stopTimer();
                 if (!hasShownCompletionModal) {
@@ -1090,30 +1072,27 @@
             document.getElementById('completionModal').classList.add('hidden');
         }
 
+        function reviewQuiz() {
+            // Nút "Xem lại bài làm"
+            closeCompletionModal();
+            // Bộ đếm giờ đã được tắt. Các nút đáp án đã tự disable.
+        }
+
+        function retryQuiz() {
+            // Nút "Làm lại từ đầu"
+            closeCompletionModal();
+            closeResetModal();
+            // Khởi động lại logic random
+            startQuiz();
+        }
+
         function openResetModal() {
-            if (Object.keys(userAnswers).length === 0) {
-                resetAllProgress();
-            } else {
-                document.getElementById('resetConfirmModal').classList.remove('hidden');
-                if (window.lucide) lucide.createIcons();
-            }
+            document.getElementById('resetConfirmModal').classList.remove('hidden');
+            if (window.lucide) lucide.createIcons();
         }
 
         function closeResetModal() {
             document.getElementById('resetConfirmModal').classList.add('hidden');
-        }
-
-        function resetAllProgress() {
-            userAnswers = {};
-            currentFilter = 'all';
-            resetTimer();
-            closeCompletionModal();
-            closeResetModal();
-            setFilter('all');
-            renderAllQuestions();
-            updateStatsAndFilters();
-            renderQuestionGrid();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function jumpToQuestion(qIndex) {
@@ -1129,18 +1108,10 @@
                 const card = document.getElementById(`q-card-${qIndex}`);
                 if (card) {
                     card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    card.classList.add('ring-2', 'ring-emerald-500');
-                    setTimeout(() => card.classList.remove('ring-2', 'ring-emerald-500'), 2200);
+                    card.classList.add('ring-2', 'ring-blue-500');
+                    setTimeout(() => card.classList.remove('ring-2', 'ring-blue-500'), 2200);
                 }
             }, 100);
-        }
-
-        function handleJumpInput() {
-            const input = document.getElementById('jumpInput');
-            const num = parseInt(input.value);
-            if (!isNaN(num) && num >= 1 && num <= processedQuestions.length) {
-                jumpToQuestion(num - 1);
-            }
         }
 
         function renderQuestionGrid() {
@@ -1151,13 +1122,10 @@
                 const isAnswered = userAnswers[idx] !== undefined;
                 const isCorrect = isAnswered && userAnswers[idx] === qObj.correctIndex;
                 const isIncorrect = isAnswered && userAnswers[idx] !== qObj.correctIndex;
-                const isBookmarked = bookmarkedQuestions.has(idx);
 
-                let btnBg = 'bg-white border-slate-300 text-slate-700 hover:bg-emerald-50';
-                if (isBookmarked) {
-                    btnBg = 'bg-amber-100 border-amber-400 text-amber-900 font-bold';
-                } else if (isCorrect) {
-                    btnBg = 'bg-emerald-500 border-emerald-600 text-white font-bold';
+                let btnBg = 'bg-white border-slate-300 text-slate-700 hover:bg-sky-50';
+                if (isCorrect) {
+                    btnBg = 'bg-blue-500 border-blue-600 text-white font-bold';
                 } else if (isIncorrect) {
                     btnBg = 'bg-red-500 border-red-600 text-white font-bold';
                 }
@@ -1178,20 +1146,13 @@
             document.getElementById('btnOpenGrid').addEventListener('click', () => {
                 document.getElementById('gridModal').classList.remove('hidden');
             });
-
             document.getElementById('btnCloseGrid').addEventListener('click', () => {
                 document.getElementById('gridModal').classList.add('hidden');
             });
-
             document.getElementById('gridModal').addEventListener('click', (e) => {
                 if (e.target.id === 'gridModal') {
                     document.getElementById('gridModal').classList.add('hidden');
                 }
-            });
-
-            // Enter key on jump input
-            document.getElementById('jumpInput').addEventListener('keyup', (e) => {
-                if (e.key === 'Enter') handleJumpInput();
             });
 
             // Initialize Lucide Icons
