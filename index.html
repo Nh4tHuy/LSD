@@ -1201,61 +1201,7 @@
             }
         });
     </script>
-    <!-- BẮT ĐẦU SCRIPT BẢO TRÌ -->
-<script>
-    (function() {
-        // Đảm bảo DOM đã tải xong trước khi chèn overlay
-        window.addEventListener('DOMContentLoaded', (event) => {
-            // Tạo phần tử overlay bao phủ toàn màn hình
-            const overlay = document.createElement('div');
-            overlay.id = 'maintenance-overlay';
-            
-            // Sử dụng Tailwind CSS để style (Lớp phủ mờ, popup nổi bật, z-index cao nhất)
-            overlay.className = 'fixed inset-0 z-[99999] bg-slate-900/80 backdrop-blur-sm flex flex-col items-center justify-center p-4 opacity-0 transition-opacity duration-500';
-            
-            // Nội dung HTML của bảng thông báo
-            overlay.innerHTML = `
-                <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center transform scale-95 transition-transform duration-500" id="maintenance-card">
-                    <!-- Icon Cờ lê/Cài đặt xoay nhẹ -->
-                    <div class="w-20 h-20 bg-sky-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-10 h-10 text-sky-600 animate-[spin_4s_linear_infinite]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                    </div>
-                    
-                    <h2 class="text-2xl font-bold text-slate-800 mb-3 font-sans">Error !</h2>
-                    <p class="text-slate-600 mb-8 leading-relaxed text-sm md:text-base">
-                        Phát hiện truy cập bất thường. Vui lòng liên hệ quản trị viên để khắc phục!
-                    </p>
-                    
-                    <div class="inline-flex items-center justify-center px-6 py-3 bg-sky-50 text-sky-700 font-semibold rounded-xl border border-sky-200">
-                        <div class="flex space-x-2 mr-3">
-                            <div class="w-2 h-2 bg-sky-600 rounded-full animate-bounce"></div>
-                            <div class="w-2 h-2 bg-sky-600 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
-                            <div class="w-2 h-2 bg-sky-600 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
-                        </div>
-                        Đang khắc phục tự động...
-                    </div>
-                </div>
-            `;
-            
-            // Chèn vào body
-            document.body.appendChild(overlay);
-            
-            // Khóa cuộn trang web
-            document.body.style.overflow = 'hidden';
-            
-            // Hiệu ứng mượt mà khi xuất hiện (Fade In)
-            setTimeout(() => {
-                overlay.classList.remove('opacity-0');
-                document.getElementById('maintenance-card').classList.remove('scale-95');
-                document.getElementById('maintenance-card').classList.add('scale-100');
-            }, 50);
-        });
-    })();
-</script>
-<!-- KẾT THÚC SCRIPT BẢO TRÌ -->
+
 
 </body>
 </html>
