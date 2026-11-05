@@ -1,1207 +1,1566 @@
 <!DOCTYPE html>
-<html lang="vi" class="h-full scroll-smooth">
+<html lang="vi" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ôn Tập Trắc Nghiệm Lịch Sử Đảng - Wiky</title>
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts Plus Jakarta Sans -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
-                    colors: {
-                        // Tông màu pastel blue tuỳ chỉnh nếu cần, nhưng ta sẽ dùng chủ yếu sky và blue của tailwind
-                    },
-                    boxShadow: {
-                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
-                        'glass-lg': '0 12px 40px 0 rgba(31, 38, 135, 0.12)',
-                        'pastel-glow': '0 0 20px rgba(56, 189, 248, 0.4)'
-                    }
-                }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mochy Music - Trình phát nhạc Web & Offline</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
+              900: '#064e3b',
             }
+          },
+          animation: {
+            'spin-slow': 'spin 20s linear infinite',
+            'pulse-glow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          }
         }
-    </script>
+      }
+    }
+  </script>
 
-    <style>
-        body {
-            /* Đổi sang background xanh biển pastel */
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 35%, #f4f4f5 70%, #e6f7ff 100%);
-            background-attachment: fixed;
-            min-height: 100vh;
-        }
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-        /* Glassmorphism styling */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.82);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.85);
-            box-shadow: 0 10px 30px -5px rgba(30, 58, 138, 0.05), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
-        }
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        .glass-header {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.75);
-        }
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      user-select: none;
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(51, 65, 85, 0.8);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(16, 185, 129, 0.8);
+    }
 
-        .glass-pill {
-            background: rgba(240, 249, 255, 0.85);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(186, 230, 253, 0.7);
-        }
+    .glass-effect {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
 
-        .option-btn {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+    .glass-card {
+      background: rgba(30, 41, 59, 0.5);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .range-slider::-webkit-slider-thumb {
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #10b981;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
 
-        .option-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(56, 189, 248, 0.14);
-        }
-
-        /* Answer States - Updated to Blue */
-        .option-correct {
-            background: rgba(224, 242, 254, 0.95) !important; /* sky-100 */
-            border-color: #3b82f6 !important; /* blue-500 */
-            color: #1e3a8a !important; /* blue-900 */
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.25) !important;
-        }
-
-        .option-incorrect {
-            background: rgba(254, 226, 226, 0.95) !important;
-            border-color: #ef4444 !important;
-            color: #7f1d1d !important;
-        }
-
-        .option-disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        /* Custom Scrollbar - Blue theme */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(240, 249, 255, 0.5);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #bae6fd;
-            border-radius: 9999px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #7dd3fc;
-        }
-
-        /* Floating background ambient elements - Blue theme */
-        .ambient-blob {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(70px);
-            z-index: -1;
-            opacity: 0.55;
-            pointer-events: none;
-            animation: float 18s ease-in-out infinite alternate;
-        }
-
-        @keyframes float {
-            0% { transform: translate(0px, 0px) scale(1); }
-            50% { transform: translate(30px, -40px) scale(1.1); }
-            100% { transform: translate(-20px, 20px) scale(0.95); }
-        }
-    </style>
+    .range-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.8);
+    }
+  </style>
 </head>
-<body class="font-sans text-slate-800 antialiased selection:bg-sky-200 selection:text-blue-900 flex flex-col min-h-screen">
 
-    <!-- Ambient background blobs -->
-    <div class="ambient-blob w-96 h-96 bg-sky-200 top-10 left-10"></div>
-    <div class="ambient-blob w-80 h-80 bg-blue-200 bottom-10 right-10" style="animation-delay: -5s;"></div>
-    <div class="ambient-blob w-72 h-72 bg-cyan-100 top-1/2 left-1/3" style="animation-delay: -10s;"></div>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col overflow-x-hidden select-none">
 
-    <!-- Sticky Navigation Header -->
-    <header class="sticky top-0 z-40 glass-header px-4 lg:px-8 py-3 shadow-sm">
-        <div class="max-w-6xl mx-auto flex items-center justify-between gap-3">
-            <!-- Brand / Title -->
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-sky-500 flex items-center justify-center text-white shadow-md shadow-sky-200 shrink-0">
-                    <i data-lucide="book-open-check" class="w-5 h-5"></i>
-                </div>
-                <div>
-                    <h1 class="text-base sm:text-lg lg:text-xl font-bold bg-gradient-to-r from-blue-800 via-sky-800 to-blue-900 bg-clip-text text-transparent leading-tight">
-                    WIKY
-                    </h1>
-                    <p class="text-xs text-blue-700 font-medium hidden sm:block">Ôn tập Lịch Sử Đảng</p>
-                </div>
-            </div>
+  <!-- Ambient Dynamic Background -->
+  <div id="ambient-bg" class="fixed inset-0 pointer-events-none transition-all duration-1000 opacity-30 z-0 bg-gradient-to-br from-emerald-900/40 via-slate-950 to-slate-950"></div>
 
-            <!-- Header Quick Stats & Controls (Ẩn đi lúc chưa bắt đầu) -->
-            <div id="headerControls" class="hidden items-center gap-2 sm:gap-3">
-                <!-- Score Counter -->
-                <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl glass-pill text-xs font-semibold text-blue-800 shadow-sm">
-                    <i data-lucide="award" class="w-4 h-4 text-blue-600"></i>
-                    <span><strong id="headerScore" class="text-blue-700 text-sm">0</strong>/<span id="headerTotal">0</span></span>
-                </div>
-
-                <!-- Timer Counter -->
-                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl glass-pill text-xs font-semibold text-blue-800 shadow-sm" title="Thời gian làm bài">
-                    <i data-lucide="timer" class="w-4 h-4 text-blue-600 animate-pulse"></i>
-                    <span id="headerTimer" class="font-mono text-sm text-blue-700 font-bold">00:00</span>
-                </div>
-
-                <!-- Grid & Reset Buttons -->
-                <button id="btnOpenGrid" class="p-2 rounded-xl glass-pill text-blue-700 hover:bg-blue-50 transition-colors" title="Bảng câu hỏi">
-                    <i data-lucide="layout-grid" class="w-4 h-4"></i>
-                </button>
-                <button id="btnResetAll" onclick="openResetModal()" class="p-2 rounded-xl glass-pill text-red-700 hover:bg-red-50 transition-colors" title="Làm lại từ đầu">
-                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-                </button>
-            </div>
+  <div class="relative z-10 flex flex-col flex-1 h-screen overflow-hidden">
+    
+    <!-- TOP HEADER -->
+    <header class="h-16 border-b border-slate-800/80 px-4 md:px-8 flex items-center justify-between glass-effect shrink-0">
+      <!-- Logo & App Title -->
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('home')">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-500 to-teal-400 flex items-center justify-center text-slate-950 shadow-lg shadow-brand-500/20">
+          <i class="fa-solid fa-compact-disc text-xl animate-spin-slow"></i>
         </div>
+        <div>
+          <h1 class="font-bold text-lg leading-tight tracking-wide text-white">Mochy<span class="text-brand-500">Music</span></h1>
+          <p class="text-[10px] text-slate-400 font-medium">Player HD & Offline Studio</p>
+        </div>
+      </div>
+
+      <!-- Search Input in Header -->
+      <div class="relative w-1/3 max-w-md hidden md:block">
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+        <input type="text" id="header-search" placeholder="Tìm kiếm bài hát, nghệ sĩ, album..." 
+               class="w-full bg-slate-800/70 text-sm text-slate-200 pl-10 pr-4 py-2 rounded-full border border-slate-700/50 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all">
+      </div>
+
+      <!-- Header Actions -->
+      <div class="flex items-center space-x-2 md:space-x-3">
+        <button onclick="openUploadModal()" title="Tải nhạc offline / YouTube" class="w-9 h-9 rounded-full bg-brand-500/20 text-brand-500 hover:bg-brand-500 hover:text-slate-950 flex items-center justify-center transition">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+        <button onclick="toggleBedsideMode()" title="Chế độ Bedside / Night Clock" class="w-9 h-9 rounded-full bg-slate-800/80 hover:bg-slate-700/80 flex items-center justify-center text-slate-300 hover:text-white transition">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <button onclick="openEqualizerModal()" title="Equalizer & Audio FX" class="w-9 h-9 rounded-full bg-slate-800/80 hover:bg-slate-700/80 flex items-center justify-center text-slate-300 hover:text-white transition">
+          <i class="fa-solid fa-sliders"></i>
+        </button>
+        <button onclick="switchTab('settings')" title="Cài đặt" class="w-9 h-9 rounded-full bg-slate-800/80 hover:bg-slate-700/80 flex items-center justify-center text-slate-300 hover:text-white transition">
+          <i class="fa-solid fa-gear"></i>
+        </button>
+      </div>
     </header>
 
-    <main class="flex-1 max-w-5xl w-full mx-auto px-3 sm:px-6 py-5 flex flex-col gap-5">
+    <!-- Main Content Layout (Sidebar + Tab Content) -->
+    <div class="flex flex-1 overflow-hidden">
+      
+      <!-- Sidebar Navigation -->
+      <aside class="w-16 md:w-64 border-r border-slate-800/60 p-2 md:p-4 flex flex-col justify-between glass-effect shrink-0">
+        <nav class="space-y-1.5 md:space-y-2">
+          <button onclick="switchTab('home')" id="nav-home" class="nav-btn w-full flex items-center space-x-4 px-3 md:px-4 py-3 rounded-xl font-medium transition text-brand-500 bg-brand-500/10">
+            <i class="fa-solid fa-house text-lg w-5 text-center"></i>
+            <span class="hidden md:inline text-sm">Trang chủ</span>
+          </button>
+          <button onclick="switchTab('search')" id="nav-search" class="nav-btn w-full flex items-center space-x-4 px-3 md:px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 transition">
+            <i class="fa-solid fa-compass text-lg w-5 text-center"></i>
+            <span class="hidden md:inline text-sm">Khám phá & Tìm kiếm</span>
+          </button>
+          <button onclick="switchTab('library')" id="nav-library" class="nav-btn w-full flex items-center space-x-4 px-3 md:px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 transition">
+            <i class="fa-solid fa-list-ul text-lg w-5 text-center"></i>
+            <span class="hidden md:inline text-sm">Thư viện nhạc</span>
+          </button>
+          <button onclick="openUploadModal()" class="w-full flex items-center space-x-4 px-3 md:px-4 py-3 rounded-xl font-medium text-emerald-400 hover:bg-emerald-500/10 transition border border-emerald-500/30">
+            <i class="fa-solid fa-cloud-arrow-up text-lg w-5 text-center"></i>
+            <span class="hidden md:inline text-sm">Tải bài hát / YouTube</span>
+          </button>
+          <button onclick="switchTab('favorites')" id="nav-favorites" class="nav-btn w-full flex items-center space-x-4 px-3 md:px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 transition">
+            <i class="fa-solid fa-heart text-lg w-5 text-center"></i>
+            <span class="hidden md:inline text-sm">Yêu thích</span>
+          </button>
+          <button onclick="switchTab('lyrics')" id="nav-lyrics" class="nav-btn w-full flex items-center space-x-4 px-3 md:px-4 py-3 rounded-xl font-medium text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 transition">
+            <i class="fa-solid fa-quote-left text-lg w-5 text-center"></i>
+            <span class="hidden md:inline text-sm">Lời bài hát (Lyrics)</span>
+          </button>
+        </nav>
+
+        <!-- Quick Info / Mini Stats -->
+        <div class="hidden md:block p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80">
+          <div class="flex items-center space-x-3 text-xs text-slate-400 mb-2">
+            <i class="fa-solid fa-shield-halved text-brand-500"></i>
+            <span>Âm thanh chất lượng HD</span>
+          </div>
+          <p class="text-[11px] text-slate-500 leading-relaxed">Hỗ trợ phát file nhạc cục bộ, stream YouTube không quảng cáo & dải tần Equalizer thực.</p>
+        </div>
+      </aside>
+
+      <!-- TAB PAGES CONTAINER -->
+      <main class="flex-1 overflow-y-auto p-4 md:p-8 space-y-8 pb-32">
         
-        <!-- Màn hình bắt đầu -->
-        <div id="startScreen" class="glass-card rounded-3xl p-8 max-w-xl mx-auto w-full text-center flex flex-col items-center justify-center gap-6 mt-10 sm:mt-20 shadow-xl border border-white/80 relative overflow-hidden">
-            <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-blue-500 to-sky-400 flex items-center justify-center text-white shadow-lg shadow-sky-200/50 mb-2">
-                <i data-lucide="graduation-cap" class="w-12 h-12"></i>
+        <!-- Tab: HOME -->
+        <div id="tab-home" class="tab-page space-y-8">
+          <!-- Hero Banner -->
+          <div class="relative rounded-3xl overflow-hidden p-6 md:p-10 bg-gradient-to-r from-emerald-950 via-slate-900 to-slate-950 border border-emerald-500/20 shadow-2xl">
+            <div class="relative z-10 max-w-xl space-y-4">
+              <span class="px-3 py-1 bg-brand-500/20 text-brand-500 text-xs font-semibold rounded-full border border-brand-500/30 uppercase tracking-wider">Mochy Offline & Online Player</span>
+              <h2 class="text-2xl md:text-4xl font-extrabold text-white leading-tight">Phát nhạc Offline & Stream YouTube không quảng cáo</h2>
+              <p class="text-slate-300 text-sm">Thêm file nhạc MP3 từ máy tính hoặc dán liên kết YouTube để nghe nhạc chất lượng cao không lo ngắt quãng.</p>
+              <div class="pt-2 flex items-center space-x-4">
+                <button onclick="openUploadModal()" class="px-6 py-3 bg-brand-500 hover:bg-brand-600 text-slate-950 font-bold rounded-full transition shadow-lg shadow-brand-500/30 flex items-center space-x-2">
+                  <i class="fa-solid fa-file-audio"></i>
+                  <span>Tải nhạc / Thêm YouTube</span>
+                </button>
+                <button onclick="switchTab('search')" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-full transition border border-slate-700">
+                  <span>Khám phá Online</span>
+                </button>
+              </div>
             </div>
-            <div>
-                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800 mb-2">Sẵn sàng ôn tập?</h2>
-                <p class="text-sm text-slate-500 font-medium max-w-sm mx-auto">Hệ thống sẽ <strong class="text-blue-600">tính giờ ngay lập tức</strong> và <strong class="text-blue-600">xáo trộn ngẫu nhiên</strong> hơn 100 câu hỏi để bạn ôn luyện.</p>
+            <div class="absolute right-0 top-0 bottom-0 w-1/3 opacity-20 md:opacity-40 pointer-events-none flex items-center justify-center">
+              <i class="fa-solid fa-music text-[180px] text-brand-500"></i>
             </div>
-            
-            <button onclick="startQuiz()" class="w-full sm:w-auto px-10 py-4 mt-2 rounded-2xl bg-blue-600 font-bold text-lg text-white hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 hover:-translate-y-1 hover:shadow-blue-300 flex items-center justify-center gap-3">
-                Bắt Đầu
-                <i data-lucide="arrow-right" class="w-5 h-5"></i>
+          </div>
+
+          <!-- Featured Quick Picks -->
+          <div>
+            <h3 class="text-xl font-bold text-white mb-4">Gợi ý nhanh cho bạn</h3>
+            <div id="quick-picks-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              <!-- Dynamic Quick Picks Loaded via JS -->
+            </div>
+          </div>
+
+          <!-- Trending Songs List -->
+          <div>
+            <h3 class="text-xl font-bold text-white mb-4">Xu hướng hàng đầu</h3>
+            <div id="trending-songs-list" class="space-y-2 bg-slate-900/40 p-4 rounded-2xl border border-slate-800/80">
+              <!-- Dynamic Trending List Loaded via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: SEARCH -->
+        <div id="tab-search" class="tab-page space-y-6 hidden">
+          <div class="max-w-2xl mx-auto space-y-4">
+            <h2 class="text-2xl font-bold text-white text-center">Khám phá & Tìm kiếm âm nhạc</h2>
+            <div class="relative">
+              <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+              <input type="text" id="search-input" placeholder="Nhập tên bài hát, ca sĩ, giai điệu..." 
+                     class="w-full bg-slate-900 text-white pl-12 pr-4 py-4 rounded-2xl border border-slate-800 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 text-base shadow-xl">
+            </div>
+          </div>
+
+          <div id="search-results" class="space-y-3">
+            <!-- Dynamic Search Results -->
+            <p class="text-center text-slate-500 py-12">Nhập từ khóa tìm kiếm để khám phá kho nhạc trực tuyến.</p>
+          </div>
+        </div>
+
+        <!-- Tab: LIBRARY -->
+        <div id="tab-library" class="tab-page space-y-6 hidden">
+          <div class="flex justify-between items-center">
+            <h2 class="text-2xl font-bold text-white">Thư viện của bạn</h2>
+            <button onclick="openUploadModal()" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-slate-950 text-xs font-bold rounded-xl transition flex items-center gap-2">
+              <i class="fa-solid fa-plus"></i> Thêm bài hát mới
             </button>
-        </div>
-
-        <!-- Main Quiz Content -->
-        <div id="mainContent" class="hidden flex-col gap-5">
-            <!-- Global Dashboard & Filter Bar -->
-            <div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col gap-4">
-                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-sky-100/80 pb-3">
-                    <div>
-                        <h2 class="text-base font-bold text-slate-800">Bộ đề số 36</h2>
-                        <p class="text-xs text-slate-500 font-medium">Đáp án được chỉnh lại theo hướng dễ nhớ, có thể khác cách diễn đạt của Cô nên chỉ tham khảo thôi.</p>
-                    </div>
-                </div>
-
-                <!-- Filter Buttons Bar -->
-                <div class="flex items-center justify-between flex-wrap gap-2 text-xs font-semibold">
-                    <div class="flex items-center gap-1.5 flex-wrap">
-                        <button onclick="setFilter('all')" id="filter-all" class="px-3 py-1.5 rounded-xl bg-blue-600 text-white shadow-sm transition-all">
-                            Tất cả
-                        </button>
-                        <button onclick="setFilter('unanswered')" id="filter-unanswered" class="px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 text-slate-700 hover:bg-sky-50 transition-all">
-                            Chưa làm
-                        </button>
-                        <button onclick="setFilter('incorrect')" id="filter-incorrect" class="px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 text-slate-700 hover:bg-red-50 text-red-700 transition-all">
-                            Câu sai
-                        </button>
-                    </div>
-                </div>
+          </div>
+          
+          <div id="playlists-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 flex items-center space-x-4 cursor-pointer hover:border-brand-500/50 transition" onclick="switchTab('favorites')">
+              <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-red-500 to-pink-700 flex items-center justify-center text-white text-2xl shadow-lg">
+                <i class="fa-solid fa-heart"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-white">Bài hát yêu thích</h4>
+                <p id="fav-count-text" class="text-xs text-slate-400">0 bài hát</p>
+              </div>
             </div>
 
-            <!-- Continuous List Container -->
-            <div id="questionsContainer" class="flex flex-col gap-5">
-                <!-- Questions rendered here as one continuous list -->
+            <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 flex items-center space-x-4 cursor-pointer hover:border-brand-500/50 transition" onclick="filterLibraryType('local')">
+              <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white text-2xl shadow-lg">
+                <i class="fa-solid fa-hard-drive"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-white">Nhạc Offline (File)</h4>
+                <p id="local-count-text" class="text-xs text-slate-400">0 bài hát</p>
+              </div>
             </div>
-        </div>
-    </main>
 
-    <!-- Floating Navigation Action Buttons (Scroll top/bottom) -->
-    <div class="fixed bottom-5 right-5 z-40 flex flex-col gap-2">
-        <button id="btnScrollTop" onclick="window.scrollTo({top:0, behavior:'smooth'})" class="p-3 rounded-2xl bg-blue-600 text-white shadow-lg hover:bg-blue-700 transition-all opacity-80 hover:opacity-100 hidden" title="Về đầu trang">
-            <i data-lucide="arrow-up" class="w-5 h-5"></i>
+            <div class="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 flex items-center space-x-4 cursor-pointer hover:border-brand-500/50 transition" onclick="filterLibraryType('youtube')">
+              <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-red-600 to-rose-800 flex items-center justify-center text-white text-2xl shadow-lg">
+                <i class="fa-brands fa-youtube"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-white">YouTube Stream</h4>
+                <p id="yt-count-text" class="text-xs text-slate-400">0 bài hát</p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-bold text-white mb-3">Tất cả bài hát trong kho</h3>
+            <div id="full-library-list" class="space-y-2">
+              <!-- Library list JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: FAVORITES -->
+        <div id="tab-favorites" class="tab-page space-y-6 hidden">
+          <div class="flex items-center justify-between">
+            <h2 class="text-2xl font-bold text-white">Bài hát đã thích</h2>
+            <button onclick="playRandom()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-semibold rounded-xl border border-slate-700 transition">
+              <i class="fa-solid fa-shuffle mr-2"></i>Phát ngẫu nhiên
+            </button>
+          </div>
+          <div id="favorites-list" class="space-y-2">
+            <!-- Dynamic Favorites List -->
+          </div>
+        </div>
+
+        <!-- Tab: LYRICS -->
+        <div id="tab-lyrics" class="tab-page space-y-6 hidden">
+          <div class="max-w-xl mx-auto text-center space-y-6 py-6">
+            <div class="space-y-2">
+              <h2 id="lyrics-title" class="text-2xl font-extrabold text-white">Chưa chọn bài hát</h2>
+              <p id="lyrics-artist" class="text-sm text-brand-500 font-medium">Mochy Studio</p>
+            </div>
+            
+            <div id="lyrics-body" class="space-y-4 py-8 min-h-[300px] flex flex-col justify-center items-center">
+              <p class="text-slate-500 italic">Chọn một bài hát để xem lời bài hát đồng bộ Karaoke.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: SETTINGS -->
+        <div id="tab-settings" class="tab-page space-y-6 max-w-2xl hidden">
+          <h2 class="text-2xl font-bold text-white">Cài đặt ứng dụng</h2>
+          
+          <div class="space-y-4 bg-slate-900/60 p-6 rounded-3xl border border-slate-800">
+            <div class="flex items-center justify-between py-3 border-b border-slate-800">
+              <div>
+                <h4 class="font-semibold text-white">Hiệu ứng đĩa than xoay (Turntable)</h4>
+                <p class="text-xs text-slate-400">Xoay bìa album khi phát nhạc ở chế độ trình phát đầy đủ</p>
+              </div>
+              <input type="checkbox" id="setting-turntable" checked class="w-5 h-5 accent-brand-500 cursor-pointer">
+            </div>
+
+            <div class="flex items-center justify-between py-3 border-b border-slate-800">
+              <div>
+                <h4 class="font-semibold text-white">Ambient Background</h4>
+                <p class="text-xs text-slate-400">Tự động đổi màu nền theo bài hát đang phát</p>
+              </div>
+              <input type="checkbox" id="setting-ambient" checked class="w-5 h-5 accent-brand-500 cursor-pointer">
+            </div>
+
+            <div class="flex items-center justify-between py-3">
+              <div>
+                <h4 class="font-semibold text-white">Xóa dữ liệu bộ nhớ đệm (Cache)</h4>
+                <p class="text-xs text-slate-400">Đặt lại danh sách bài hát yêu thích và cấu hình</p>
+              </div>
+              <button onclick="clearAppData()" class="px-4 py-2 bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white rounded-xl text-xs font-semibold transition">
+                Xóa dữ liệu
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+
+    <!-- BOTTOM FIXED PLAYER BAR -->
+    <div class="fixed bottom-0 left-0 right-0 h-24 border-t border-slate-800/80 px-4 md:px-8 glass-effect z-40 flex items-center justify-between">
+      
+      <!-- Track Info -->
+      <div class="flex items-center space-x-4 w-1/4 cursor-pointer" onclick="toggleExpandedPlayer()">
+        <img id="player-cover" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=100&auto=format&fit=crop&q=80" 
+             class="w-14 h-14 rounded-xl object-cover border border-slate-700/50 shadow-md">
+        <div class="hidden sm:block overflow-hidden">
+          <h4 id="player-title" class="font-semibold text-sm text-white truncate">Chưa chọn bài hát</h4>
+          <p id="player-artist" class="text-xs text-slate-400 truncate mt-0.5">Mochy Music</p>
+        </div>
+      </div>
+
+      <!-- Controls & Progress Slider -->
+      <div class="flex flex-col items-center space-y-2 w-full max-w-xl px-4">
+        <!-- Buttons -->
+        <div class="flex items-center space-x-6">
+          <button id="btn-shuffle" onclick="toggleShuffle()" class="text-slate-400 hover:text-white text-sm transition">
+            <i class="fa-solid fa-shuffle"></i>
+          </button>
+          <button onclick="prevTrack()" class="text-slate-300 hover:text-white text-lg transition">
+            <i class="fa-solid fa-backward-step"></i>
+          </button>
+          <button id="btn-play-pause" onclick="togglePlayPause()" class="w-11 h-11 rounded-full bg-brand-500 hover:bg-brand-400 text-slate-950 flex items-center justify-center transition shadow-lg shadow-brand-500/30 text-lg">
+            <i class="fa-solid fa-play ml-0.5"></i>
+          </button>
+          <button onclick="nextTrack()" class="text-slate-300 hover:text-white text-lg transition">
+            <i class="fa-solid fa-forward-step"></i>
+          </button>
+          <button id="btn-repeat" onclick="toggleRepeat()" class="text-slate-400 hover:text-white text-sm transition">
+            <i class="fa-solid fa-repeat"></i>
+          </button>
+        </div>
+
+        <!-- Slider Progress -->
+        <div class="w-full flex items-center space-x-3 text-xs font-mono text-slate-400">
+          <span id="current-time">0:00</span>
+          <input type="range" id="progress-bar" value="0" min="0" max="100" class="range-slider w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-brand-500">
+          <span id="total-time">0:00</span>
+        </div>
+      </div>
+
+      <!-- Extra Actions (Fav, Volume, Fullscreen) -->
+      <div class="flex items-center justify-end space-x-3 w-1/4">
+        <button id="player-fav-btn" onclick="toggleFavoriteCurrent()" class="w-9 h-9 text-slate-400 hover:text-red-500 transition">
+          <i class="fa-regular fa-heart text-lg"></i>
         </button>
-        <button id="btnScrollBottom" onclick="window.scrollTo({top: document.body.scrollHeight, behavior:'smooth'})" class="p-3 rounded-2xl bg-sky-600 text-white shadow-lg hover:bg-sky-700 transition-all opacity-80 hover:opacity-100 hidden" title="Xuống cuối trang">
-            <i data-lucide="arrow-down" class="w-5 h-5"></i>
+
+        <!-- Volume Bar -->
+        <div class="hidden lg:flex items-center space-x-2">
+          <button id="btn-mute" onclick="toggleMute()" class="text-slate-400 hover:text-white text-sm">
+            <i class="fa-solid fa-volume-high"></i>
+          </button>
+          <input type="range" id="volume-bar" value="80" min="0" max="100" class="range-slider w-20 h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-brand-500">
+        </div>
+
+        <button onclick="toggleExpandedPlayer()" class="w-9 h-9 text-slate-400 hover:text-brand-500 transition">
+          <i class="fa-solid fa-up-right-and-down-left-from-center text-sm"></i>
         </button>
+      </div>
     </div>
 
-    <!-- Modal: Question Grid Selector -->
-    <div id="gridModal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="glass-card max-w-3xl w-full max-h-[85vh] rounded-2xl p-5 flex flex-col shadow-2xl">
-            <div class="flex items-center justify-between pb-3 border-b border-sky-100">
-                <div class="flex items-center gap-2">
-                    <i data-lucide="layout-grid" class="w-5 h-5 text-blue-700"></i>
-                    <h3 class="font-bold text-slate-800 text-base">Bảng Chuyển Nhanh Câu Hỏi</h3>
-                </div>
-                <button id="btnCloseGrid" class="text-slate-400 hover:text-slate-600 p-1 bg-slate-100 rounded-full hover:bg-slate-200">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
+  </div>
 
-            <!-- Grid Legend -->
-            <div class="flex items-center justify-center gap-4 py-3 text-xs border-b border-sky-100 flex-wrap">
-                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-white border border-slate-300"></span> Chưa làm</span>
-                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-blue-500"></span> Đúng</span>
-                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-red-500"></span> Sai</span>
-            </div>
+  <!-- FULLSCREEN EXPANDED TURNTABLE PLAYER OVERLAY -->
+  <div id="expanded-player" class="fixed inset-0 z-50 glass-effect flex flex-col justify-between p-6 md:p-12 transition-all duration-500 transform translate-y-full opacity-0 pointer-events-none">
+    
+    <!-- Top Header -->
+    <div class="flex items-center justify-between">
+      <button onclick="toggleExpandedPlayer()" class="w-10 h-10 rounded-full bg-slate-800/80 hover:bg-slate-700 flex items-center justify-center text-slate-200 transition">
+        <i class="fa-solid fa-chevron-down"></i>
+      </button>
+      <span class="text-xs font-semibold text-brand-500 uppercase tracking-widest">Đang phát phát nhạc chất lượng cao</span>
+      <button onclick="openEqualizerModal()" class="w-10 h-10 rounded-full bg-slate-800/80 hover:bg-slate-700 flex items-center justify-center text-slate-200 transition">
+        <i class="fa-solid fa-sliders"></i>
+      </button>
+    </div>
 
-            <!-- Grid Buttons Container -->
-            <div id="questionGridContainer" class="flex-1 overflow-y-auto py-4 grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-2">
-                <!-- Dynamically generated grid buttons -->
+    <!-- Middle: Turntable Disc & Synced Lyrics -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center max-w-5xl mx-auto w-full my-auto">
+      
+      <!-- Turntable Vinyl Vinyl Disc View -->
+      <div class="flex justify-center">
+        <div class="relative w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full bg-slate-900 border-8 border-slate-800/80 shadow-2xl p-4 flex items-center justify-center">
+          <div id="expanded-disc" class="w-full h-full rounded-full border-4 border-slate-950/80 overflow-hidden relative flex items-center justify-center shadow-inner">
+            <img id="expanded-cover" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&auto=format&fit=crop&q=80" 
+                 class="w-full h-full object-cover rounded-full">
+            <div class="absolute w-16 h-16 rounded-full bg-slate-950 border-4 border-slate-800 flex items-center justify-center">
+              <div class="w-4 h-4 rounded-full bg-brand-500"></div>
             </div>
+          </div>
         </div>
+      </div>
+
+      <!-- Karaoke Lyrics Expanded Display -->
+      <div class="flex flex-col justify-center text-left space-y-4 max-h-80 overflow-y-auto px-4" id="expanded-lyrics">
+        <p class="text-slate-500 italic">Đang tải lời bài hát...</p>
+      </div>
     </div>
 
-    <!-- Modal: Completion Celebration Popup -->
-    <div id="completionModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div class="glass-card max-w-md w-full rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center shadow-2xl border border-white/80 relative overflow-hidden">
-            <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-blue-500 to-sky-400 flex items-center justify-center text-white shadow-lg shadow-sky-200/50 mb-4 animate-bounce">
-                <i data-lucide="trophy" class="w-10 h-10"></i>
-            </div>
-            <h2 class="text-2xl font-extrabold text-slate-800 mb-1">Chúc Mừng Bạn!</h2>
-            <p class="text-xs text-slate-500 font-medium mb-6">Bạn đã hoàn thành toàn toàn bộ bài ôn tập!</p>
-            
-            <div class="w-full bg-sky-50/80 rounded-2xl p-4 border border-sky-100 flex justify-around mb-6 shadow-inner">
-                <div class="text-center">
-                    <span class="text-xs text-slate-500 font-medium block mb-1">Kết quả</span>
-                    <span id="modalScore" class="text-3xl font-black text-blue-600">0/0</span>
-                </div>
-                <div class="w-px bg-sky-200"></div>
-                <div class="text-center">
-                    <span class="text-xs text-slate-500 font-medium block mb-1">Thời gian</span>
-                    <span id="modalTime" class="text-xl mt-1 block font-black text-sky-600">00:00</span>
-                </div>
-            </div>
+    <!-- Bottom Controls for Expanded View -->
+    <div class="max-w-xl mx-auto w-full space-y-4">
+      <div class="text-center">
+        <h3 id="expanded-title" class="text-2xl font-extrabold text-white truncate">Chưa chọn bài hát</h3>
+        <p id="expanded-artist" class="text-sm text-slate-400 truncate">Mochy Studio</p>
+      </div>
 
-            <div class="flex items-center gap-3 w-full">
-                <button onclick="reviewQuiz()" class="flex-1 py-3 px-2 rounded-xl bg-white border border-slate-200 font-semibold text-sm text-slate-700 hover:bg-slate-50 transition-colors shadow-sm">
-                    Xem Lại
-                </button>
-                <button onclick="retryQuiz()" class="flex-1 py-3 px-2 rounded-xl bg-blue-600 font-bold text-sm text-white hover:bg-blue-700 transition-colors shadow-md shadow-blue-200">
-                    Làm Lại
-                </button>
-            </div>
+      <div class="flex items-center space-x-3 text-xs font-mono text-slate-400">
+        <span id="exp-current-time">0:00</span>
+        <input type="range" id="exp-progress-bar" value="0" min="0" max="100" class="range-slider w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-brand-500">
+        <span id="exp-total-time">0:00</span>
+      </div>
+
+      <div class="flex items-center justify-center space-x-8 pt-2">
+        <button id="exp-btn-shuffle" onclick="toggleShuffle()" class="text-slate-400 hover:text-white text-lg transition">
+          <i class="fa-solid fa-shuffle"></i>
+        </button>
+        <button onclick="prevTrack()" class="text-slate-200 hover:text-white text-2xl transition">
+          <i class="fa-solid fa-backward-step"></i>
+        </button>
+        <button id="exp-btn-play-pause" onclick="togglePlayPause()" class="w-16 h-16 rounded-full bg-brand-500 hover:bg-brand-400 text-slate-950 flex items-center justify-center transition shadow-xl shadow-brand-500/40 text-2xl">
+          <i class="fa-solid fa-play ml-1"></i>
+        </button>
+        <button onclick="nextTrack()" class="text-slate-200 hover:text-white text-2xl transition">
+          <i class="fa-solid fa-forward-step"></i>
+        </button>
+        <button id="exp-btn-repeat" onclick="toggleRepeat()" class="text-slate-400 hover:text-white text-lg transition">
+          <i class="fa-solid fa-repeat"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BEDSIDE NIGHT CLOCK OVERLAY -->
+  <div id="bedside-overlay" class="fixed inset-0 bg-slate-950 z-50 flex flex-col justify-between p-8 md:p-16 transition-opacity duration-500 opacity-0 pointer-events-none">
+    <div class="flex justify-between items-center text-slate-500">
+      <span class="text-xs tracking-widest uppercase"><i class="fa-solid fa-moon text-brand-500 mr-2"></i>Bedside Mode</span>
+      <button onclick="toggleBedsideMode()" class="hover:text-white transition">
+        <i class="fa-solid fa-xmark text-xl"></i>
+      </button>
+    </div>
+
+    <div class="text-center my-auto space-y-4">
+      <h1 id="bedside-clock" class="text-7xl md:text-9xl font-extrabold text-slate-100 font-mono tracking-tighter">00:00</h1>
+      <p id="bedside-date" class="text-lg text-slate-400 font-medium">Thứ Hai, 1 tháng 1</p>
+    </div>
+
+    <div class="flex items-center justify-center space-x-6 text-slate-400">
+      <button onclick="prevTrack()" class="hover:text-white text-xl"><i class="fa-solid fa-backward-step"></i></button>
+      <button onclick="togglePlayPause()" class="w-12 h-12 rounded-full bg-slate-800 text-white flex items-center justify-center hover:bg-brand-500 hover:text-slate-950 transition"><i class="fa-solid fa-play"></i></button>
+      <button onclick="nextTrack()" class="hover:text-white text-xl"><i class="fa-solid fa-forward-step"></i></button>
+    </div>
+  </div>
+
+  <!-- MODAL BỘ CHỈNH ÂM EQUALIZER (WEB AUDIO DSP) -->
+  <div id="eq-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 max-w-md w-full space-y-6 glass-effect">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+        <h3 class="text-xl font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-sliders text-brand-500"></i> Equalizer 5-Band DSP
+        </h3>
+        <button onclick="closeEqualizerModal()" class="text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Preset Buttons -->
+      <div class="grid grid-cols-4 gap-2 text-xs font-semibold">
+        <button onclick="setEqPreset('flat')" class="py-2 bg-slate-800 hover:bg-brand-500 hover:text-slate-950 text-slate-300 rounded-xl transition">Flat</button>
+        <button onclick="setEqPreset('bass')" class="py-2 bg-slate-800 hover:bg-brand-500 hover:text-slate-950 text-slate-300 rounded-xl transition">Bass Boost</button>
+        <button onclick="setEqPreset('vocal')" class="py-2 bg-slate-800 hover:bg-brand-500 hover:text-slate-950 text-slate-300 rounded-xl transition">Vocal</button>
+        <button onclick="setEqPreset('treble')" class="py-2 bg-slate-800 hover:bg-brand-500 hover:text-slate-950 text-slate-300 rounded-xl transition">Treble</button>
+      </div>
+
+      <!-- Band Sliders -->
+      <div class="grid grid-cols-5 gap-4 pt-4 text-center">
+        <div>
+          <input type="range" id="eq-band-0" min="-12" max="12" value="0" step="1" oninput="updateEqGain(0, this.value)" class="h-32 appearance-none bg-slate-800 w-2 rounded-lg accent-brand-500 -rotate-90 my-10">
+          <span class="block text-xs text-slate-400 font-mono mt-2">60Hz</span>
         </div>
-    </div>
-
-    <!-- Modal: Custom Reset Confirmation Popup -->
-    <div id="resetConfirmModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div class="glass-card max-w-sm w-full rounded-3xl p-6 flex flex-col items-center text-center shadow-2xl border border-white/80">
-            <div class="w-14 h-14 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center mb-4">
-                <i data-lucide="rotate-ccw" class="w-7 h-7"></i>
-            </div>
-            <h3 class="text-lg font-bold text-slate-800 mb-2">Làm Lại Từ Đầu?</h3>
-            <p class="text-xs text-slate-500 font-medium mb-6">Bạn sẽ bắt đầu một phiên làm bài mới, câu hỏi sẽ được xáo trộn lại.</p>
-            <div class="flex items-center gap-3 w-full">
-                <button onclick="closeResetModal()" class="flex-1 py-2.5 px-4 rounded-xl bg-white border border-slate-200 font-semibold text-xs text-slate-700 hover:bg-slate-50 transition-colors">
-                    Hủy Bỏ
-                </button>
-                <button onclick="retryQuiz()" class="flex-1 py-2.5 px-4 rounded-xl bg-red-600 font-bold text-xs text-white hover:bg-red-700 transition-colors shadow-md shadow-red-200">
-                    Xác Nhận
-                </button>
-            </div>
+        <div>
+          <input type="range" id="eq-band-1" min="-12" max="12" value="0" step="1" oninput="updateEqGain(1, this.value)" class="h-32 appearance-none bg-slate-800 w-2 rounded-lg accent-brand-500 -rotate-90 my-10">
+          <span class="block text-xs text-slate-400 font-mono mt-2">230Hz</span>
         </div>
+        <div>
+          <input type="range" id="eq-band-2" min="-12" max="12" value="0" step="1" oninput="updateEqGain(2, this.value)" class="h-32 appearance-none bg-slate-800 w-2 rounded-lg accent-brand-500 -rotate-90 my-10">
+          <span class="block text-xs text-slate-400 font-mono mt-2">910Hz</span>
+        </div>
+        <div>
+          <input type="range" id="eq-band-3" min="-12" max="12" value="0" step="1" oninput="updateEqGain(3, this.value)" class="h-32 appearance-none bg-slate-800 w-2 rounded-lg accent-brand-500 -rotate-90 my-10">
+          <span class="block text-xs text-slate-400 font-mono mt-2">4kHz</span>
+        </div>
+        <div>
+          <input type="range" id="eq-band-4" min="-12" max="12" value="0" step="1" oninput="updateEqGain(4, this.value)" class="h-32 appearance-none bg-slate-800 w-2 rounded-lg accent-brand-500 -rotate-90 my-10">
+          <span class="block text-xs text-slate-400 font-mono mt-2">14kHz</span>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Footer copyright -->
-    <footer class="py-5 text-center text-xs text-slate-500 mt-auto glass-header">
-        Huy Lỏ Code Web
-    </footer>
+  <!-- MODAL TẢI FILE NHẠC HOẶC THÊM LINK YOUTUBE -->
+  <div id="upload-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 max-w-lg w-full space-y-6 glass-effect">
+      <div class="flex justify-between items-center">
+        <h3 class="text-xl font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-cloud-arrow-up text-brand-500"></i> Thêm bài hát vào Mochy
+        </h3>
+        <button onclick="closeUploadModal()" class="text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
 
-    <script>
-        /* RAW EXHAUSTIVE DATASET: 95 Questions */
-        const RAW_DATASET = [
-            {
-                q: "Sự ra đời của ba tổ chức Cộng sản vào năm 1929 có khuyết điểm cơ bản là gì?",
-                a: "Thiếu sự đoàn kết thống nhất về tổ chức",
-                d: ["Không ủng hộ Quốc tế Cộng sản", "Không có đường lối cách mạng đúng đắn", "Chưa thu hút được đông đảo công nhân"]
-            },
-            {
-                q: "Sự phát triển của phong trào yêu nước Việt Nam vào những năm 20 của thế kỷ XX có ý nghĩa như thế nào?",
-                a: "Cả ba phương án trên đều đúng",
-                d: ["Bồi đắp thêm chủ nghĩa yêu nước", "Cổ vũ mạnh mẽ tinh thần yêu nước", "Thúc đẩy những nhà yêu nước tìm con đường mới"]
-            },
-            {
-                q: "Nội dung nào sau đây KHÔNG được xác định tại Hội nghị thành lập Đảng 2/1930?",
-                a: "Lấy tên Đảng là Đảng Cộng sản Đông Dương",
-                d: ["Lấy tên Đảng là Đảng Cộng sản Việt Nam", "Thông qua Chánh cương vắn tắt, Sách lược vắn tắt", "Cử Ban chấp hành Trung ương Đảng lâm thời"]
-            },
-            {
-                q: "Mưu đồ của Pháp đối với công cuộc xâm lược Việt Nam nói riêng và Đông Dương nói chung là gì?",
-                a: "Cả ba phương án trên đều đúng",
-                d: ["Bóc lột sức lao động rẻ mạt", "Vơ vét tài nguyên khoáng sản", "Biến nơi đây thành thị trường tiêu thụ hàng hóa"]
-            },
-            {
-                q: "Mâu thuẫn chủ yếu trong lòng xã hội Việt Nam dưới thời Pháp thuộc là gì?",
-                a: "Giữa toàn thể dân tộc VN với thực dân Pháp xâm lược",
-                d: ["Giữa tư sản và công nhân", "Giữa địa chủ và nông dân", "Giữa tầng lớp trí thức và thực dân Pháp"]
-            },
-            {
-                q: "Sự khác nhau cơ bản giữa Cương lĩnh chính trị đầu tiên và Luận cương tháng 10/1930 là ở nội dung nào?",
-                a: "Nhiệm vụ và lực lượng cách mạng",
-                d: ["Phương hướng chiến lược", "Vai trò lãnh đạo của Đảng", "Mục tiêu cuối cùng là xây dựng CNXH"]
-            },
-            {
-                q: "Đảng cộng sản Việt nam ra đời dựa trên sự kết hợp của các yếu tố nào sau đây?",
-                a: "Chủ nghĩa Mác - Lênin, Phong trào công nhân, Phong trào yêu nước",
-                d: ["Chủ nghĩa Mác - Lênin và Phong trào công nhân", "Chủ nghĩa Mác - Lênin và Phong trào yêu nước", "Phong trào công nhân và Phong trào yêu nước"]
-            },
-            {
-                q: "Ai được bầu làm Tổng Bí thư tại Đại hội lần thứ I của Đảng (3/1935)?",
-                a: "Lê Hồng Phong",
-                d: ["Trần Phú", "Nguyễn Văn Cừ", "Hà Huy Tập"]
-            },
-            {
-                q: "Đâu là điều kiện tạo ra khả năng đấu tranh công khai hợp pháp cho phong trào cách mạng Đông Dương giai đoạn 1936-1939?",
-                a: "Cả ba phương án trên đều đúng",
-                d: ["Sự xuất hiện chủ nghĩa phát xít", "Chủ trương chuyển hướng của Quốc tế Cộng Sản", "Mặt trận Nhân dân Pháp lên cầm quyền"]
-            },
-            {
-                q: "Hãy cho biết tên gọi chung của các tổ chức quần chúng trong mặt trận Việt Minh?",
-                a: "Cứu quốc",
-                d: ["Dân chủ", "Phản đế", "Giải phóng"]
-            },
-            {
-                q: "Kẻ thù chính của nhân dân Đông Dương kể từ khi Nhật đảo chính Pháp 9/3/1945 là ai?",
-                a: "Phát xít Nhật",
-                d: ["Thực dân Pháp", "Cả Pháp và Nhật", "Quân Tưởng và Anh"]
-            },
-            {
-                q: "Ngày 12/3/1945, Ban chấp hành Trung ương Đảng ra chỉ thị nào sau đây?",
-                a: "Nhật - Pháp bắn nhau và hành động của chúng ta",
-                d: ["Kháng chiến kiến quốc", "Toàn quốc kháng chiến", "Hòa để tiến"]
-            },
-            {
-                q: "Thời cơ giành chính quyền trong Cách mạng tháng Tám năm 1945 tồn tại trong khoảng thời gian nào?",
-                a: "Từ khi Nhật đầu hàng đến trước khi quân Đồng minh vào Đông Dương",
-                d: ["Từ khi Nhật đảo chính Pháp đến khi Bảo Đại thoái vị", "Từ khi Pháp đầu hàng đến khi Nhật đầu hàng", "Từ khi quân Đồng minh vào Đông Dương đến cuối năm 1945"]
-            },
-            {
-                q: "Việt Nam đã được các nước XHCN công nhận và đặt quan hệ ngoại giao từ khi nào?",
-                a: "Năm 1950",
-                d: ["Năm 1945", "Năm 1948", "Năm 1954"]
-            },
-            {
-                q: "Đại hội lần thứ II (1951) đã quyết định tách 3 Đảng bộ ở mỗi nước để thành lập đảng riêng. Đảng bộ Việt Nam được đặt tên là gì?",
-                a: "Đảng Lao động Việt Nam",
-                d: ["Đảng Cộng sản Việt Nam", "Đảng Cộng sản Đông Dương", "Hội nghiên cứu chủ nghĩa Mác"]
-            },
-            {
-                q: "Quyết định mở mặt trận ngoại giao nhằm tranh thủ sự ủng hộ của quốc tế, mở ra cục diện vừa đánh, vừa đàm của Đảng được đề ra trong kỳ họp nào?",
-                a: "Hội nghị lần thứ 13 Ban Chấp hành Trung ương Đảng (khóa III) 1/1967",
-                d: ["Đại hội III (9/1960)", "Hội nghị lần thứ 11 Ban Chấp hành Trung ương Đảng (khóa III) 3/1965", "Hội nghị lần thứ 12 Ban Chấp hành Trung ương Đảng (khóa III) 12/1965"]
-            },
-            {
-                q: "Giai đoạn 1965-1968, đế quốc Mỹ thực hiện chiến lược chiến tranh nào đối với Việt Nam?",
-                a: "Chiến tranh phá hoại ở miền Bắc và Chiến tranh cục bộ ở miền Nam",
-                d: ["Chiến tranh phá hoại ở miền Bắc", "Việt Nam hóa chiến tranh", "Chiến tranh cục bộ ở miền Nam"]
-            },
-            {
-                q: "Đâu là khó khăn lớn nhất khi cả nước bắt tay vào xây dựng CNXH?",
-                a: "Điểm xuất phát thấp từ nền kinh tế nghèo nàn, lạc hậu, trình độ sản xuất nhỏ",
-                d: ["Các nước xã hội chủ nghĩa giảm viện trợ", "Hậu quả chiến tranh để lại", "Các thế lực thù địch bao vây cấm vận"]
-            },
-            {
-                q: "Đại hội IV (12/1976) của Đảng đã xác định nhiệm vụ trọng tâm của cả thời kỳ quá độ lên CNXH ở nước ta là gì?",
-                a: "Đẩy mạnh công nghiệp hóa XHCN",
-                d: ["Xây dựng con người mới XHCN", "Xây dựng nền sản xuất lớn XHCN", "Xây dựng nền văn hóa mới"]
-            },
-            {
-                q: "Cuộc chiến tranh chống xâm lược bảo vệ Tổ quốc ở biên giới phía Bắc nước ta trên thực tế diễn ra trong thời gian nào?",
-                a: "Từ năm 1979 đến năm 1989",
-                d: ["Trong năm 1979", "Từ năm 1978 đến năm 1980", "Từ năm 1979 đến năm 1985"]
-            },
-            {
-                q: "Đâu là bài học kinh nghiệm mà Đại hội VI (12/1986) rút ra?",
-                a: "Phải kết hợp sức mạnh dân tộc và sức mạnh thời đại trong điều kiện mới",
-                d: ["Phải ưu tiên phát triển công nghiệp nặng", "Phải hoàn thành cải tạo XHCN trước tiên", "Phải duy trì cơ chế tập trung bao cấp thêm một thời gian"]
-            },
-            {
-                q: "Tính từ năm 1986 đến nay, Đảng đã thông qua bao nhiêu Cương lĩnh?",
-                a: "Hai",
-                d: ["Một", "Ba", "Bốn"]
-            },
-            {
-                q: "Nước ta ra khỏi tình trạng nước nghèo và kém phát triển, nằm trong nhóm nước có thu nhập trung bình từ khi nào?",
-                a: "Năm 2010",
-                d: ["Năm 2000", "Năm 2002", "Năm 2008"]
-            },
-            {
-                q: "Hội nghị Trung ương 5 khóa XII (2017) của Đảng đã xác định thành phần kinh tế nào đóng vai trò nòng cốt để phát triển nền kinh tế độc lập tự chủ?",
-                a: "Kinh tế nhà nước, kinh tế tập thể và kinh tế tư nhân",
-                d: ["Chỉ có Kinh tế Nhà nước", "Kinh tế nhà nước và Kinh tế có vốn đầu tư nước ngoài", "Kinh tế tư nhân và Kinh tế tập thể"]
-            },
-            {
-                q: "Tháng 11/2006, Việt Nam trở thành thành viên thứ mấy của Tổ chức Thương mại Thế giới (WTO)?",
-                a: "Thứ 150",
-                d: ["Thứ 145", "Thứ 160", "Thứ 164"]
-            },
-            {
-                q: "Mô hình kinh tế nước ta trong thời kỳ trước đổi mới là gì?",
-                a: "Kế hoạch hóa tập trung hành chính bao cấp",
-                d: ["Kinh tế thị trường tự do", "Kinh tế nhiều thành phần", "Kinh tế thị trường định hướng XHCN"]
-            },
-            {
-                q: "Đâu là đặc tính cơ bản của con người Việt Nam mà Đảng Cộng sản Việt Nam hiện đang chú trọng xây dựng?",
-                a: "Yêu nước, nhân ái, nghĩa tình, trung thực, đoàn kết, cần cù, sáng tạo",
-                d: ["Dân tộc, nhân văn, dân chủ và khoa học", "Cần kiệm, liêm chính, chí công vô tư", "Chân, thiện, mỹ"]
-            },
-            {
-                q: "Để hình thành đường lối đổi mới, Đảng đã trải qua quá trình tìm tòi, khảo nghiệm với bao nhiêu khâu đột phá cơ bản?",
-                a: "Ba khâu đột phá",
-                d: ["Hai khâu đột phá", "Bốn khâu đột phá", "Năm khâu đột phá"]
-            },
-            {
-                q: "Công tác chuẩn bị mọi mặt cho Đại hội VI - Đại hội đổi mới của Đảng gắn liền với vai trò của Tổng bí thư nào?",
-                a: "Trường Chinh",
-                d: ["Lê Duẩn", "Nguyễn Văn Linh", "Đỗ Mười"]
-            },
-            {
-                q: "Đâu là đặc trưng tổng quát về mục tiêu xây dựng CNXH ở Việt Nam được xác định tại Đại hội VIII (1996) của Đảng?",
-                a: "Dân giàu, nước mạnh, xã hội công bằng, văn minh",
-                d: ["Dân giàu, nước mạnh, công bằng, dân chủ, văn minh", "Dân giàu, nước mạnh, xã hội dân chủ, công bằng", "Dân giàu, nước mạnh, xã hội văn minh, hiện đại"]
-            },
-            {
-                q: "Để rút ngắn thời gian khoảng cách đuổi kịp các nước đi trước, Đảng ta đã có chủ trương gì?",
-                a: "Đẩy mạnh công nghiệp hóa, hiện đại hóa gắn với phát triển kinh tế tri thức",
-                d: ["Tập trung phát triển nông nghiệp sinh thái", "Vay vốn tối đa từ các quỹ quốc tế", "Ưu tiên phát triển công nghiệp nặng"]
-            },
-            {
-                q: "Khái niệm 'Công nghiệp hóa - Hiện đại hóa' được Đảng đưa ra lần đầu tiên khi nào?",
-                a: "Hội nghị Trung ương 7 khóa VII (năm 1994)",
-                d: ["Đại hội VI (năm 1986)", "Đại hội VII (năm 1991)", "Hội nghị Trung ương 6 khóa VII (năm 1993)"]
-            },
-            {
-                q: "Chủ trương xóa bỏ cơ chế kế hoạch hóa, tập trung quan liêu bao cấp của Đảng được đề cập lần đầu tiên ở kỳ họp nào?",
-                a: "Hội nghị Trung ương 8 khóa V (6/1985)",
-                d: ["Hội nghị Trung ương 6 khóa IV (8/1979)", "Hội nghị Trung ương 9 khóa IV (1/1981)", "Đại hội VI (12/1986)"]
-            },
-            {
-                q: "Đâu là mục tiêu tổng quát được Đảng xác định trong Chiến lược phát triển kinh tế - xã hội năm 2001-2010?",
-                a: "Phấn đấu đến năm 2010, đưa nước ta ra khỏi tình trạng nước nghèo và kém phát triển",
-                d: ["Phấn đấu đưa nước ta trở thành nước công nghiệp phát triển", "Đưa thu nhập bình quân đầu người vượt mức 5.000 USD", "Hoàn thành về cơ bản sự nghiệp CNH, HĐH"]
-            },
-            {
-                q: "Nội dung nào sau đây được xác định tại Đại hội III (9/1960) của Đảng?",
-                a: "Miền Bắc có vai trò quyết định nhất đối với sự nghiệp cách mạng Việt Nam",
-                d: ["Miền Nam có vai trò quyết định nhất", "Hai miền có vai trò ngang nhau", "Miền Bắc chỉ đóng vai trò hậu thuẫn tinh thần"]
-            },
-            {
-                q: "Đại hội VIII của Đảng đã xác định nguồn lực nào là yếu tố cơ bản cho sự phát triển nhanh và bền vững trong quá trình CNH, HĐH?",
-                a: "Con người",
-                d: ["Khoa học công nghệ", "Tài nguyên đất đai", "Vốn đầu tư nước ngoài"]
-            },
-            {
-                q: "Hiện nay, khoa học công nghệ được Đảng xác định có vai trò gì đối với sự nghiệp đẩy mạnh CNH, HĐH?",
-                a: "Nền tảng và động lực",
-                d: ["Động lực quan trọng nhất", "Điều kiện hỗ trợ", "Nguồn lực quyết định duy nhất"]
-            },
-            {
-                q: "Để góp phần thành công trong sự nghiệp xây dựng CNXH ở Việt Nam, mỗi sinh viên cần thực hiện những điều nào?",
-                a: "Kiên định mục tiêu độc lập dân tộc và CNXH ; Tập trung phát triển bản thân, học tập nâng cao trình độ",
-                d: ["Kiên định mục tiêu độc lập dân tộc và CNXH", "Tập trung phát triển bản thân, học tập nâng cao trình độ", "Chỉ làm giàu kinh tế cho cá nhân"]
-            },
-            {
-                q: "Diễn đạt nào sau đây là đúng khi nói về vai trò lãnh đạo của Đảng đối với cách mạng Việt Nam?",
-                a: "Sự lãnh đạo đúng đắn của Đảng là nhân tố hàng đầu quyết định thắng lợi của cách mạng Việt Nam",
-                d: ["Sự lãnh đạo của Đảng là yếu tố duy nhất tạo nên thắng lợi", "Đảng chỉ đóng vai trò cố vấn cho chính phủ", "Sự thắng lợi hoàn toàn dựa vào viện trợ bên ngoài"]
-            },
-            {
-                q: "Tại Đại hội XIII của Đảng đã xác định mục tiêu phấn đấu đến năm 2030 đưa nước ta đạt trình độ phát triển như thế nào?",
-                a: "Đến năm 2030, kỷ niệm 100 năm thành lập Đảng, là nước đang phát triển, có công nghiệp hiện đại, thu nhập trung bình cao",
-                d: ["Là nước phát triển, thu nhập cao", "Là nước đang phát triển, thu nhập trung bình thấp", "Là nước công nghiệp phát triển hiện đại hàng đầu Châu Á"]
-            },
-            {
-                q: "Tình hình thế giới cuối thế kỷ XIX đầu thế kỷ XX có mấy đặc điểm lớn tác động mạnh mẽ đến phong trào yêu nước Việt Nam?",
-                a: "3 đặc điểm",
-                d: ["2 đặc điểm", "4 đặc điểm", "5 đặc điểm"]
-            },
-            {
-                q: "Hiệp ước nào sau đây đánh dấu việc Triều đình Nhà Nguyễn đã đầu hàng hoàn toàn thực dân Pháp?",
-                a: "Hiệp ước 1884 (Hiệp ước Patenôtre)",
-                d: ["Hiệp ước 1862 (Nhâm Tuất)", "Hiệp ước 1874 (Giáp Tuất)", "Hiệp ước 1883 (Harmand)"]
-            },
-            {
-                q: "Trong quá trình thống trị Việt Nam, Thực dân Pháp đã tiến hành mấy cuộc khai thác thuộc địa?",
-                a: "2 cuộc",
-                d: ["1 cuộc", "3 cuộc", "4 cuộc"]
-            },
-            {
-                q: "Dưới chế độ thống trị của Thực dân Pháp, giai cấp địa chủ Việt Nam bị phân hóa làm mấy bộ phận?",
-                a: "3 bộ phận",
-                d: ["2 bộ phận", "4 bộ phận", "5 bộ phận"]
-            },
-            {
-                q: "Dưới chế độ thống trị của Thực dân Pháp, giai cấp tư sản Việt Nam bị phân hóa làm mấy bộ phận?",
-                a: "2 bộ phận",
-                d: ["3 bộ phận", "4 bộ phận", "Không bị phân hóa"]
-            },
-            {
-                q: "Dưới chế độ thống trị của Thực dân Pháp, giai cấp nào ở Việt Nam bị bóc lột nặng nề nhất?",
-                a: "Nông dân",
-                d: ["Công nhân", "Địa chủ", "Tư sản"]
-            },
-            {
-                q: "Dưới chế độ thống trị của Thực dân Pháp, giai tầng nào có lực lượng nhỏ bé nhưng sớm tiếp nhận tư tưởng tiên tiến, nhanh chóng phát triển từ 'tự phát' đến 'tự giác'?",
-                a: "Công nhân",
-                d: ["Nông dân", "Tiểu tư sản, trí thức", "Tư sản dân tộc"]
-            },
-            {
-                q: "Dưới chế độ thống trị của Thực dân Pháp, giai tầng nào có tinh thần dân tộc, yêu nước, nhạy cảm về chính trị nhưng địa vị kinh tế bấp bênh, dễ dao động?",
-                a: "Tiểu tư sản, trí thức",
-                d: ["Công nhân", "Nông dân", "Tư sản mại bản"]
-            },
-            {
-                q: "Nguyên nhân chính yếu dẫn đến sự thất bại của phong trào yêu nước Việt Nam cuối thế kỷ XIX đầu thế kỷ XX là gì?",
-                a: "Thiếu giai cấp tiên tiến và đường lối cách mạng đúng đắn lãnh đạo",
-                d: ["Thực dân Pháp quá mạnh", "Nhân dân không ủng hộ", "Thiếu vũ khí hiện đại"]
-            },
-            {
-                q: "Vào những năm cuối thế kỷ XIX đầu thế kỷ XX ở vùng miền núi và trung du phía Bắc có phong trào đã kiên cường chống Pháp suốt gần 30 năm. Đó là phong trào nào?",
-                a: "Phong trào nông dân Yên Thế",
-                d: ["Phong trào nông dân Hưng Yên", "Phong trào Yên Bái", "Phong trào Thái Nguyên"]
-            },
-            {
-                q: "Ở Việt Nam đầu thế kỷ XX, phong trào yêu nước Việt Nam chịu ảnh hưởng, tác động của xu hướng nào?",
-                a: "Cải cách, canh tân",
-                d: ["Cần Vương phong kiến", "Chủ nghĩa vô sản ngay từ đầu", "Xu hướng hòa hoãn"]
-            },
-            {
-                q: "Những năm đầu thế kỷ XX, phong trào yêu nước theo xu hướng bạo động do ai khởi xướng và lãnh đạo?",
-                a: "Phan Bội Châu",
-                d: ["Phan Châu Trinh", "Hoàng Hoa Thám", "Nguyễn Thái Học"]
-            },
-            {
-                q: "Những năm đầu thế kỷ XX, phong trào yêu nước theo xu hướng cải cách do ai khởi xướng và lãnh đạo?",
-                a: "Phan Châu Trinh",
-                d: ["Phan Bội Châu", "Kỳ Ngoại Hầu Cường Để", "Huỳnh Thúc Kháng"]
-            },
-            {
-                q: "Khi thực dân Pháp đẩy mạnh khai thác thuộc địa lần thứ hai, đã ra đời một tổ chức yêu nước thu hút đông đảo học sinh, sinh viên yêu nước ở Bắc Kỳ. Đó là tổ chức nào?",
-                a: "Việt Nam Quốc dân Đảng",
-                d: ["Tân Việt Cách mạng Đảng", "Đảng Lập trường", "Việt Nam Nghĩa đoàn"]
-            },
-            {
-                q: "Tổ chức Việt Nam Quốc dân Đảng do ai sáng lập và lãnh đạo?",
-                a: "Nguyễn Thái Học",
-                d: ["Phan Bội Châu", "Nguyễn An Ninh", "Lê Hồng Phong"]
-            },
-            {
-                q: "Thắng lợi về quốc tế của nước ta sau Cách mạng Tháng Tám năm 1945 là gì?",
-                a: "Cả ba phương án trên đều đúng",
-                d: ["Liên Xô trở thành thành trì CNXH", "Các nước Đông, Trung Âu chọn đường CNXH", "Phong trào giải phóng dân tộc thuộc địa dâng cao"]
-            },
-            {
-                q: "Sau thắng lợi của Cách mạng Tháng 8/1945 ai đã trở thành biểu tượng của khối đại đoàn kết toàn dân tộc Việt Nam?",
-                a: "Hồ Chí Minh",
-                d: ["Trường Chinh", "Võ Nguyên Giáp", "Tôn Đức Thắng"]
-            },
-            {
-                q: "Sau Cách mạng Tháng 8/1945 nước ta có bao nhiêu % dân số bị mù chữ?",
-                a: "95%",
-                d: ["80%", "90%", "98%"]
-            },
-            {
-                q: "Ngày 3/9/1945, Phiên họp đầu tiên của Chính phủ Lâm thời dưới sự chủ trì của Bác Hồ đã xác định nhiệm vụ cấp bách là gì?",
-                a: "Diệt giặc đói, giặc dốt và giặc ngoại xâm",
-                d: ["Củng cố chính quyền và cải cách ruộng đất", "Chống giặc ngoại xâm là duy nhất", "Phát hành đồng tiền Việt Nam"]
-            },
-            {
-                q: "Chỉ thị nào của Đảng có tác dụng định hướng tư tưởng, trực tiếp chỉ đạo cuộc kháng chiến ở Nam Bộ và bảo vệ chính quyền sau Cách mạng Tháng Tám? (25/11/1945)",
-                a: "Chỉ thị Kháng chiến kiến quốc",
-                d: ["Chỉ thị Hòa để tiến", "Lời kêu gọi toàn quốc kháng chiến", "Chỉ thị Nhật Pháp bắn nhau"]
-            },
-            {
-                q: "Nạn đói lớn năm 1945 ở nước ta cơ bản được đẩy lùi vào thời gian nào?",
-                a: "Đầu năm 1946",
-                d: ["Cuối năm 1945", "Cuối năm 1946", "Đầu năm 1947"]
-            },
-            {
-                q: "Chủ tịch Hồ Chí Minh đã gửi thư khen ngợi, động viên đồng bào miền Nam và tặng danh hiệu gì cho nhân dân Nam Bộ?",
-                a: "\"Thành đồng Tổ quốc\"",
-                d: ["\"Anh hùng kiên cường\"", "\"Bất khuất trung hậu\"", "\"Dũng cảm tiên phong\""]
-            },
-            {
-                q: "Ngay sau khi ký Hiệp định sơ bộ, ngày 9/3/1946, Thường vụ Trung ương Đảng đã ra Chỉ thị gì để phân tích, đánh giá chủ trương hòa hoãn?",
-                a: "Chỉ thị Hòa để tiến",
-                d: ["Chỉ thị Kháng chiến kiến quốc", "Lời kêu gọi toàn quốc kháng chiến", "Chỉ thị Nhật - Pháp bắn nhau"]
-            },
-            {
-                q: "Ngọn cờ dẫn đường, động viên toàn Đảng, toàn quân, toàn dân ta tiến lên chống thực dân Pháp xâm lược là văn kiện nào?",
-                a: "Lời kêu gọi toàn quốc kháng chiến",
-                d: ["Chỉ thị Kháng chiến kiến quốc", "Chỉ thị Hòa để tiến", "Tác phẩm Kháng chiến nhất định thắng lợi"]
-            },
-            {
-                q: "Sắp xếp thứ tự các nước lần lượt công nhận và đặt quan hệ ngoại giao với ta năm 1950?",
-                a: "Trung Quốc, Liên Xô, Triều Tiên",
-                d: ["Liên Xô, Trung Quốc, Triều Tiên", "Triều Tiên, Trung Quốc, Liên Xô", "Trung Quốc, Triều Tiên, Liên Xô"]
-            },
-            {
-                q: "Âm mưu của đế quốc Mỹ tại miền Nam Việt Nam sau năm 1954 là gì?",
-                a: "Biến nơi đây thành thuộc địa kiểu mới ; Chia cắt lâu dài hai miền Nam - Bắc",
-                d: ["Biến nơi đây thành thuộc địa kiểu mới", "Chia cắt lâu dài hai miền Nam - Bắc", "Giúp đỡ chính quyền Ngô Đình Diệm phát triển dân chủ"]
-            },
-            {
-                q: "Ai là người soạn thảo Đề cương đường lối cách mạng Việt Nam ở miền Nam (1956)?",
-                a: "Lê Duẩn",
-                d: ["Trường Chinh", "Võ Nguyên Giáp", "Phạm Văn Đồng"]
-            },
-            {
-                q: "Thắng lợi nào là bước nhảy vọt lịch sử của cách mạng miền Nam, chuyển từ thế giữ gìn lực lượng sang thế tiến công? (1959 - 1960)",
-                a: "Phong trào Đồng khởi",
-                d: ["Trận thắng Ấp Bắc", "Chiến thắng Bình Giã", "Trận Núi Thành"]
-            },
-            {
-                q: " \"Đại hội lần này là Đại hội xây dựng CNXH ở miền Bắc và đấu tranh hòa bình thống nhất nước nhà\" là nói về Đại hội nào?",
-                a: "Đại hội III (9/1960)",
-                d: ["Đại hội II (1951)", "Đại hội IV (1976)", "Đại hội V (1982)"]
-            },
-            {
-                q: "Trước nguy cơ thất bại của \"Chiến tranh đặc biệt\", đế quốc Mỹ quyết định chuyển sang chiến lược chiến tranh nào?",
-                a: "Chiến lược chiến tranh cục bộ",
-                d: ["Chiến tranh đơn phương", "Việt Nam hóa chiến tranh", "Chiến tranh phá hoại"]
-            },
-            {
-                q: "Khó khăn lớn nhất của đất nước ta sau năm 1975 là gì?",
-                a: "Kinh tế - xã hội còn ở trình độ rất thấp",
-                d: ["Chỉ do hậu quả của thiên tai", "Chỉ do dịch bệnh kéo dài", "Do thiếu nhân lực lao động"]
-            },
-            {
-                q: "Đại hội IV của Đảng (12/1976) đã bộc lộ những hạn chế nào?",
-                a: "Cả ba phương án trên đều đúng",
-                d: ["Chưa tổng kết kinh nghiệm 21 năm xây dựng CNXH ở miền Bắc", "Chưa phát hiện khuyết tật mô hình cũ", "Dự kiến thời gian kết thúc thời kỳ quá độ quá nóng vội"]
-            },
-            {
-                q: "Bước đột phá đầu tiên về đổi mới kinh tế của Đảng tại Hội nghị Trung ương 6 khóa IV (8/1979) có chủ trương gì?",
-                a: "Hủy bỏ những rào cản để cho \"sản xuất bung ra\"",
-                d: ["Xóa bỏ hoàn toàn thành phần kinh tế tư nhân", "Thực hiện khoán 10 ngay lập tức", "Mở cửa thu hút đầu tư nước ngoài"]
-            },
-            {
-                q: "Chỉ thị số 100-CT/TW (1/1981) của Ban Bí thư Trung ương Đảng mang lại đổi mới quan trọng trong lĩnh vực nào?",
-                a: "Nông nghiệp",
-                d: ["Công nghiệp nặng", "Thương nghiệp và xuất nhập khẩu", "Giao thông vận tải"]
-            },
-            {
-                q: "Quyết định 25/CP và 26/CP (năm 1981) của Chính phủ tập trung tháo gỡ rào cản trong lĩnh vực nào?",
-                a: "Công nghiệp",
-                d: ["Nông nghiệp hợp tác xã", "Giáo dục và y tế", "Tài chính ngân hàng"]
-            },
-            {
-                q: "Trước hiện tượng \"khoán chui\" trong hợp tác xã nông nghiệp ở một số địa phương, Ban Bí thư đã ban hành văn bản nào?",
-                a: "Chỉ thị 100-CT/TW",
-                d: ["Nghị quyết Khoán 10", "Quyết định 25/CP", "Nghị quyết Trung ương 6"]
-            },
-            {
-                q: "Sau đại thắng mùa Xuân năm 1975, nhiệm vụ đầu tiên và bức thiết nhất của nước ta là gì?",
-                a: "Hoàn thành thống nhất nước nhà về mặt Nhà nước",
-                d: ["Khôi phục công nghiệp nặng", "Xin gia nhập Liên Hợp Quốc", "Cải cách tiền tệ"]
-            },
-            {
-                q: "Trong ba cuộc cách mạng được Đảng xác định ở Đại hội IV (1976), cuộc cách mạng nào là then chốt nhất?",
-                a: "Cách mạng Khoa học - Kỹ thuật",
-                d: ["Cách mạng quan hệ sản xuất", "Cách mạng tư tưởng và văn hóa", "Cách mạng công nghiệp nhẹ"]
-            },
-            {
-                q: "Nước nào là nước đầu tiên trong hệ thống XHCN chính thức đặt quan hệ ngoại giao với Việt Nam năm 1950? (18/1/1950)",
-                a: "Cộng hòa Nhân dân Trung Hoa",
-                d: ["Liên Xô", "Cộng hòa Dân chủ Đức", "Triều Tiên"]
-            },
-            {
-                q: "Tính từ năm 1930 đến nay, Đảng Cộng sản Việt Nam đã thông qua tổng cộng bao nhiêu Cương lĩnh chính trị?",
-                a: "Năm Cương lĩnh",
-                d: ["Ba Cương lĩnh", "Bốn Cương lĩnh", "Sáu Cương lĩnh"]
-            },
-            {
-                q: "Tính chất của xã hội Việt Nam dưới thời Pháp thuộc là gì?",
-                a: "Thuộc địa nửa phong kiến",
-                d: ["Phong kiến thuần túy", "Tư bản chủ nghĩa", "Thuộc địa hoàn toàn không còn phong kiến"]
-            },
-            {
-                q: "Kỳ họp Quốc hội nước Việt Nam thống nhất lần thứ nhất (7/1976) đã bầu ai làm Chủ tịch Quốc hội, Chủ tịch nước, Thủ tướng?",
-                a: "Chủ tịch Quốc hội: Trường Chinh ; Chủ tịch nước: Tôn Đức Thắng ; Thủ tướng: Phạm Văn Đồng",
-                d: ["Chủ tịch Quốc hội: Lê Duẩn ; Chủ tịch nước: Tôn Đức Thắng ; Thủ tướng: Đỗ Mười", "Chủ tịch Quốc hội: Nguyễn Hữu Thọ ; Chủ tịch nước: Trường Chinh ; Thủ tướng: Phạm Văn Đồng", "Chủ tịch Quốc hội: Trường Chinh ; Chủ tịch nước: Nguyễn Hữu Thọ ; Thủ tướng: Võ Văn Kiệt"]
-            },
-            {
-                q: "Nhiệm vụ bao trùm mục tiêu tổng quát trong suốt thời kỳ quá độ lên CNXH được xác định ở Đại hội IV (12/1976) là gì?",
-                a: "Đẩy mạnh công nghiệp hóa XHCN",
-                d: ["Hoàn thành cải tạo XHCN ở miền Nam", "Phát triển kinh tế thị trường", "Mở rộng hợp tác quốc tế"]
-            },
-            {
-                q: "Đảng quyết định đổi tên Đảng từ Đảng Lao động Việt Nam sang Đảng Cộng sản Việt Nam tại kỳ họp nào?",
-                a: "Đại hội Đại biểu toàn quốc lần thứ IV (12/1976)",
-                d: ["Đại hội III (1960)", "Đại hội V (1982)", "Đại hội VI (1986)"]
-            },
-            {
-                q: "Trước thời kỳ đổi mới (1986), nền kinh tế nước ta có mấy thành phần kinh tế?",
-                a: "3 thành phần",
-                d: ["5 thành phần", "2 thành phần", "1 thành phần"]
-            },
-            {
-                q: "Kỳ họp hội nghị nào có ý nghĩa là khâu đột phá đầu tiên về đổi mới kinh tế?",
-                a: "Hội nghị Trung ương 6 khóa IV (8/1979)",
-                d: ["Hội nghị Trung ương 8 khóa V (6/1985)", "Đại hội VI (12/1986)", "Hội nghị Trung ương 9 khóa IV"]
-            },
-            {
-                q: "Đặc trưng cơ bản của công nghiệp hóa thời kỳ trước đổi mới là gì?",
-                a: "Ưu tiên phát triển công nghiệp nặng",
-                d: ["Ưu tiên phát triển công nghiệp nhẹ", "Ưu tiên phát triển nông nghiệp sinh thái", "Ưu tiên phát triển kinh tế tri thức"]
-            },
-            {
-                q: "Chặng đường đầu tiên của thời kỳ quá độ lên CNXH được xác định từ Đại hội mấy của Đảng?",
-                a: "Đại hội V (1982)",
-                d: ["Đại hội III (1960)", "Đại hội IV (1976)", "Đại hội VI (1986)"]
-            },
-            {
-                q: "Mô hình CNXH trước thời kỳ đổi mới có mấy đặc trưng cơ bản?",
-                a: "4 đặc trưng",
-                d: ["6 đặc trưng", "8 đặc trưng", "10 đặc trưng"]
-            },
-            {
-                q: "Nội dung CNH tại Đại hội VI (12/1986) tập trung vào những chương trình nào?",
-                a: "Thực hiện cả 3 chương trình kinh tế",
-                d: ["CTKT về lương thực - thực phẩm", "CTKT về hàng hóa tiêu dùng", "CTKT về hàng hóa xuất khẩu"]
-            },
-            {
-                q: "Lĩnh vực nào được Đảng chủ trương đổi mới đầu tiên tại Đại hội VI (12/1986)?",
-                a: "Đổi mới kinh tế",
-                d: ["Đổi mới hệ thống chính trị", "Đổi mới văn hóa - tư tưởng", "Đổi mới giáo dục"]
-            },
-            {
-                q: "Sai lầm trong chủ trương về xây dựng CNXH trước thời kỳ đổi mới là gì?",
-                a: "Cả ba phương án trên đều đúng",
-                d: ["Duy trì quá lâu cơ chế kế hoạch hóa", "Mục tiêu phát triển quá cao", "Chủ quan nóng vội"]
-            },
-            {
-                q: "Mô hình CNXH được xác định trong Cương lĩnh năm 1991 gồm mấy đặc trưng?",
-                a: "6 đặc trưng",
-                d: ["4 đặc trưng", "8 đặc trưng", "10 đặc trưng"]
-            },
-            {
-                q: "Đặc trưng nào sau đây của CNXH KHÔNG được xác định trong Cương lĩnh năm 1991?",
-                a: "Có nhà nước pháp quyền XHCN",
-                d: ["Do nhân dân lao động làm chủ", "Có nền kinh tế phát triển cao dựa trên lực lượng sản xuất hiện đại", "Con người được giải phóng khỏi áp bức, bóc lột"]
-            },
-            {
-                q: "Văn kiện nào của Đảng đã đặt nhiệm vụ giải phóng dân tộc, chống đế quốc lên hàng đầu? (Cương lĩnh CT đầu tiên)",
-                a: "Chánh cương vắn tắt, Sách lược vắn tắt (2/1930)",
-                d: ["Luận cương chính trị tháng 10/1930", "Nghị quyết Đại hội I (1935)", "Chỉ thị thành lập Đội Tuyên truyền giải phóng quân"]
-            },
-                {
-                q: "* Phong trào Cần Vương diễn ra vào thời gian nào?",
-                a: "Từ năm 1885 đến năm 1896",
-                d: ["Năm 1880 đến năm 1885", "Năm 1890 đến năm 1895", "Từ năm 1885 đến năm 1890"]
-            } ,
-                {
-                q: "* Chỉ số hạnh phúc của Việt Nam năm 2025 so với năm 2020 tăng bao nhiêu? (83-46)",
-                a: "Tăng 37 bậc",
-                d: ["Tăng 30 bậc", "Tăng 40 bậc", "Tăng 43 bậc"]
-            },
-                {
-                q: "* Hội nghị Hiệp thương chính trị thống nhất đất nước 11/1975 được tổ chức ở đâu?",
-                a: "Sài Gòn - Gia Định",
-                d: ["Hà Nội", "Thành phố Hồ Chí Minh", "Cao Bằng"]
-            },
-                {
-                q: "* Mục tiêu chiến lược GDP đến năm 2030 của Việt Nam là bao nhiêu?",
-                a: "Đạt khoảng 8.500 USD / từ 10% trở lên",
-                d: ["Đạt khoảng 8.000 USD / từ 5% trở lên", "Đạt khoảng 9.000 USD / từ 15% trở lên", "Đạt khoảng 9.500 USD / từ 20% trở lên"]
-            },
-                {
-                q: "* Thực dân Pháp bắt đầu tiến hành cuộc khai thác thuộc địa lần thứ nhất ở Việt Nam vào năm nào?",
-                a: "Năm 1897 (1897 - 1914)",
-                d: ["Năm 1890", "Năm 1895", "Năm 1893"]
-            },
-                {
-                q: "* Thực dân Pháp tiến hành cuộc khai thác thuộc địa với quy mô và tốc độ lớn nhất ở Việt Nam vào năm nào? (Lần 2)",
-                a: "Năm 1919 (1919 - 1929)",
-                d: ["Năm 1910", "Năm 1920", "Năm 1923"]
-            },
-                {
-                q: "* Nhà tù nào ở Việt Nam được thực dân Pháp xây dựng như là `Địa ngục trần gian` vào năm 1862 ?",
-                a: "Nhà tù Côn Đảo",
-                d: ["Nhà tù Hỏa Lò", "Nhà tù Sơn La", "Nhà tù Lao Bảo"]
-            },
-                {
-                q: "* Năm 1961-1965, Mỹ đã tiến hành chiến lược chiến tranh nào để xâm lược miền Nam Việt Nam?",
-                a: "Chiến tranh đặc biệt",
-                d: ["Chiến tranh cục bộ", "Chiến tranh phá hoại", "Chiến tranh lạnh"]
-            }
-        ];
+      <!-- Tabs modal: File vs YouTube -->
+      <div class="flex border-b border-slate-800 space-x-6 text-sm font-semibold">
+        <button id="modal-tab-file-btn" onclick="switchModalTab('file')" class="pb-3 border-b-2 border-brand-500 text-brand-500">
+          <i class="fa-solid fa-file-audio mr-1.5"></i> Tải file từ máy (.mp3, .wav)
+        </button>
+        <button id="modal-tab-yt-btn" onclick="switchModalTab('yt')" class="pb-3 border-b-2 border-transparent text-slate-400 hover:text-slate-200">
+          <i class="fa-brands fa-youtube mr-1.5 text-red-500"></i> Dán link YouTube
+        </button>
+      </div>
 
-        
-        let processedQuestions = [];
-        let userAnswers = {}; // Format: { questionIdx: selectedOptionIdx }
-        let currentFilter = 'all'; // 'all', 'unanswered', 'answered', 'incorrect'
-        let isQuizStarted = false;
+      <!-- Tab Content: File Upload -->
+      <div id="modal-tab-file" class="space-y-4">
+        <div class="border-2 border-dashed border-slate-700 hover:border-brand-500/60 rounded-2xl p-8 text-center cursor-pointer transition bg-slate-950/40" onclick="document.getElementById('file-input').click()">
+          <i class="fa-solid fa-file-circle-plus text-4xl text-brand-500 mb-3"></i>
+          <h4 class="font-bold text-slate-200">Nhấp vào đây để chọn tệp âm thanh</h4>
+          <p class="text-xs text-slate-500 mt-1">Hỗ trợ các định dạng .mp3, .wav, .m4a, .ogg</p>
+          <input type="file" id="file-input" accept="audio/*" multiple class="hidden" onchange="handleFileUpload(event)">
+        </div>
+      </div>
 
-        /* Timer variables */
-        let timerInterval = null;
-        let secondsElapsed = 0;
-        let hasShownCompletionModal = false;
+      <!-- Tab Content: YouTube Link -->
+      <div id="modal-tab-yt" class="space-y-4 hidden">
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-1.5">URL bài hát / Video YouTube:</label>
+          <input type="text" id="yt-url-input" placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="w-full bg-slate-800 text-white text-sm px-4 py-3 rounded-xl border border-slate-700 focus:outline-none focus:border-brand-500">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Tên bài hát (Tùy chọn):</label>
+            <input type="text" id="yt-title-input" placeholder="Tên bài nhạc..." class="w-full bg-slate-800 text-white text-sm px-4 py-3 rounded-xl border border-slate-700 focus:outline-none focus:border-brand-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 mb-1.5">Nghệ sĩ / Ca sĩ:</label>
+            <input type="text" id="yt-artist-input" placeholder="YouTube Artist" class="w-full bg-slate-800 text-white text-sm px-4 py-3 rounded-xl border border-slate-700 focus:outline-none focus:border-brand-500">
+          </div>
+        </div>
+        <button id="btn-add-yt" onclick="addYouTubeTrack()" class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl text-sm transition flex items-center justify-center gap-2">
+          <i class="fa-brands fa-youtube"></i> Thêm luồng YouTube không quảng cáo
+        </button>
+      </div>
+    </div>
+  </div>
 
-        /* Helper shuffle array */
-        function shuffleArray(array) {
-            const arr = [...array];
-            for (let i = arr.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [arr[i], arr[j]] = [arr[j], arr[i]];
-            }
-            return arr;
-        }
+  <!-- Hidden Audio Element -->
+  <audio id="audio-engine" crossorigin="anonymous"></audio>
 
-        function initApp() {
-            // Chỉ chuẩn bị data nhưng KHÔNG hiển thị ra màn hình cho đến khi bấm bắt đầu
-            if (window.lucide) {
-                lucide.createIcons();
-            }
-        }
+  <!-- Audio Engine & Dynamic JS Logic -->
+  <script>
+    const JAMENDO_CLIENT_ID = 'a47b0e11';
+    
+    // Default fallback catalog if network APIs fail or are throttled
+    const FALLBACK_ONLINE_TRACKS = [
+      {
+        id: 'fallback_1',
+        title: 'Acoustic Sunset Mood',
+        artist: 'Soles',
+        cover: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&auto=format&fit=crop&q=80',
+        url: 'https://prod-1.storage.jamendo.com/1/3/mp3192/1881335.mp3',
+        color: '#065f46',
+        type: 'online',
+        lyrics: [
+          { time: 0, text: "[Intro Acoustic Guitar]" },
+          { time: 8, text: "Giai điệu dịu êm của buổi chiều tà..." },
+          { time: 20, text: "Thả hồn theo ánh hoàng hôn buông xuống..." },
+          { time: 35, text: "Lắng nghe những giai điệu acoustic tự do." }
+        ]
+      },
+      {
+        id: 'fallback_2',
+        title: 'Synthwave Night Drive',
+        artist: 'CyberPulse',
+        cover: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=400&auto=format&fit=crop&q=80',
+        url: 'https://prod-1.storage.jamendo.com/1/3/mp3192/1882100.mp3',
+        color: '#4c1d95',
+        type: 'online',
+        lyrics: [
+          { time: 0, text: "[Retro Electronic Synth Beats]" },
+          { time: 12, text: "Ánh đèn Neon rực rỡ phố đêm..." },
+          { time: 28, text: "Cảm nhận nhịp đập âm thanh quyến rũ." }
+        ]
+      },
+      {
+        id: 'fallback_3',
+        title: 'Chill Lofi Beats',
+        artist: 'Kuma Study',
+        cover: 'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=400&auto=format&fit=crop&q=80',
+        url: 'https://prod-1.storage.jamendo.com/1/3/mp3192/1879000.mp3',
+        color: '#1e3a8a',
+        type: 'online',
+        lyrics: [
+          { time: 0, text: "[Lofi Ambient Noise & Soft Piano]" },
+          { time: 15, text: "Thư giãn không gian học tập và làm việc..." },
+          { time: 30, text: "Nhịp điệu Lofi êm dịu từng giây phút." }
+        ]
+      }
+    ];
 
-        function startQuiz() {
-            isQuizStarted = true;
+    let playlistData = [...FALLBACK_ONLINE_TRACKS];
 
-            // Xử lý và xáo trộn ngẫu nhiên bộ câu hỏi mỗi lần bắt đầu
-            let shuffledRaw = shuffleArray(RAW_DATASET);
-            processedQuestions = shuffledRaw.map((item, idx) => {
-                const correctAnswer = item.a;
-                const optionsList = [correctAnswer, ...item.d];
-                const shuffledOptions = shuffleArray(optionsList);
-                const correctIdx = shuffledOptions.indexOf(correctAnswer);
+    // --- APP STATE ---
+    let currentTrackIndex = 0;
+    let isPlaying = false;
+    let favorites = new Set(JSON.parse(localStorage.getItem('mochy_favs') || '[]'));
+    let isShuffle = false;
+    let isRepeat = false;
+    let currentTab = 'home';
+    let isBedside = false;
 
-                return {
-                    id: idx, // ID mới theo thứ tự đã xáo trộn
-                    question: item.q,
-                    options: shuffledOptions,
-                    correctIndex: correctIdx,
-                    correctText: correctAnswer
-                };
-            });
+    // --- WEB AUDIO API DSP EQUALIZER ENGINE ---
+    let audioCtx = null;
+    let audioSource = null;
+    let eqFilters = [];
+    const BAND_FREQS = [60, 230, 910, 4000, 14000];
 
-            // Reset dữ liệu
-            userAnswers = {};
-            currentFilter = 'all';
-            hasShownCompletionModal = false;
+    function initWebAudioDSP() {
+      if (audioCtx) return;
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+        audioSource = audioCtx.createMediaElementSource(audio);
 
-            // Chuyển đổi hiển thị màn hình
-            document.getElementById('startScreen').classList.add('hidden');
-            document.getElementById('mainContent').classList.remove('hidden');
-            document.getElementById('mainContent').classList.add('flex');
-            
-            document.getElementById('headerControls').classList.remove('hidden');
-            document.getElementById('headerControls').classList.add('flex');
+        let lastNode = audioSource;
+        BAND_FREQS.forEach((freq, i) => {
+          const filter = audioCtx.createBiquadFilter();
+          if (i === 0) {
+            filter.type = 'lowshelf';
+          } else if (i === BAND_FREQS.length - 1) {
+            filter.type = 'highshelf';
+          } else {
+            filter.type = 'peaking';
+            filter.Q.value = 1.0;
+          }
+          filter.frequency.value = freq;
+          filter.gain.value = 0;
 
-            document.getElementById('btnScrollTop').classList.remove('hidden');
-            document.getElementById('btnScrollBottom').classList.remove('hidden');
-
-            // Cập nhật giao diện bộ lọc
-            setFilter('all');
-
-            // Bắt đầu tính giờ ngay lập tức
-            resetTimer();
-            startTimer();
-
-            // Render câu hỏi
-            renderAllQuestions();
-            updateStatsAndFilters();
-            renderQuestionGrid();
-            
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function startTimer() {
-            if (timerInterval) return;
-            timerInterval = setInterval(() => {
-                secondsElapsed++;
-                const timerEl = document.getElementById('headerTimer');
-                if (timerEl) timerEl.innerText = formatDisplayTime(secondsElapsed);
-            }, 1000);
-        }
-
-        function stopTimer() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-            }
-        }
-
-        function resetTimer() {
-            stopTimer();
-            secondsElapsed = 0;
-            const timerEl = document.getElementById('headerTimer');
-            if (timerEl) timerEl.innerText = '00:00';
-        }
-
-        function formatDisplayTime(totalSecs) {
-            const hrs = Math.floor(totalSecs / 3600);
-            const mins = Math.floor((totalSecs % 3600) / 60);
-            const secs = totalSecs % 60;
-            const pad = n => String(n).padStart(2, '0');
-
-            if (hrs > 0) {
-                return `${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
-            }
-            return `${pad(mins)}:${pad(secs)}`;
-        }
-
-        function formatTextTime(totalSecs) {
-            const mins = Math.floor(totalSecs / 60);
-            const secs = totalSecs % 60;
-            if (mins > 0) {
-                return `${mins} phút ${secs} giây`;
-            }
-            return `${secs} giây`;
-        }
-
-        function renderAllQuestions() {
-            const container = document.getElementById('questionsContainer');
-            container.innerHTML = '';
-
-            const prefixes = ['A', 'B', 'C', 'D'];
-
-            processedQuestions.forEach((qObj, idx) => {
-                const userSelected = userAnswers[idx];
-                const isAnswered = userSelected !== undefined;
-                const isIncorrect = isAnswered && userSelected !== qObj.correctIndex;
-
-                // Lọc hiển thị
-                let isVisible = true;
-                if (currentFilter === 'unanswered' && isAnswered) isVisible = false;
-                if (currentFilter === 'answered' && !isAnswered) isVisible = false;
-                if (currentFilter === 'incorrect' && !isIncorrect) isVisible = false;
-
-                const card = document.createElement('div');
-                card.className = `glass-card rounded-2xl p-5 sm:p-6 transition-all duration-300 relative overflow-hidden ${isVisible ? 'block' : 'hidden'}`;
-                card.id = `q-card-${idx}`;
-
-                // Options HTML
-                let optionsHTML = '';
-                qObj.options.forEach((optText, optIdx) => {
-                    let btnClass = 'option-btn w-full text-left p-3.5 sm:p-4 rounded-xl border text-sm sm:text-base font-medium flex items-start gap-3 bg-white/80 border-slate-200 text-slate-700 hover:bg-sky-50/80 hover:border-sky-300';
-                    let badgeClass = 'w-6 h-6 rounded-lg bg-sky-100 text-blue-800 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5';
-                    let iconHTML = '';
-
-                    if (isAnswered) {
-                        if (optIdx === qObj.correctIndex) {
-                            btnClass = 'option-btn option-correct w-full text-left p-3.5 sm:p-4 rounded-xl border text-sm sm:text-base font-semibold flex items-start gap-3';
-                            badgeClass = 'w-6 h-6 rounded-lg bg-blue-600 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5';
-                            iconHTML = `<i data-lucide="check-circle-2" class="w-5 h-5 text-blue-600 shrink-0 ml-auto"></i>`;
-                        } else if (optIdx === userSelected) {
-                            btnClass = 'option-btn option-incorrect w-full text-left p-3.5 sm:p-4 rounded-xl border text-sm sm:text-base font-semibold flex items-start gap-3';
-                            badgeClass = 'w-6 h-6 rounded-lg bg-red-600 text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5';
-                            iconHTML = `<i data-lucide="x-circle" class="w-5 h-5 text-red-500 shrink-0 ml-auto"></i>`;
-                        } else {
-                            btnClass += ' option-disabled';
-                        }
-                    }
-
-                    optionsHTML += `
-                        <button 
-                            onclick="selectAnswer(${idx}, ${optIdx})" 
-                            ${isAnswered ? 'disabled' : ''} 
-                            class="${btnClass}">
-                            <span class="${badgeClass}">${prefixes[optIdx]}</span>
-                            <span class="flex-1 leading-snug">${optText}</span>
-                            ${iconHTML}
-                        </button>
-                    `;
-                });
-
-                // Status tag
-                let statusBadge = '';
-                if (isAnswered) {
-                    if (userSelected === qObj.correctIndex) {
-                        statusBadge = `<span class="px-2.5 py-1 rounded-lg bg-sky-100 text-blue-800 text-xs font-bold flex items-center gap-1"><i data-lucide="check" class="w-3.5 h-3.5"></i> Chính xác</span>`;
-                    } else {
-                        statusBadge = `<span class="px-2.5 py-1 rounded-lg bg-red-100 text-red-800 text-xs font-bold flex items-center gap-1"><i data-lucide="x" class="w-3.5 h-3.5"></i> Chưa đúng</span>`;
-                    }
-                }
-
-                card.innerHTML = `
-                    <div class="flex items-center justify-between gap-3 mb-3.5">
-                        <div class="flex items-center gap-2">
-                            <span class="px-3 py-1 rounded-xl bg-gradient-to-r from-blue-600 to-sky-500 text-white font-extrabold text-xs shadow-sm">
-                                CÂU ${idx + 1}
-                            </span>
-                            <span id="status-${idx}">${statusBadge}</span>
-                        </div>
-                    </div>
-                    <h3 class="text-base sm:text-lg font-bold text-slate-800 mb-4 leading-snug">
-                        ${qObj.question}
-                    </h3>
-                    <div class="grid grid-cols-1 gap-2.5">
-                        ${optionsHTML}
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-
-            if (window.lucide) {
-                lucide.createIcons();
-            }
-        }
-
-        function selectAnswer(questionIdx, selectedOptIdx) {
-            if (userAnswers[questionIdx] !== undefined) return;
-            userAnswers[questionIdx] = selectedOptIdx;
-
-            renderAllQuestions();
-            updateStatsAndFilters();
-            renderQuestionGrid();
-        }
-
-        function setFilter(filterType) {
-            currentFilter = filterType;
-
-            ['all', 'unanswered', 'incorrect'].forEach(f => {
-                const btn = document.getElementById(`filter-${f}`);
-                if (btn) {
-                    if (f === filterType) {
-                        btn.className = 'px-3 py-1.5 rounded-xl bg-blue-600 text-white shadow-sm transition-all';
-                    } else {
-                        btn.className = 'px-3 py-1.5 rounded-xl bg-white/80 border border-slate-200 text-slate-700 hover:bg-sky-50 transition-all';
-                    }
-                }
-            });
-
-            renderAllQuestions();
-        }
-
-        function updateStatsAndFilters() {
-            const total = processedQuestions.length;
-            const answeredCount = Object.keys(userAnswers).length;
-            
-            let correctCount = 0;
-
-            Object.keys(userAnswers).forEach(gIdx => {
-                if (userAnswers[gIdx] === processedQuestions[gIdx].correctIndex) {
-                    correctCount++;
-                }
-            });
-
-            document.getElementById('headerScore').innerText = correctCount;
-            document.getElementById('headerTotal').innerText = total;
-
-            // Tự động kiểm tra đã làm hết 95 câu chưa
-            if (total > 0 && answeredCount === total) {
-                stopTimer();
-                if (!hasShownCompletionModal) {
-                    hasShownCompletionModal = true;
-                    showCompletionModal(correctCount, total, secondsElapsed);
-                }
-            }
-        }
-
-        function showCompletionModal(score, total, timeSecs) {
-            document.getElementById('modalScore').innerText = `${score}/${total}`;
-            document.getElementById('modalTime').innerText = formatTextTime(timeSecs);
-            document.getElementById('completionModal').classList.remove('hidden');
-            if (window.lucide) lucide.createIcons();
-        }
-
-        function closeCompletionModal() {
-            document.getElementById('completionModal').classList.add('hidden');
-        }
-
-        function reviewQuiz() {
-            // Nút "Xem lại bài làm"
-            closeCompletionModal();
-            // Bộ đếm giờ đã được tắt. Các nút đáp án đã tự disable.
-        }
-
-        function retryQuiz() {
-            // Nút "Làm lại từ đầu"
-            closeCompletionModal();
-            closeResetModal();
-            // Khởi động lại logic random
-            startQuiz();
-        }
-
-        function openResetModal() {
-            document.getElementById('resetConfirmModal').classList.remove('hidden');
-            if (window.lucide) lucide.createIcons();
-        }
-
-        function closeResetModal() {
-            document.getElementById('resetConfirmModal').classList.add('hidden');
-        }
-
-        function jumpToQuestion(qIndex) {
-            if (qIndex < 0 || qIndex >= processedQuestions.length) return;
-
-            if (currentFilter !== 'all') {
-                setFilter('all');
-            }
-
-            document.getElementById('gridModal').classList.add('hidden');
-
-            setTimeout(() => {
-                const card = document.getElementById(`q-card-${qIndex}`);
-                if (card) {
-                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    card.classList.add('ring-2', 'ring-blue-500');
-                    setTimeout(() => card.classList.remove('ring-2', 'ring-blue-500'), 2200);
-                }
-            }, 100);
-        }
-
-        function renderQuestionGrid() {
-            const gridContainer = document.getElementById('questionGridContainer');
-            gridContainer.innerHTML = '';
-
-            processedQuestions.forEach((qObj, idx) => {
-                const isAnswered = userAnswers[idx] !== undefined;
-                const isCorrect = isAnswered && userAnswers[idx] === qObj.correctIndex;
-                const isIncorrect = isAnswered && userAnswers[idx] !== qObj.correctIndex;
-
-                let btnBg = 'bg-white border-slate-300 text-slate-700 hover:bg-sky-50';
-                if (isCorrect) {
-                    btnBg = 'bg-blue-500 border-blue-600 text-white font-bold';
-                } else if (isIncorrect) {
-                    btnBg = 'bg-red-500 border-red-600 text-white font-bold';
-                }
-
-                const btn = document.createElement('button');
-                btn.className = `p-2 rounded-xl text-xs border flex items-center justify-center transition-all shadow-sm ${btnBg}`;
-                btn.innerText = idx + 1;
-                btn.onclick = () => jumpToQuestion(idx);
-
-                gridContainer.appendChild(btn);
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            initApp();
-
-            // Modal Grid Listeners
-            document.getElementById('btnOpenGrid').addEventListener('click', () => {
-                document.getElementById('gridModal').classList.remove('hidden');
-            });
-            document.getElementById('btnCloseGrid').addEventListener('click', () => {
-                document.getElementById('gridModal').classList.add('hidden');
-            });
-            document.getElementById('gridModal').addEventListener('click', (e) => {
-                if (e.target.id === 'gridModal') {
-                    document.getElementById('gridModal').classList.add('hidden');
-                }
-            });
-
-            // Initialize Lucide Icons
-            if (window.lucide) {
-                lucide.createIcons();
-            }
+          lastNode.connect(filter);
+          lastNode = filter;
+          eqFilters.push(filter);
         });
-    </script>
 
+        lastNode.connect(audioCtx.destination);
+      } catch (e) {
+        console.warn("Web Audio API AudioContext setup deferred until user interaction.", e);
+      }
+    }
 
+    // --- AUDIO ENGINE REFERENCES ---
+    const audio = document.getElementById('audio-engine');
+    const progressBar = document.getElementById('progress-bar');
+    const expProgressBar = document.getElementById('exp-progress-bar');
+    const volumeBar = document.getElementById('volume-bar');
+
+    // --- INITIALIZATION ---
+    window.addEventListener('DOMContentLoaded', () => {
+      fetchOnlineTrending();
+      renderFavorites();
+      renderLibrary();
+      setupAudioEventListeners();
+      startBedsideClock();
+      
+      const headerSearch = document.getElementById('header-search');
+      const tabSearch = document.getElementById('search-input');
+
+      let searchTimer;
+      const triggerSearch = (val) => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => {
+          if (val.trim()) {
+            searchOnlineMusic(val);
+          }
+        }, 500);
+      };
+
+      if (headerSearch) {
+        headerSearch.addEventListener('input', (e) => {
+          switchTab('search');
+          if (tabSearch) tabSearch.value = e.target.value;
+          triggerSearch(e.target.value);
+        });
+      }
+
+      if (tabSearch) {
+        tabSearch.addEventListener('input', (e) => {
+          triggerSearch(e.target.value);
+        });
+      }
+    });
+
+    // --- FETCH ONLINE MUSIC DATA WITH FALLBACK PROTECTION ---
+    async function fetchOnlineTrending() {
+      try {
+        const url = `https://api.jamendo.com/v3.0/tracks/?client_id=${JAMENDO_CLIENT_ID}&format=json&limit=12&order=popularity_week&hasimage=true`;
+        const res = await fetch(url);
+        if(!res.ok) throw new Error("API Network error");
+        const data = await res.json();
+        
+        if (data.results && data.results.length > 0) {
+          const onlineTracks = data.results.map(item => ({
+            id: 'jam_' + item.id,
+            title: item.name,
+            artist: item.artist_name,
+            cover: item.album_image || item.image || 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&auto=format&fit=crop&q=80',
+            url: item.audio,
+            color: getRandomColor(),
+            type: 'online',
+            lyrics: generateMockSyncedLyrics(item.name)
+          }));
+
+          const localTracks = playlistData.filter(t => t.type === 'local' || t.type === 'youtube');
+          playlistData = [...localTracks, ...onlineTracks];
+        }
+      } catch (err) {
+        console.warn("API restricted or offline. Initializing fallback high quality track list.", err);
+      } finally {
+        renderQuickPicks();
+        renderTrending();
+        renderLibrary();
+        loadTrack(0, false);
+      }
+    }
+
+    async function searchOnlineMusic(query) {
+      const resultsContainer = document.getElementById('search-results');
+      if (!resultsContainer) return;
+
+      resultsContainer.innerHTML = `<p class="text-center text-slate-400 py-8"><i class="fa-solid fa-spinner animate-spin"></i> Đang tìm kiếm trực tuyến...</p>`;
+
+      try {
+        const url = `https://api.jamendo.com/v3.0/tracks/?client_id=${JAMENDO_CLIENT_ID}&format=json&limit=15&namesearch=${encodeURIComponent(query)}&hasimage=true`;
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (data.results && data.results.length > 0) {
+          const searchTracks = data.results.map(item => ({
+            id: 'jam_' + item.id,
+            title: item.name,
+            artist: item.artist_name,
+            cover: item.album_image || item.image,
+            url: item.audio,
+            color: getRandomColor(),
+            type: 'online',
+            lyrics: generateMockSyncedLyrics(item.name)
+          }));
+
+          resultsContainer.innerHTML = searchTracks.map(item => `
+            <div onclick="playSearchTrack('${item.id}', '${escapeHtml(item.title)}', '${escapeHtml(item.artist)}', '${item.cover}', '${item.url}')" class="flex items-center justify-between p-3 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-brand-500/40 cursor-pointer transition">
+              <div class="flex items-center space-x-3">
+                <img src="${item.cover}" class="w-12 h-12 rounded-lg object-cover">
+                <div>
+                  <h5 class="font-semibold text-sm text-white">${item.title}</h5>
+                  <p class="text-xs text-slate-400">${item.artist}</p>
+                </div>
+              </div>
+              <button class="w-9 h-9 rounded-full bg-brand-500/20 text-brand-500 flex items-center justify-center hover:bg-brand-500 hover:text-slate-950 transition">
+                <i class="fa-solid fa-play text-xs"></i>
+              </button>
+            </div>
+          `).join('');
+        } else {
+          const filtered = playlistData.filter(t => t.title.toLowerCase().includes(query.toLowerCase()) || t.artist.toLowerCase().includes(query.toLowerCase()));
+          if(filtered.length > 0) {
+            resultsContainer.innerHTML = filtered.map(item => `
+              <div onclick="playSearchTrack('${item.id}', '${escapeHtml(item.title)}', '${escapeHtml(item.artist)}', '${item.cover}', '${item.url}')" class="flex items-center justify-between p-3 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-brand-500/40 cursor-pointer transition">
+                <div class="flex items-center space-x-3">
+                  <img src="${item.cover}" class="w-12 h-12 rounded-lg object-cover">
+                  <div>
+                    <h5 class="font-semibold text-sm text-white">${item.title}</h5>
+                    <p class="text-xs text-slate-400">${item.artist}</p>
+                  </div>
+                </div>
+                <button class="w-9 h-9 rounded-full bg-brand-500/20 text-brand-500 flex items-center justify-center hover:bg-brand-500 hover:text-slate-950 transition">
+                  <i class="fa-solid fa-play text-xs"></i>
+                </button>
+              </div>
+            `).join('');
+          } else {
+            resultsContainer.innerHTML = `<p class="text-center text-slate-500 py-8">Không tìm thấy kết quả nào phù hợp.</p>`;
+          }
+        }
+      } catch (e) {
+        resultsContainer.innerHTML = `<p class="text-center text-amber-400 py-8">Đang tìm kiếm trong kho nhạc cục bộ...</p>`;
+      }
+    }
+
+    function playSearchTrack(id, title, artist, cover, url) {
+      const existingIndex = playlistData.findIndex(t => t.id === id);
+      if (existingIndex !== -1) {
+        loadTrack(existingIndex, true);
+      } else {
+        const newTrack = {
+          id, title, artist, cover, url,
+          color: getRandomColor(),
+          type: 'online',
+          lyrics: generateMockSyncedLyrics(title)
+        };
+        playlistData.unshift(newTrack);
+        loadTrack(0, true);
+        renderQuickPicks();
+        renderTrending();
+        renderLibrary();
+      }
+    }
+
+    // --- LOCAL FILE UPLOAD & YOUTUBE STREAM EXTRACTOR ---
+    function openUploadModal() {
+      const modal = document.getElementById('upload-modal');
+      if (modal) modal.classList.remove('opacity-0', 'pointer-events-none');
+    }
+
+    function closeUploadModal() {
+      const modal = document.getElementById('upload-modal');
+      if (modal) modal.classList.add('opacity-0', 'pointer-events-none');
+    }
+
+    function switchModalTab(tab) {
+      if(tab === 'file') {
+        document.getElementById('modal-tab-file').classList.remove('hidden');
+        document.getElementById('modal-tab-yt').classList.add('hidden');
+        document.getElementById('modal-tab-file-btn').className = "pb-3 border-b-2 border-brand-500 text-brand-500";
+        document.getElementById('modal-tab-yt-btn').className = "pb-3 border-b-2 border-transparent text-slate-400 hover:text-slate-200";
+      } else {
+        document.getElementById('modal-tab-file').classList.add('hidden');
+        document.getElementById('modal-tab-yt').classList.remove('hidden');
+        document.getElementById('modal-tab-yt-btn').className = "pb-3 border-b-2 border-red-500 text-red-500";
+        document.getElementById('modal-tab-file-btn').className = "pb-3 border-b-2 border-transparent text-slate-400 hover:text-slate-200";
+      }
+    }
+
+    function handleFileUpload(event) {
+      const files = event.target.files;
+      if (!files || files.length === 0) return;
+
+      Array.from(files).forEach((file, index) => {
+        const fileUrl = URL.createObjectURL(file);
+        const trackName = file.name.replace(/\.[^/.]+$/, "");
+
+        const localTrack = {
+          id: 'local_' + Date.now() + '_' + index,
+          title: trackName,
+          artist: 'Nhạc Offline của bạn',
+          cover: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&auto=format&fit=crop&q=80',
+          url: fileUrl,
+          color: '#047857',
+          type: 'local',
+          lyrics: [
+            { time: 0, text: `[Tệp nhạc Offline: ${trackName}]` },
+            { time: 10, text: "Đang phát bài hát từ bộ nhớ máy tính/điện thoại" }
+          ]
+        };
+
+        playlistData.unshift(localTrack);
+      });
+
+      closeUploadModal();
+      renderLibrary();
+      renderQuickPicks();
+      renderTrending();
+      loadTrack(0, true);
+      switchTab('library');
+    }
+
+    function extractYouTubeId(url) {
+      if (!url) return null;
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      const match = url.match(regExp);
+      if (match && match[2].length === 11) {
+        return match[2];
+      }
+      // direct 11 character ID check
+      if (url.length === 11 && !url.includes('/')) {
+        return url;
+      }
+      return null;
+    }
+
+    // MULTI-ENGINE YOUTUBE AUDIO EXTRACTOR (HIGH RELIABILITY)
+    async function fetchYouTubeAudioStreamUrl(videoId) {
+      const PIPED_INSTANCES = [
+        `https://pipedapi.kavin.rocks/streams/${videoId}`,
+        `https://api.piped.video/streams/${videoId}`,
+        `https://pipedapi.mha.fi/streams/${videoId}`,
+        `https://pipedapi.garudalinux.org/streams/${videoId}`
+      ];
+
+      for (let endpoint of PIPED_INSTANCES) {
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 3500);
+          const response = await fetch(endpoint, { signal: controller.signal });
+          clearTimeout(timeoutId);
+
+          if (response.ok) {
+            const data = await response.json();
+            if (data.audioStreams && data.audioStreams.length > 0) {
+              // Return highest bitrate audio stream
+              const sorted = data.audioStreams.sort((a, b) => (b.bitrate || 0) - (a.bitrate || 0));
+              return { url: sorted[0].url, title: data.title, uploader: data.uploader };
+            }
+          }
+        } catch (e) {
+          console.warn("Piped instance failed, trying next mirror...", endpoint);
+        }
+      }
+
+      // FALLBACK COBALT / INVIDIOUS DIRECT AUDIO STREAM PROXY
+      const DIRECT_FALLBACKS = [
+        `https://invidious.drgns.space/latest_version?id=${videoId}&italic=0&itype=mp4`,
+        `https://inv.tux.pizza/latest_version?id=${videoId}&italic=0&itype=mp4`,
+        `https://vid.puffyan.us/latest_version?id=${videoId}&italic=0&itype=mp4`
+      ];
+
+      return { url: DIRECT_FALLBACKS[0], title: null, uploader: null };
+    }
+
+    async function addYouTubeTrack() {
+      const inputUrl = document.getElementById('yt-url-input').value.trim();
+      const inputTitle = document.getElementById('yt-title-input').value.trim();
+      const inputArtist = document.getElementById('yt-artist-input').value.trim();
+      const btnAdd = document.getElementById('btn-add-yt');
+
+      const videoId = extractYouTubeId(inputUrl);
+      if (!videoId) {
+        alert("Liên kết YouTube không hợp lệ! Vui lòng dán đúng đường dẫn dạng https://www.youtube.com/watch?v=... hoặc video ID.");
+        return;
+      }
+
+      if (btnAdd) {
+        btnAdd.disabled = true;
+        btnAdd.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Đang giải mã luồng YouTube...`;
+      }
+
+      const ytCover = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+      
+      try {
+        const streamData = await fetchYouTubeAudioStreamUrl(videoId);
+        
+        const finalTitle = inputTitle || streamData.title || `YouTube Track (${videoId})`;
+        const finalArtist = inputArtist || streamData.uploader || 'YouTube Artist';
+
+        const ytTrack = {
+          id: 'yt_' + videoId + '_' + Date.now(),
+          title: finalTitle,
+          artist: finalArtist,
+          cover: ytCover,
+          url: streamData.url,
+          color: '#991b1b',
+          type: 'youtube',
+          videoId: videoId,
+          lyrics: [
+            { time: 0, text: `[Phát luồng âm thanh YouTube: ${finalTitle}]` },
+            { time: 10, text: "Âm thanh phát mượt mà không quảng cáo" },
+            { time: 30, text: "Mochy Music YouTube Audio Engine Engine" }
+          ]
+        };
+
+        playlistData.unshift(ytTrack);
+        closeUploadModal();
+        renderLibrary();
+        renderQuickPicks();
+        renderTrending();
+        loadTrack(0, true);
+        switchTab('library');
+
+        // Clear input form
+        document.getElementById('yt-url-input').value = '';
+        document.getElementById('yt-title-input').value = '';
+        document.getElementById('yt-artist-input').value = '';
+
+      } catch (err) {
+        console.error("Error adding YouTube track:", err);
+        alert("Không thể giải mã luồng YouTube này. Hãy kiểm tra kết quả mạng hoặc thử video YouTube khác!");
+      } finally {
+        if (btnAdd) {
+          btnAdd.disabled = false;
+          btnAdd.innerHTML = `<i class="fa-brands fa-youtube"></i> Thêm luồng YouTube không quảng cáo`;
+        }
+      }
+    }
+
+    function renderLibrary() {
+      const container = document.getElementById('full-library-list');
+      if (!container) return;
+
+      const localTracks = playlistData.filter(t => t.type === 'local');
+      const ytTracks = playlistData.filter(t => t.type === 'youtube');
+
+      const localEl = document.getElementById('local-count-text');
+      const ytEl = document.getElementById('yt-count-text');
+      if (localEl) localEl.innerText = `${localTracks.length} bài hát`;
+      if (ytEl) ytEl.innerText = `${ytTracks.length} bài hát`;
+
+      if (playlistData.length === 0) {
+        container.innerHTML = `<p class="text-slate-500 text-sm py-4">Thư viện trống.</p>`;
+        return;
+      }
+
+      container.innerHTML = playlistData.map((item, idx) => {
+        let badge = '';
+        if(item.type === 'local') {
+          badge = '<span class="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[10px] rounded font-semibold">Offline File</span>';
+        } else if(item.type === 'youtube') {
+          badge = '<span class="px-2 py-0.5 bg-red-500/20 text-red-400 text-[10px] rounded font-semibold">YouTube Stream</span>';
+        } else {
+          badge = '<span class="px-2 py-0.5 bg-brand-500/20 text-brand-400 text-[10px] rounded font-semibold">Online CDN</span>';
+        }
+
+        return `
+          <div onclick="loadTrack(${idx}, true)" class="flex items-center justify-between p-3 rounded-xl bg-slate-900/40 border border-slate-800/80 hover:bg-slate-800/60 transition cursor-pointer">
+            <div class="flex items-center space-x-4">
+              <img src="${item.cover}" class="w-12 h-12 rounded-lg object-cover" onerror="this.src='https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=100&auto=format&fit=crop&q=80'">
+              <div>
+                <div class="flex items-center space-x-2">
+                  <h5 class="font-semibold text-sm text-white">${item.title}</h5>
+                  ${badge}
+                </div>
+                <p class="text-xs text-slate-400">${item.artist}</p>
+              </div>
+            </div>
+            <button class="w-8 h-8 rounded-full bg-slate-800 hover:bg-brand-500 hover:text-slate-950 text-slate-300 flex items-center justify-center transition">
+              <i class="fa-solid fa-play text-xs ml-0.5"></i>
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterLibraryType(type) {
+      switchTab('library');
+      const container = document.getElementById('full-library-list');
+      if (!container) return;
+      const filtered = playlistData.filter(t => t.type === type);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<p class="text-slate-500 text-sm py-8 text-center">Chưa có bài hát nào thuộc loại này. Hãy bấm "Thêm bài hát mới" để tải lên.</p>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map((item) => {
+        const idx = playlistData.findIndex(t => t.id === item.id);
+        return `
+          <div onclick="loadTrack(${idx}, true)" class="flex items-center justify-between p-3 rounded-xl bg-slate-900/40 border border-slate-800/80 hover:bg-slate-800/60 transition cursor-pointer">
+            <div class="flex items-center space-x-4">
+              <img src="${item.cover}" class="w-12 h-12 rounded-lg object-cover" onerror="this.src='https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=100&auto=format&fit=crop&q=80'">
+              <div>
+                <h5 class="font-semibold text-sm text-white">${item.title}</h5>
+                <p class="text-xs text-slate-400">${item.artist}</p>
+              </div>
+            </div>
+            <button class="w-8 h-8 rounded-full bg-brand-500 text-slate-950 flex items-center justify-center">
+              <i class="fa-solid fa-play text-xs ml-0.5"></i>
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function generateMockSyncedLyrics(trackName) {
+      return [
+        { time: 0, text: `[Giai điệu bắt đầu: ${trackName}]` },
+        { time: 8, text: "Lắng nghe thanh âm tự do đắm say..." },
+        { time: 20, text: "Nhịp đập âm nhạc xua tan âu lo ngày dài" },
+        { time: 35, text: "Hòa cùng giai điệu cảm xúc ngập tràn..." },
+        { time: 50, text: "Mochy Music - Trải nghiệm phát nhạc đỉnh cao" }
+      ];
+    }
+
+    function getRandomColor() {
+      const colors = ['#065f46', '#4c1d95', '#1e3a8a', '#78350f', '#831843', '#1e293b'];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    }
+
+    // --- TAB NAVIGATION SYSTEM ---
+    function switchTab(tabId) {
+      currentTab = tabId;
+      document.querySelectorAll('.tab-page').forEach(page => page.classList.add('hidden'));
+      const targetTab = document.getElementById(`tab-${tabId}`);
+      if (targetTab) targetTab.classList.remove('hidden');
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('text-brand-500', 'bg-brand-500/10');
+        btn.classList.add('text-slate-400');
+      });
+      
+      const activeNav = document.getElementById(`nav-${tabId}`);
+      if(activeNav) {
+        activeNav.classList.add('text-brand-500', 'bg-brand-500/10');
+        activeNav.classList.remove('text-slate-400');
+      }
+    }
+
+    // --- AUDIO PLAYER CORE ---
+    async function loadTrack(index, autoPlay = true) {
+      if (!playlistData.length) return;
+      currentTrackIndex = index;
+      const track = playlistData[currentTrackIndex];
+
+      // If YouTube track has outdated / expiring link, dynamically refresh stream URL before play
+      if (track.type === 'youtube' && track.videoId) {
+        try {
+          const freshData = await fetchYouTubeAudioStreamUrl(track.videoId);
+          if (freshData && freshData.url) {
+            track.url = freshData.url;
+          }
+        } catch(e) {
+          console.warn("Using fallback stored stream URL", e);
+        }
+      }
+      
+      audio.src = track.url;
+      audio.load();
+
+      document.getElementById('player-title').innerText = track.title;
+      document.getElementById('player-artist').innerText = track.artist;
+      document.getElementById('player-cover').src = track.cover;
+
+      document.getElementById('expanded-title').innerText = track.title;
+      document.getElementById('expanded-artist').innerText = track.artist;
+      document.getElementById('expanded-cover').src = track.cover;
+
+      document.getElementById('lyrics-title').innerText = track.title;
+      document.getElementById('lyrics-artist').innerText = track.artist;
+
+      const ambientSetting = document.getElementById('setting-ambient');
+      if(!ambientSetting || ambientSetting.checked) {
+        document.getElementById('ambient-bg').style.background = `radial-gradient(circle, ${track.color} 0%, rgba(15,23,42,1) 80%)`;
+      }
+
+      updateFavIcon();
+      renderLyrics(track.lyrics);
+
+      if(autoPlay) {
+        playTrack();
+      }
+    }
+
+    function playTrack() {
+      initWebAudioDSP();
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          isPlaying = true;
+          updatePlayButtonsUI();
+          toggleDiscRotation(true);
+        }).catch(err => {
+          console.warn("Playback error or autoplay blocked:", err);
+          // Auto retry fallback stream if YT stream link failed
+          const track = playlistData[currentTrackIndex];
+          if (track && track.type === 'youtube' && track.videoId) {
+            audio.src = `https://inv.tux.pizza/latest_version?id=${track.videoId}&italic=0&itype=mp4`;
+            audio.play().then(() => {
+              isPlaying = true;
+              updatePlayButtonsUI();
+              toggleDiscRotation(true);
+            }).catch(e => console.error("YT Fallback Stream Error", e));
+          }
+        });
+      }
+    }
+
+    function pauseTrack() {
+      audio.pause();
+      isPlaying = false;
+      updatePlayButtonsUI();
+      toggleDiscRotation(false);
+    }
+
+    function togglePlayPause() {
+      if (isPlaying) {
+        pauseTrack();
+      } else {
+        playTrack();
+      }
+    }
+
+    function nextTrack() {
+      if (isShuffle) {
+        currentTrackIndex = Math.floor(Math.random() * playlistData.length);
+      } else {
+        currentTrackIndex = (currentTrackIndex + 1) % playlistData.length;
+      }
+      loadTrack(currentTrackIndex, true);
+    }
+
+    function prevTrack() {
+      currentTrackIndex = (currentTrackIndex - 1 + playlistData.length) % playlistData.length;
+      loadTrack(currentTrackIndex, true);
+    }
+
+    function updatePlayButtonsUI() {
+      const icon = isPlaying ? '<i class="fa-solid fa-pause"></i>' : '<i class="fa-solid fa-play ml-0.5"></i>';
+      document.getElementById('btn-play-pause').innerHTML = icon;
+      document.getElementById('exp-btn-play-pause').innerHTML = icon;
+    }
+
+    function toggleDiscRotation(rotate) {
+      const disc = document.getElementById('expanded-disc');
+      const settingTT = document.getElementById('setting-turntable');
+      if (rotate && (!settingTT || settingTT.checked)) {
+        disc.classList.add('animate-spin-slow');
+      } else {
+        disc.classList.remove('animate-spin-slow');
+      }
+    }
+
+    // --- PROGRESS & VOLUME EVENTS ---
+    function setupAudioEventListeners() {
+      audio.addEventListener('timeupdate', () => {
+        if (!isNaN(audio.duration) && audio.duration > 0) {
+          const pct = (audio.currentTime / audio.duration) * 100;
+          progressBar.value = pct;
+          expProgressBar.value = pct;
+
+          document.getElementById('current-time').innerText = formatTime(audio.currentTime);
+          document.getElementById('exp-current-time').innerText = formatTime(audio.currentTime);
+          document.getElementById('total-time').innerText = formatTime(audio.duration);
+          document.getElementById('exp-total-time').innerText = formatTime(audio.duration);
+
+          highlightLyrics(audio.currentTime);
+        }
+      });
+
+      audio.addEventListener('ended', () => {
+        if (isRepeat) {
+          audio.currentTime = 0;
+          playTrack();
+        } else {
+          nextTrack();
+        }
+      });
+
+      progressBar.addEventListener('input', (e) => {
+        if (!isNaN(audio.duration)) {
+          audio.currentTime = (e.target.value / 100) * audio.duration;
+        }
+      });
+
+      expProgressBar.addEventListener('input', (e) => {
+        if (!isNaN(audio.duration)) {
+          audio.currentTime = (e.target.value / 100) * audio.duration;
+        }
+      });
+
+      volumeBar.addEventListener('input', (e) => {
+        audio.volume = e.target.value / 100;
+      });
+    }
+
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    function toggleShuffle() {
+      isShuffle = !isShuffle;
+      document.getElementById('btn-shuffle').classList.toggle('text-brand-500', isShuffle);
+      document.getElementById('exp-btn-shuffle').classList.toggle('text-brand-500', isShuffle);
+    }
+
+    function toggleRepeat() {
+      isRepeat = !isRepeat;
+      document.getElementById('btn-repeat').classList.toggle('text-brand-500', isRepeat);
+      document.getElementById('exp-btn-repeat').classList.toggle('text-brand-500', isRepeat);
+    }
+
+    function toggleMute() {
+      audio.muted = !audio.muted;
+      document.getElementById('btn-mute').innerHTML = audio.muted ? 
+        '<i class="fa-solid fa-volume-xmark text-red-500"></i>' : '<i class="fa-solid fa-volume-high"></i>';
+    }
+
+    // --- FAVORITES SYSTEM ---
+    function toggleFavoriteCurrent() {
+      if (!playlistData.length) return;
+      const trackId = playlistData[currentTrackIndex].id;
+      if (favorites.has(trackId)) {
+        favorites.delete(trackId);
+      } else {
+        favorites.add(trackId);
+      }
+      localStorage.setItem('mochy_favs', JSON.stringify([...favorites]));
+      updateFavIcon();
+      renderFavorites();
+    }
+
+    function updateFavIcon() {
+      if (!playlistData.length) return;
+      const trackId = playlistData[currentTrackIndex].id;
+      const btn = document.getElementById('player-fav-btn');
+      if (favorites.has(trackId)) {
+        btn.innerHTML = '<i class="fa-solid fa-heart text-red-500"></i>';
+      } else {
+        btn.innerHTML = '<i class="fa-regular fa-heart"></i>';
+      }
+    }
+
+    // --- RENDERING VIEWS ---
+    function renderQuickPicks() {
+      const container = document.getElementById('quick-picks-grid');
+      if (!container) return;
+      container.innerHTML = playlistData.slice(0, 10).map((item, idx) => `
+        <div onclick="loadTrack(${idx}, true)" class="group cursor-pointer bg-slate-900/60 p-3 rounded-2xl border border-slate-800/80 hover:border-brand-500/50 hover:bg-slate-800/60 transition duration-300 glass-effect">
+          <div class="relative overflow-hidden rounded-xl aspect-square mb-3">
+            <img src="${item.cover}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&auto=format&fit=crop&q=80'">
+            <button class="absolute bottom-2 right-2 w-10 h-10 rounded-full bg-brand-500 text-slate-950 flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-lg translate-y-2 group-hover:translate-y-0">
+              <i class="fa-solid fa-play ml-0.5"></i>
+            </button>
+          </div>
+          <h4 class="font-semibold text-sm text-white truncate">${item.title}</h4>
+          <p class="text-xs text-slate-400 truncate mt-0.5">${item.artist}</p>
+        </div>
+      `).join('');
+    }
+
+    function renderTrending() {
+      const container = document.getElementById('trending-songs-list');
+      if (!container) return;
+      container.innerHTML = playlistData.map((item, idx) => `
+        <div onclick="loadTrack(${idx}, true)" class="flex items-center justify-between p-3 rounded-xl hover:bg-slate-800/60 transition cursor-pointer group border border-transparent hover:border-slate-700/50">
+          <div class="flex items-center space-x-4">
+            <span class="text-sm font-bold text-slate-500 group-hover:text-brand-500 w-4">${idx + 1}</span>
+            <img src="${item.cover}" class="w-12 h-12 rounded-lg object-cover" onerror="this.src='https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=100&auto=format&fit=crop&q=80'">
+            <div>
+              <h5 class="font-semibold text-sm text-white group-hover:text-brand-500 transition">${item.title}</h5>
+              <p class="text-xs text-slate-400">${item.artist}</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-4">
+            <span class="text-xs text-slate-500 font-mono">${item.type === 'local' ? 'Offline File' : item.type === 'youtube' ? 'YouTube Stream' : 'Stream HD'}</span>
+            <button class="text-slate-400 hover:text-white"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderFavorites() {
+      const container = document.getElementById('favorites-list');
+      if (!container) return;
+      const favTracks = playlistData.filter(track => favorites.has(track.id));
+      
+      const favCountEl = document.getElementById('fav-count-text');
+      if (favCountEl) favCountEl.innerText = `${favorites.size} bài hát`;
+
+      if (favTracks.length === 0) {
+        container.innerHTML = `<p class="text-slate-500 text-sm py-4">Chưa có bài hát nào được thêm vào danh sách yêu thích.</p>`;
+        return;
+      }
+
+      container.innerHTML = favTracks.map((item) => {
+        const idx = playlistData.findIndex(t => t.id === item.id);
+        return `
+          <div onclick="loadTrack(${idx}, true)" class="flex items-center justify-between p-3 rounded-xl bg-slate-900/40 border border-slate-800/80 hover:bg-slate-800/60 transition cursor-pointer">
+            <div class="flex items-center space-x-4">
+              <img src="${item.cover}" class="w-12 h-12 rounded-lg object-cover" onerror="this.src='https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=100&auto=format&fit=crop&q=80'">
+              <div>
+                <h5 class="font-semibold text-sm text-white">${item.title}</h5>
+                <p class="text-xs text-slate-400">${item.artist}</p>
+              </div>
+            </div>
+            <i class="fa-solid fa-heart text-red-500 text-sm"></i>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function playRandom() {
+      const randomIdx = Math.floor(Math.random() * playlistData.length);
+      loadTrack(randomIdx, true);
+    }
+
+    // --- LYRICS SYSTEM ---
+    function renderLyrics(lyrics) {
+      const body = document.getElementById('lyrics-body');
+      const expBody = document.getElementById('expanded-lyrics');
+      
+      if (!lyrics || lyrics.length === 0) {
+        const emptyMsg = `<p class="text-slate-500 italic">Không tìm thấy lời bài hát.</p>`;
+        if (body) body.innerHTML = emptyMsg;
+        if (expBody) expBody.innerHTML = emptyMsg;
+        return;
+      }
+
+      const html = lyrics.map((line, i) => `
+        <p id="lyric-line-${i}" class="lyric-line text-lg font-medium text-slate-400 transition-all duration-300 py-1">${line.text}</p>
+      `).join('');
+
+      if (body) body.innerHTML = html;
+      if (expBody) expBody.innerHTML = html;
+    }
+
+    function highlightLyrics(currentTime) {
+      if (!playlistData[currentTrackIndex]) return;
+      const lyrics = playlistData[currentTrackIndex].lyrics;
+      if (!lyrics) return;
+
+      let activeIndex = -1;
+      for (let i = 0; i < lyrics.length; i++) {
+        if (currentTime >= lyrics[i].time) {
+          activeIndex = i;
+        }
+      }
+
+      document.querySelectorAll('.lyric-line').forEach((el, idx) => {
+        if (idx === activeIndex) {
+          el.classList.add('text-brand-500', 'text-2xl', 'font-bold', 'scale-105');
+          el.classList.remove('text-slate-400');
+        } else {
+          el.classList.remove('text-brand-500', 'text-2xl', 'font-bold', 'scale-105');
+          el.classList.add('text-slate-400');
+        }
+      });
+    }
+
+    // --- FULLSCREEN EXPANDED PLAYER ---
+    function toggleExpandedPlayer() {
+      const player = document.getElementById('expanded-player');
+      const isHidden = player.classList.contains('translate-y-full');
+
+      if (isHidden) {
+        player.classList.remove('translate-y-full', 'opacity-0', 'pointer-events-none');
+        player.classList.add('translate-y-0', 'opacity-100');
+      } else {
+        player.classList.add('translate-y-full', 'opacity-0', 'pointer-events-none');
+        player.classList.remove('translate-y-0', 'opacity-100');
+      }
+    }
+
+    // --- EQUALIZER REAL DSP FUNCTIONS ---
+    function openEqualizerModal() {
+      initWebAudioDSP();
+      const modal = document.getElementById('eq-modal');
+      if (modal) modal.classList.remove('opacity-0', 'pointer-events-none');
+    }
+
+    function closeEqualizerModal() {
+      const modal = document.getElementById('eq-modal');
+      if (modal) modal.classList.add('opacity-0', 'pointer-events-none');
+    }
+
+    function updateEqGain(bandIndex, gainValue) {
+      if (eqFilters[bandIndex]) {
+        eqFilters[bandIndex].gain.value = parseFloat(gainValue);
+      }
+    }
+
+    function setEqPreset(preset) {
+      const presets = {
+        flat: [0, 0, 0, 0, 0],
+        bass: [8, 5, 1, 0, -1],
+        vocal: [-2, 1, 6, 4, 1],
+        treble: [-3, -1, 2, 6, 9]
+      };
+      const values = presets[preset] || presets.flat;
+      values.forEach((val, i) => {
+        const input = document.getElementById(`eq-band-${i}`);
+        if (input) {
+          input.value = val;
+          updateEqGain(i, val);
+        }
+      });
+    }
+
+    // --- BEDSIDE CLOCK MODE ---
+    function toggleBedsideMode() {
+      isBedside = !isBedside;
+      const overlay = document.getElementById('bedside-overlay');
+      if (isBedside) {
+        overlay.classList.remove('opacity-0', 'pointer-events-none');
+      } else {
+        overlay.classList.add('opacity-0', 'pointer-events-none');
+      }
+    }
+
+    function startBedsideClock() {
+      setInterval(() => {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const clockEl = document.getElementById('bedside-clock');
+        if (clockEl) clockEl.innerText = `${hours}:${minutes}`;
+
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const dateEl = document.getElementById('bedside-date');
+        if (dateEl) dateEl.innerText = now.toLocaleDateString('vi-VN', options);
+      }, 1000);
+    }
+
+    function clearAppData() {
+      localStorage.clear();
+      favorites.clear();
+      renderFavorites();
+      alert("Đã xóa toàn bộ dữ liệu lưu trữ trên trình duyệt!");
+    }
+  </script>
 </body>
 </html>
